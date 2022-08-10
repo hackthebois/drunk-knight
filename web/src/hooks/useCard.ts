@@ -1,30 +1,11 @@
+import axios from "axios";
 import { useQuery } from "react-query";
-import Card from "../types/Card";
-
-const cards: Card[] = [
-	{
-		id: 1,
-		name: "Alphabet",
-		description: "Say the ABCs backwards, drink a second for each letter you didn't get",
-		type: "memory",
-	},
-	{
-		id: 3,
-		name: "Dog Breads",
-		description: "Go clockwise naming dog breads, first to fail drinks",
-		type: "categories",
-	},
-	{
-		id: 2,
-		name: "Favourite Colour",
-		description: "If you share a favourite colour with another player, drink",
-		type: "majority",
-	},
-];
+import { CardSchema } from "../types/Card";
 
 const getCardRequest = async () => {
-	// const res = await axios.get("https://jsonplaceholder.typicode.com/todos");
-	// const data = await res.data;
+	const res = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/card`);
+	const data: unknown = await res.data;
+	const cards = await CardSchema.array().parse(data);
 
 	return cards;
 };
