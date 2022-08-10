@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { CardType } from '@prisma/client';
 import { CardService } from './card.service';
+import { CreateCardDto } from './dto/card.dto';
 
 @Controller('card')
 export class CardController {
@@ -18,5 +19,10 @@ export class CardController {
     @Get("/:id")
     getCardById(@Param(":id") id: string) {
         return this.cardService.getCardById(id);
+    }
+
+    @Post("create")
+    createCard(@Body() body: CreateCardDto) {
+
     }
 }
