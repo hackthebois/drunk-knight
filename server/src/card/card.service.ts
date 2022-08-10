@@ -17,7 +17,7 @@ interface CardFilter {
 @Injectable()
 export class CardService {
 
-    constructor(private readonly prismaService: PrismaService) { }
+    constructor(private readonly prismaService: PrismaService) {}
 
     async getAllCards(filter: CardFilter, userId: string) {
 
@@ -94,7 +94,7 @@ export class CardService {
     }
 
     async deleteCardById(id: string){
-        await this.prismaService.card.deleteMany({
+        await this.prismaService.card.delete({
             where:{
                 id,
             }
