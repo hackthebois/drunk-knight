@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { CardType } from '@prisma/client';
 import { CardService } from './card.service';
-import { CreateCardDto } from './dto/card.dto';
+import { CreateCardDto, UpdateCardDto } from './dto/card.dto';
 
 @Controller('card')
 export class CardController {
@@ -24,5 +24,15 @@ export class CardController {
     @Post("/create")
     createCard(@Body() body: CreateCardDto) {
         return this.cardService.createCard(body);
+    }
+
+    @Put("/:id")
+    updateCardById(@Param("id") id: string, @Body() body: UpdateCardDto){
+        return this.cardService.updateCardById(id, body);
+    }
+
+    @Delete("/:id")
+    deleteCardById(@Param(":id") id: string){
+        return this.cardService.deleteCardById(id);
     }
 }
