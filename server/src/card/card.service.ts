@@ -52,7 +52,7 @@ export class CardService {
 
     async createCard({ name, description, cardType }: CreateCardDto, userId: string) {
 
-        const cardExists = await this.prismaService.card.findUnique({
+        const cardExists = await this.prismaService.card.findFirst({
             where:{
                 name
             }

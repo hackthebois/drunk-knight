@@ -10,7 +10,8 @@ export class AdminController {
 
     @Roles(UserType.ADMIN)
     @Get()
-    getAllUsers(){
+    getAllUsers(@Query('UserType') user_type: UserType){
+        const filter = user_type in UserType ? { user_type } : undefined;
         return this.adminService.getAllUsers();
     }
 }
