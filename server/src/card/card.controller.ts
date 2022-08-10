@@ -5,7 +5,7 @@ import { CardService } from './card.service';
 import { CreateCardDto, UpdateCardDto } from './dto/card.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 
-@Controller('card')
+@Controller('/account/card')
 export class CardController {
 
     constructor(private readonly cardService: CardService) { }
