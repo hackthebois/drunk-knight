@@ -19,15 +19,22 @@ export class CardService {
 
     constructor(private readonly prismaService: PrismaService) { }
 
-    async getAllCards(filter: CardFilter) {
-        const cards = await this.prismaService.card.findMany({
-            select: cardSelect,
-            where: filter
+    async getAllCards(filter: CardFilter, userId: string) {
+
+        const user = await this.prismaService.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                cards: {
+                    where: filter
+                }
+            }
         });
 
-        if (!cards.length) throw new NotFoundException();
+        if (!user) throw new NotFoundException();
 
-        return cards;
+        return user.cards.map(card => new CardResponseDto(card));
     }
 
     async getCardById(id: string) {
@@ -38,12 +45,12 @@ export class CardService {
             select: cardSelect
         });
 
-        if (!card) throw new BadRequestException();
+        if (!card) throw new NotFoundException();
 
         return new CardResponseDto(card);
     }
 
-    async createCard({ name, description, cardType }: CreateCardDto) {
+    async createCard({ name, description, cardType }: CreateCardDto, userId: string) {
 
         const cardExists = await this.prismaService.card.findUnique({
             where:{
@@ -58,7 +65,7 @@ export class CardService {
                 name: name,
                 description: description,
                 card_type: cardType,
-                user_id: "cl6moqxoq0049downm9fm2dc4"
+                user_id: userId
             }
         });
 
@@ -72,7 +79,7 @@ export class CardService {
             }
         });
 
-        if(!cardExists) throw new BadRequestException();
+        if(!cardExists) throw new NotFoundException();
 
         const updatedCard = await this.prismaService.card.update({
             where:{
@@ -94,5 +101,27 @@ export class CardService {
         });
 
         return "Successfully Deleted"
+    }
+
+    async getUserByCardId(id: string){
+        
+        const card = await this.prismaService.card.findFirst({
+            where: {
+                id
+            },
+            select: {
+                user: {
+                    select: {
+                        id: true,
+                        username: true,
+                        email: true,
+                    }
+                }
+            }
+        });
+
+        if(!card) throw new NotFoundException()
+
+        return card.user;
     }
 }

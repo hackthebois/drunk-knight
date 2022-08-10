@@ -1,38 +1,52 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
-import { CardType } from '@prisma/client';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UnauthorizedException} from '@nestjs/common';
+import { CardType, UserType } from '@prisma/client';
+import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { CardService } from './card.service';
 import { CreateCardDto, UpdateCardDto } from './dto/card.dto';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('card')
 export class CardController {
 
     constructor(private readonly cardService: CardService) { }
 
+    @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Get()
-    getAllCards(@Query('cardtype') card_type?: CardType) {
-
+    getAllCards(@User() user: UserInfo, @Query('cardtype') card_type?: CardType) {
         const filter = card_type in CardType ? { card_type } : undefined;
-
-        return this.cardService.getAllCards(filter);
+        return this.cardService.getAllCards(filter, user.id);
     }
 
+    @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Get("/:id")
-    getCardById(@Param(":id") id: string) {
+    async getCardById(@Param(":id") id: string, @User() user: UserInfo) {
+        const cardOwner = await this.cardService.getUserByCardId(id);
+        if(cardOwner.id !== user.id) throw new UnauthorizedException();
+
         return this.cardService.getCardById(id);
     }
 
+    @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Post("/create")
-    createCard(@Body() body: CreateCardDto) {
-        return this.cardService.createCard(body);
+    createCard(@Body() body: CreateCardDto, @User() user: UserInfo) {
+        return this.cardService.createCard(body, user.id);
     }
 
+    @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Put("/:id")
-    updateCardById(@Param("id") id: string, @Body() body: UpdateCardDto){
+    async updateCardById(@Param("id") id: string, @Body() body: UpdateCardDto, @User() user: UserInfo){
+        const cardOwner = await this.cardService.getUserByCardId(id);
+        if(cardOwner.id !== user.id) throw new UnauthorizedException();
+
         return this.cardService.updateCardById(id, body);
     }
 
+    @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Delete("/:id")
-    deleteCardById(@Param(":id") id: string){
+    async deleteCardById(@Param(":id") id: string, @User() user: UserInfo){
+        const cardOwner = await this.cardService.getUserByCardId(id);
+        if(cardOwner.id !== user.id) throw new UnauthorizedException();
+
         return this.cardService.deleteCardById(id);
     }
 }
