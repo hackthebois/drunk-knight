@@ -7,9 +7,10 @@ import { CardModule } from './card/card.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { AuthGuard } from './gaurds/auth.gaurd';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [UserModule, PrismaModule, CardModule],
+  imports: [UserModule, PrismaModule, CardModule, AdminModule],
   controllers: [AppController],
   providers: [AppService, {
     provide: APP_INTERCEPTOR,
