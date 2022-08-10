@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CardType } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-
+import { CardResponseDto, CreateCardDto } from './dto/card.dto';
 
 export const cardSelect = {
     id: true,
@@ -41,5 +41,27 @@ export class CardService {
         if (!card) throw new BadRequestException();
 
         return card;
+    }
+
+    async createCard({ name, description, cardType }: CreateCardDto) {
+
+        const cardExists = this.prismaService.card.findFirst({
+            where:{
+                name: name
+            }
+        });
+        
+        if(cardExists) throw new ConflictException();
+
+        const card = await this.prismaService.card.create({
+            data: {
+                name: name,
+                description: description,
+                card_type: cardType,
+                user_id: "cl6mos1ah0084downrbwbde2h"
+            }
+        });
+
+        return new CardResponseDto(card);
     }
 }

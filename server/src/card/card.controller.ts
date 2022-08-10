@@ -21,8 +21,8 @@ export class CardController {
         return this.cardService.getCardById(id);
     }
 
-    @Post("create")
+    @Post("/create")
     createCard(@Body() body: CreateCardDto) {
-
+        return this.cardService.createCard(body);
     }
 }
