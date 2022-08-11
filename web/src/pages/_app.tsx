@@ -6,7 +6,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const queryClient = new QueryClient();
 	return (
 		<QueryClientProvider client={queryClient}>
-			<Component {...pageProps} />
+			<div className="m-auto max-w-screen-lg h-[100vh] p-20">
+				<Component {...pageProps} />
+			</div>
 		</QueryClientProvider>
 	);
 }

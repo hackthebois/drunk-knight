@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	body {
+		@apply bg-background text-text;
+	}
+}
+
+@layer utilities {
+	.flip {
+		transform: rotateY(180deg);
+	}
+	.input {
+		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 mb-4 mt-2;
+	}
+	.gbtn {
+		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold cursor-pointer hover:bg-white hover:bg-opacity-5 transition-colors;
+	}
+	.ebtn {
+		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-opacity-90 transition-colors bg-red-500;
+	}
+}
