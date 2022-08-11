@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpException, Param, Put } from '@nestjs/common';
 import { UserType } from '@prisma/client';
 import { Roles } from 'src/decorators/roles.decorator';
 import { User, UserInfo } from './decorators/user.decorator';
@@ -19,6 +19,7 @@ export class UserController {
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Put("/account")
     updateUserProfile(@User() user: UserInfo, @Body() body: UpdateUserDto){
+        if(!body.email && !body.username) throw new BadRequestException();
         return this.userService.updateUserProfile(body, user.id);
     }
 

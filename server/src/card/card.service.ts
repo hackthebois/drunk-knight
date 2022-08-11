@@ -73,13 +73,6 @@ export class CardService {
     }
 
     async updateCardById(id: string, data: UpdateCardDto) {
-        const cardExists = await this.prismaService.card.findUnique({
-            where:{
-                id
-            }
-        });
-
-        if(!cardExists) throw new NotFoundException();
 
         const updatedCard = await this.prismaService.card.update({
             where:{
@@ -87,8 +80,6 @@ export class CardService {
             },
             data,
         });
-
-        console.log(updatedCard);
 
         return new CardResponseDto(updatedCard);
     }

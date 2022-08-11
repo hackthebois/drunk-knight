@@ -18,13 +18,7 @@ export class UserService {
     }
 
     async updateUserProfile(data: UpdateUserDto, id: string) {
-        const userExists = await this.prismaService.user.findUnique({
-            where:data
-        });
-
-        if(userExists) throw new BadRequestException();
-
-
+        
         const user = await this.prismaService.user.update({
             where: {
                 id

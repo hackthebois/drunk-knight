@@ -16,10 +16,6 @@ export class UserResponseDto {
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
-  id: string;
-
-  @IsString()
-  @IsOptional()
   username: string;
 
   @IsEmail()
