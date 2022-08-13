@@ -19,10 +19,7 @@ const SignUp = () => {
 
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-full">
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className=" border-[1px] border-[#ccc] rounded max-w-[400px] p-10"
-			>
+			<form onSubmit={handleSubmit(onSubmit)} className="form">
 				<h2 className="text-white font-bold text-3xl mb-8 text-center">Sign up</h2>
 				{errors.email ? (
 					<p className="ebtn mb-4">{errors.email.message}</p>
@@ -31,18 +28,29 @@ const SignUp = () => {
 				) : (
 					errors.password && <p className="ebtn mb-4">{errors.password.message}</p>
 				)}
+				<label htmlFor="username" className="text-white text-xl">
+					Username
+				</label>
+				<input
+					id="username"
+					className="input"
+					{...register("username")}
+					placeholder="Username here..."
+				/>
 				<label htmlFor="email" className="text-white text-xl">
 					Email
 				</label>
-				<input className="input" {...register("email")} placeholder="Email here..." />
-				<label htmlFor="email" className="text-white text-xl">
-					Username
-				</label>
-				<input className="input" {...register("username")} placeholder="Username here..." />
-				<label htmlFor="email" className="text-white text-xl">
+				<input
+					id="email"
+					className="input"
+					{...register("email")}
+					placeholder="Email here..."
+				/>
+				<label htmlFor="password" className="text-white text-xl">
 					Password
 				</label>
 				<input
+					id="password"
 					type="password"
 					className="input"
 					{...register("password")}
