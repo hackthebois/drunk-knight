@@ -1,7 +1,6 @@
 import { CardType } from "@prisma/client"
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
-
 export class CreateCardDto {
     @IsString()
     @IsNotEmpty()
@@ -34,12 +33,12 @@ export class CardResponseDto {
     id: string;
     name: string;
     description: string;
-    card_type: CardType;
+    cardType: CardType;
 
-    constructor(paritial: Partial<CardResponseDto>) {
+    constructor(paritial: any) {
         this.id = paritial.id;
         this.name = paritial.name;
         this.description = paritial.description;
-        this.card_type = paritial.card_type;
+        this.cardType = paritial.card_type;
       }
 }
