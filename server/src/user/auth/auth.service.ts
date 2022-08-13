@@ -1,9 +1,28 @@
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SignInDto, SignUpDto } from '../dtos/auth.dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UserType } from '@prisma/client';
+import * as nodemailer from "nodemailer";
+
+
+const transport = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD
+  }
+});
+
+
+interface JWTPayload {
+  name: string;
+  iat: number;
+  exp: number;
+}
 
 @Injectable()
 export class AuthService {
@@ -30,6 +49,8 @@ export class AuthService {
           }
       });
 
+      this.sendEmailConfirmation(email);
+
       return this.generateJWT(user.username, user.id);
     }
 
@@ -41,6 +62,8 @@ export class AuthService {
         });
     
         if (!user) throw new HttpException('Invalid credentials', 400);
+
+        if(!user.email_confirmation) throw new BadRequestException("Please Confirm Email Before Attemping to Log In");
     
         const hashedPassword = user.password;
     
@@ -51,12 +74,64 @@ export class AuthService {
         return this.generateJWT(user.username, user.id);
     }
 
-    async getUserProfile(id: string) {
+    private async getUserProfile(id: string) {
       return await this.prismaService.user.findUnique({
         where: {
           id
         }
       });
+    }
+
+    async verifyEmailConfirmation(token: string){
+      try{
+        const payload = jwt.verify(token, process.env.JSON_EMAIL_SECRET_KEY) as JWTPayload;
+
+        const user = await this.prismaService.user.findUnique({
+          where:{
+            email: payload.name
+          }
+        });
+
+        if(user.email_confirmation) return "Already Confirmed Email";
+
+        await this.prismaService.user.update({
+          where: {
+            email: payload.name,
+          },
+          data : {
+            email_confirmation: true
+          }
+        });
+      }catch (error) {
+        return "Unsuccessfull Confirmation :("
+      }
+
+      return "Successfull Confirmation :)"
+    }
+
+    private async sendEmailConfirmation(email: string) {
+
+      const url = `http://localhost:8000/auth/confirm/${this.generateEmailJWT(email)}`
+
+      await transport.sendMail({
+      from:'"Drunk Knight" <drunk.knight.official@gmail.com>',
+      to: email,
+      subject:"Email Confirmation",
+      html: `<h1>Thank You For playing Drunk Knight</h1> <br>
+      To confirm your email address, please click on the following link: <a href="Email Confirmation Link">${url}</a>`,
+      });
+    }
+
+    private generateEmailJWT(email: string){
+      return jwt.sign(
+        {
+          name: email
+        },
+        process.env.JSON_EMAIL_SECRET_KEY,
+        {
+          expiresIn: 900
+        }
+      );
     }
 
 
