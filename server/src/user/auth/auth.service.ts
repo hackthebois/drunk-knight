@@ -5,6 +5,9 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UserType } from '@prisma/client';
 import * as nodemailer from "nodemailer";
+import * as handlebars from 'handlebars';
+import * as fs from 'fs';
+import * as path from 'path';
 
 
 const transport = nodemailer.createTransport({
@@ -112,13 +115,20 @@ export class AuthService {
     private async sendEmailConfirmation(email: string) {
 
       const url = `http://localhost:8000/auth/confirm/${this.generateEmailJWT(email)}`
+      const filePath = path.join(__dirname, '..', '..', '..', 'src/user/html/email.html');
+      const source = fs.readFileSync(filePath, 'utf-8').toString();
+      const template = handlebars.compile(source);
+      const replacements = {
+        email: email,
+        url: url
+      };
+      const htmlToSend = template(replacements);
 
       await transport.sendMail({
       from:'"Drunk Knight" <drunk.knight.official@gmail.com>',
       to: email,
       subject:"Email Confirmation",
-      html: `<h1>Thank You For playing Drunk Knight</h1> <br>
-      To confirm your email address, please click on the following link: <a href="Email Confirmation Link">${url}</a>`,
+      html: htmlToSend,
       });
     }
 
