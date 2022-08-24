@@ -19,38 +19,47 @@ export class CardService {
 
     constructor(private readonly prismaService: PrismaService) {}
 
-    async getAllCards(filter: CardFilter, userId: string) {
-
-        const user = await this.prismaService.user.findFirst({
+    async getAllCards(userId: string, deckId: string, filter: CardFilter) {
+        const deck = await this.prismaService.deck.findFirst({
             where: {
-                id: userId
+                id: deckId
             },
             select: {
+                user_id: true,
                 cards: {
                     where: filter
                 }
             }
         });
 
-        if (!user) throw new NotFoundException();
+        if (!deck) throw new NotFoundException();
+        if(deck.user_id !== userId) throw new BadRequestException();
 
-        return user.cards.map(card => new CardResponseDto(card));
+        return deck.cards.map(card => new CardResponseDto(card));
     }
 
-    async getCardById(id: string) {
-        const card = await this.prismaService.card.findFirst({
+    async getCardById(userId: string, deckId: string,cardId: string) {
+        const deck = await this.prismaService.deck.findFirst({
             where: {
-                id: id
+                id: deckId
             },
-            select: cardSelect
-        });
+            select: {
+                user_id: true,
+                cards: {
+                    where: {
+                        id: cardId
+                    }
+                }
+            }
+        }); 
 
-        if (!card) throw new NotFoundException();
+        if (!deck) throw new NotFoundException();
+        if(deck.user_id !== userId) throw new BadRequestException();
 
-        return new CardResponseDto(card);
+        return new CardResponseDto(deck.cards[0]);
     }
 
-    async createCard({ name, description, cardType }: CreateCardDto, userId: string) {
+    async createCard(deckId: string, { name, description, cardType }: CreateCardDto) {
 
         const cardExists = await this.prismaService.card.findFirst({
             where:{
@@ -65,7 +74,7 @@ export class CardService {
                 name: name,
                 description: description,
                 card_type: cardType,
-                user_id: userId
+                deck_id: deckId
             }
         });
 
@@ -94,9 +103,25 @@ export class CardService {
         return "Successfully Deleted"
     }
 
-    async getUserByCardId(id: string){
+    async getDeckByCardId(id: string){
         
         const card = await this.prismaService.card.findFirst({
+            where: {
+                id
+            },
+            select: {
+                deck: true
+            }
+        });
+
+        if(!card) throw new NotFoundException()
+
+        return card.deck;
+    }
+
+    async getUserByDeckId(id: string){
+
+        const deck = await this.prismaService.deck.findUnique({
             where: {
                 id
             },
@@ -111,8 +136,8 @@ export class CardService {
             }
         });
 
-        if(!card) throw new NotFoundException()
+        if(!deck) throw new NotFoundException()
 
-        return card.user;
+        return deck.user;
     }
 }

@@ -8,9 +8,10 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { AuthGuard } from './gaurds/auth.gaurd';
 import { AdminModule } from './admin/admin.module';
+import { DeckModule } from './deck/deck.module';
 
 @Module({
-  imports: [UserModule, PrismaModule, CardModule, AdminModule],
+  imports: [UserModule, PrismaModule, CardModule, AdminModule, DeckModule],
   controllers: [AppController],
   providers: [AppService, {
     provide: APP_INTERCEPTOR,

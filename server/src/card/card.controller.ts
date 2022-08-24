@@ -5,48 +5,59 @@ import { CardService } from './card.service';
 import { CreateCardDto, UpdateCardDto } from './dto/card.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 
-@Controller('/account/card')
+@Controller('/account/:userId/deck/:deckId/card')
 export class CardController {
 
     constructor(private readonly cardService: CardService) { }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Get()
-    getAllCards(@User() user: UserInfo, @Query('cardtype') card_type?: CardType) {
+    getAllCards(@Param("userId") userId: string, @Param("deckId") deckId: string, @Query('cardtype') card_type?: CardType) {
         const filter = card_type in CardType ? { card_type } : undefined;
-        return this.cardService.getAllCards(filter, user.id);
+        return this.cardService.getAllCards(userId, deckId, filter);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Get("/:id")
-    async getCardById(@Param(":id") id: string, @User() user: UserInfo) {
-        const cardOwner = await this.cardService.getUserByCardId(id);
-        if(cardOwner.id !== user.id) throw new UnauthorizedException();
-
-        return this.cardService.getCardById(id);
+    async getCardById(@Param("userId") userId: string, @Param("deckId") deckId: string, @Param(":id") cardId: string) {
+        return this.cardService.getCardById(userId, deckId, cardId);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Post("/create")
-    createCard(@Body() body: CreateCardDto, @User() user: UserInfo) {
-        return this.cardService.createCard(body, user.id);
+    async createCard(@Param("userId") userId: string, @Param("deckId") deckId: string, @Body() body: CreateCardDto, @User() user: UserInfo) {
+        if(userId !== user.id) throw new UnauthorizedException();
+        const deckOwner = await this.cardService.getUserByDeckId(deckId);
+        if(userId !== deckOwner.id) throw new UnauthorizedException();
+
+        return this.cardService.createCard(deckId, body);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Put("/:id")
-    async updateCardById(@Param("id") id: string, @Body() body: UpdateCardDto, @User() user: UserInfo){
-        const cardOwner = await this.cardService.getUserByCardId(id);
-        if(cardOwner.id !== user.id) throw new UnauthorizedException();
+    async updateCardById(
+        @Param("userId") userId: string, 
+        @Param("deckId") deckId: string, 
+        @Param("id") cardId: string, 
+        @Body() body: UpdateCardDto, 
+        @User() user: UserInfo){
+        const deck = await this.cardService.getDeckByCardId(cardId);
+        if(deck.user_id !== user.id || deck.id !== deckId || user.id !== userId) throw new UnauthorizedException();
 
-        return this.cardService.updateCardById(id, body);
+        return this.cardService.updateCardById(cardId, body);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Delete("/:id")
-    async deleteCardById(@Param(":id") id: string, @User() user: UserInfo){
-        const cardOwner = await this.cardService.getUserByCardId(id);
-        if(cardOwner.id !== user.id) throw new UnauthorizedException();
+    async deleteCardById(
+        @Param("userId") userId: string, 
+        @Param("deckId") deckId: string, 
+        @Param("id") cardId: string, 
+        @Body() body: UpdateCardDto, 
+        @User() user: UserInfo){
+        const deck = await this.cardService.getDeckByCardId(cardId);
+        if(deck.user_id !== user.id || deck.id !== deckId || user.id !== userId) throw new UnauthorizedException();
 
-        return this.cardService.deleteCardById(id);
+        return this.cardService.deleteCardById(cardId);
     }
 }

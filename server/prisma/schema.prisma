@@ -26,6 +26,17 @@ model User {
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
   user_type             UserType
+  decks                 Deck[]
+}
+
+model Deck {
+  id                    String @id @default(cuid())
+  name                  String
+  selected              Boolean
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+  user_id               String
+  user                  User     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
   cards                 Card[]
 }
 
@@ -36,8 +47,8 @@ model Card {
   card_type             CardType
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
-  user_id               String
-  user                  User     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  deck_id               String
+  deck                  Deck     @relation(fields: [deck_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 enum CardType {

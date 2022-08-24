@@ -5,26 +5,32 @@ import { User, UserInfo } from './decorators/user.decorator';
 import { UpdateUserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
 
-@Controller()
+@Controller("/account")
 export class UserController {
 
     constructor(private readonly userService: UserService){}
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
-    @Get("/account")
+    @Get("/:id")
+    getUserById(@Param("id") id: string){
+        return this.userService.getUserById(id);
+    }
+
+    @Roles(UserType.DEFAULT, UserType.ADMIN)
+    @Get()
     getUserProfile(@User() user: UserInfo){
         return this.userService.getUserProfile(user.id);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
-    @Put("/account")
+    @Put()
     updateUserProfile(@User() user: UserInfo, @Body() body: UpdateUserDto){
         if(!body.email && !body.username) throw new BadRequestException();
         return this.userService.updateUserProfile(body, user.id);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
-    @Delete("/account")
+    @Delete()
     deleteUser(@User() user: UserInfo) {
 
         if(user.name === "Admin") throw new HttpException("You Cannot Delete the Admin Account", 400);
