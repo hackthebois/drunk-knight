@@ -1,30 +1,19 @@
+import { useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Cards from "../components/Cards";
-import { Card } from "../types/Card";
+import { env } from "../env/client.mjs";
+import { Card, CardSchema } from "../types/Card";
 
-const cards: Card[] = [
-	{
-		id: "1",
-		name: "Alphabet",
-		description: "Say the ABCs backwards, drink a second for each letter you didn't get",
-		cardType: "ACTION",
-	},
-	{
-		id: "2",
-		name: "Dog Breads",
-		description: "Go clockwise naming dog breads, first to fail drinks",
-		cardType: "CATEGORIES",
-	},
-	{
-		id: "3",
-		name: "Favourite Colour",
-		description: "If you share a favourite colour with another player, drink",
-		cardType: "MAJORITY",
-	},
-];
+const play = async () => {
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`);
+	const data: unknown = await res.json();
+	return await CardSchema.array().min(1).parse(data);
+};
 
 const Home: NextPage = () => {
+	const { data: cards } = useQuery(["play"], play);
+
 	return (
 		<>
 			<Head>

@@ -8,15 +8,15 @@ const typeColours = {
 	MAJORITY: "#937DC2",
 };
 
-const CardItem = ({ name, description, cardType }: Card) => {
+const CardItem = ({ card: { name, description, card_type } }: { card: Card }) => {
 	return (
 		<div className="w-full h-full text-text flex flex-col shadow">
 			<div
 				className="p-4 relative flex items-start justify-between rounded-t"
-				style={{ backgroundColor: typeColours[cardType] }}
+				style={{ backgroundColor: typeColours[card_type] }}
 			>
 				<div className="bg-white flex p-2 items-center rounded font-bold h-10">
-					{cardType}
+					{card_type}
 				</div>
 			</div>
 			<div className="bg-white p-8 flex-1 rounded-b">
@@ -28,15 +28,15 @@ const CardItem = ({ name, description, cardType }: Card) => {
 };
 
 const Cards = ({ cards }: { cards: Card[] }) => {
-	const [firstCard, setFirstCard] = useState(0);
-	const [secondCard, setSecondCard] = useState(1);
-	const [degrees, setDegrees] = useState(0);
-	const [flipped, setFlipped] = useState(false);
-
 	const nextCard = (index: number) => {
 		if (cards && index >= cards.length - 1) return 0;
 		else return index + 1;
 	};
+
+	const [firstCard, setFirstCard] = useState(0);
+	const [secondCard, setSecondCard] = useState(nextCard(firstCard));
+	const [degrees, setDegrees] = useState(0);
+	const [flipped, setFlipped] = useState(false);
 
 	const flipCard = () => {
 		setFlipped(!flipped);
@@ -44,10 +44,6 @@ const Cards = ({ cards }: { cards: Card[] }) => {
 		if (flipped) setFirstCard(nextCard(secondCard));
 		else setSecondCard(nextCard(firstCard));
 	};
-
-	if (cards.length < 2) {
-		return <div>Not enough cards.</div>;
-	}
 
 	return (
 		<>
@@ -66,7 +62,7 @@ const Cards = ({ cards }: { cards: Card[] }) => {
 						className="absolute w-full h-full"
 						style={{ backfaceVisibility: "hidden" }}
 					>
-						<CardItem {...cards[firstCard]} />
+						<CardItem card={cards[firstCard]} />
 					</div>
 					<div
 						className="absolute w-full h-full"
@@ -75,7 +71,7 @@ const Cards = ({ cards }: { cards: Card[] }) => {
 							transform: "rotateY(180deg)",
 						}}
 					>
-						<CardItem {...cards[secondCard]} />
+						<CardItem card={cards[secondCard]} />
 					</div>
 				</div>
 			</div>
