@@ -21,8 +21,9 @@ export class AuthGuard implements CanActivate {
             context.getClass()
         ]);
         
-        if(roles?.length){
-            const request = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest();
+
+        if(request.headers && request.headers.authorization){
             const token = request.headers?.authorization?.split("Bearer ")[1];
             
             try {
@@ -34,7 +35,7 @@ export class AuthGuard implements CanActivate {
                     }
                 });
 
-                if(!user || !roles.includes(user.user_type)) return false;
+                if(!user || (!roles.includes(user.user_type) && roles?.length !== 0)) return false;
 
             }catch (error){
                 return false;
