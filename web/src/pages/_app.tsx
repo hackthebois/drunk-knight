@@ -1,16 +1,8 @@
 import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { AppType } from "next/dist/shared/lib/utils";
 
-function MyApp({ Component, pageProps }: AppProps) {
-	const queryClient = new QueryClient();
-	return (
-		<QueryClientProvider client={queryClient}>
-			<div className="m-auto max-w-screen-lg h-[100vh] p-20">
-				<Component {...pageProps} />
-			</div>
-		</QueryClientProvider>
-	);
-}
+const MyApp: AppType = ({ Component, pageProps }) => {
+  return <Component {...pageProps} />;
+};
 
 export default MyApp;
