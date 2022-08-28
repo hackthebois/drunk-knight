@@ -8,20 +8,6 @@ export class UserService {
 
     constructor(private readonly prismaService: PrismaService){}
 
-    async getUserById(id: string) {
-        const user = await this.prismaService.user.findFirst({
-            where: {
-                id: id,
-                user_type: UserType.DEFAULT
-            },
-        });
-
-        if(!user) throw new NotFoundException();
-
-        return new UserResponseDto(user);
-    }
-
-
     async getUserProfile(id: string) {
         const user =  await this.prismaService.user.findFirst({
             where: {

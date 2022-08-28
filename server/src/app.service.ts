@@ -8,10 +8,6 @@ export class AppService {
 
   constructor(private readonly prismaService: PrismaService) {}
 
-  getHello(): string {
-    return "Welcome To Drunk-Knight";
-  }
-
   async getGameplayCards(user: UserInfo) {
     const gameplayDecks = await this.prismaService.user.findFirst({
       where:{
@@ -26,7 +22,7 @@ export class AppService {
       }
     });
     
-    const standardCards = gameplayDecks.decks[0].cards;
+    const standardCards = gameplayDecks?.decks[0].cards;
 
     if(user && user.name != "__admin"){
       const userCards = await this.prismaService.deck.findFirst({

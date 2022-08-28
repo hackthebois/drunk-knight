@@ -42,7 +42,7 @@ model Deck {
 
 model Card {
   id                    String   @id @default(cuid())
-  name                  String   @unique
+  name                  String
   description           String
   card_type             CardType
   created_at            DateTime @default(now())

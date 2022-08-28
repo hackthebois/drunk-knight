@@ -1,4 +1,4 @@
-import { CardType } from "@prisma/client"
+import { CardType, Deck } from "@prisma/client"
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 
@@ -21,9 +21,11 @@ export class UpdateDeckDto {
 export class DeckResponseDto {
     id: string;
     name: string;
+    selected: boolean
 
-    constructor(paritial: any) {
+    constructor(paritial: Partial<Deck>) {
         this.id = paritial.id;
         this.name = paritial.name;
+        this.selected = paritial.selected;
       }
 }

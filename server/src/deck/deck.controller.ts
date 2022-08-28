@@ -5,7 +5,7 @@ import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { DeckService } from './deck.service';
 import { CreateDeckDto, UpdateDeckDto } from './dto/deck.dto';
 
-@Controller('/account/:userId/deck')
+@Controller('/deck')
 export class DeckController {
 
     constructor(private readonly deckService: DeckService){}
@@ -24,27 +24,25 @@ export class DeckController {
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Post("/create")
-    createDeck(@User() user: UserInfo, @Body() body: CreateDeckDto, @Param("userId") userId: string,) {
-        if(user.id !== userId) throw new UnauthorizedException();
-        
+    createDeck(@User() user: UserInfo, @Body() body: CreateDeckDto) {
         return this.deckService.createDeck(user.id, body);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Put("/:id")
-    async updateDeckById(@User() user: UserInfo, @Body() body: UpdateDeckDto, @Param("userId") userId: string, @Param("id") id: string) {
+    async updateDeckById(@User() user: UserInfo, @Body() body: UpdateDeckDto, @Param("id") id: string) {
         const deckOwner = await this.deckService.getUserByDeckId(id);
-        if(deckOwner.id !== userId) throw new UnauthorizedException();
+        if(deckOwner.id !== user.id) throw new UnauthorizedException();
         
         return this.deckService.updateDeckById(id, body);
     }
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Delete("/:id")
-    async deleteDeckById(@User() user: UserInfo, @Param("userId") userId: string, @Param("id") id: string) {
+    async deleteDeckById(@User() user: UserInfo, @Param("id") id: string) {
 
         const deckOwner = await this.deckService.getUserByDeckId(id);
-        if(deckOwner.id !== userId) throw new UnauthorizedException();
+        if(deckOwner.id !== user.id) throw new UnauthorizedException();
 
         return this.deckService.deleteDeckById(id);
     }

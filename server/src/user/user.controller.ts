@@ -11,12 +11,6 @@ export class UserController {
     constructor(private readonly userService: UserService){}
 
     @Roles(UserType.DEFAULT, UserType.ADMIN)
-    @Get("/:id")
-    getUserById(@Param("id") id: string){
-        return this.userService.getUserById(id);
-    }
-
-    @Roles(UserType.DEFAULT, UserType.ADMIN)
     @Get()
     getUserProfile(@User() user: UserInfo){
         return this.userService.getUserProfile(user.id);
