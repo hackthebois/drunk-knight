@@ -9,9 +9,10 @@ import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { AuthGuard } from './gaurds/auth.gaurd';
 import { AdminModule } from './admin/admin.module';
 import { DeckModule } from './deck/deck.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
-  imports: [UserModule, PrismaModule, CardModule, AdminModule, DeckModule],
+  imports: [UserModule, PrismaModule, CardModule, AdminModule, DeckModule, SearchModule],
   controllers: [AppController],
   providers: [AppService, {
     provide: APP_INTERCEPTOR,
