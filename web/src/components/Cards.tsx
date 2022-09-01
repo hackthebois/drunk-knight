@@ -8,7 +8,12 @@ const typeColours = {
 	MAJORITY: "#937DC2",
 };
 
-const CardItem = ({ card: { name, description, card_type } }: { card: Card }) => {
+const CardItem = ({ card }: { card?: Card }) => {
+	if (!card) {
+		return <div>Empty card</div>;
+	}
+	const { card_type, name, description } = card;
+
 	return (
 		<div className="w-full h-full text-text flex flex-col shadow">
 			<div
