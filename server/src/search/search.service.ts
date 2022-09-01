@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CardType, UserType } from '@prisma/client';
-import { createDecipheriv } from 'crypto';
 import { CardResponseDto } from 'src/card/dto/card.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchDto } from './dtos/search.dto';
