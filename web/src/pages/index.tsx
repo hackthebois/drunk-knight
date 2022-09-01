@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Cards from "../components/Cards";
 import { env } from "../env/client.mjs";
-import { Card, CardSchema } from "../types/Card";
+import { CardSchema } from "../types/Card";
 
 const play = async () => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`);
