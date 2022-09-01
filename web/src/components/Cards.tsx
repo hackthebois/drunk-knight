@@ -53,7 +53,7 @@ const Cards = ({ cards }: { cards: Card[] }) => {
 	return (
 		<>
 			<div
-				className="w-[100vw] sm:w-[600px] h-96 sm:h-[450px] p-8 bg-transparent"
+				className="w-full sm:w-[600px] h-96 sm:h-[450px] bg-transparent"
 				style={{ perspective: 1000 }}
 			>
 				<div
@@ -80,10 +80,7 @@ const Cards = ({ cards }: { cards: Card[] }) => {
 					</div>
 				</div>
 			</div>
-			<button
-				onClick={flipCard}
-				className="bg-white font-bold px-4 py-2 mt-8 sm:mt-12 rounded text-lg shadow text-text"
-			>
+			<button onClick={flipCard} className="btn mt-8 sm:mt-12">
 				Next Card
 			</button>
 		</>

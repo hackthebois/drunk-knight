@@ -2,9 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	@apply bg-background w-[100vw] h-[100vh] overflow-hidden text-white flex items-center justify-center;
+@layer base {
+	body {
+		@apply bg-background w-[100vw] h-[100vh] overflow-hidden text-white flex items-center justify-center;
+	}
+	main {
+		@apply w-[100vw] h-[100vh] p-8;
+	}
 }
-main {
-	@apply max-w-5xl m-auto w-full h-full flex items-center justify-center flex-col;
+
+@layer components {
+	.btn {
+		@apply bg-white font-bold px-4 py-2 rounded text-lg shadow text-text;
+	}
+	.gbtn {
+		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
+	}
+	.ebtn {
+		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-opacity-90 transition-colors bg-red-500;
+	}
+	.form {
+		@apply border-[1px] border-[#ccc] rounded max-w-[400px] p-10;
+	}
+	.input {
+		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 mb-4 mt-2 text-text;
+	}
 }

@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import Cards from "../components/Cards";
 import { env } from "../env/client.mjs";
+import useAuth from "../hooks/useAuth";
 import { CardSchema } from "../types/Card";
+import { FaUserCircle } from "react-icons/fa";
 
 const play = async () => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`);
@@ -13,6 +16,8 @@ const play = async () => {
 
 const Home: NextPage = () => {
 	const { data: cards } = useQuery(["play"], play);
+	const { findUser } = useAuth();
+	const { data: user } = findUser;
 
 	return (
 		<>
@@ -22,7 +27,25 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main>{cards && <Cards cards={cards} />}</main>
+			<main className="w-[100vw] h-[100vh] p-8 flex flex-col items-center justify-center">
+				{cards && <Cards cards={cards} />}
+				{!user ? (
+					<div className="text-white absolute bottom-8">
+						Your are playing as guest.{" "}
+						<Link href="/auth/signin">
+							<a className=" text-blue-400">Sign in</a>
+						</Link>{" "}
+						or{" "}
+						<Link href="/auth/signup">
+							<a className=" text-blue-400">Sign up</a>
+						</Link>
+					</div>
+				) : (
+					<Link href="/account">
+						<FaUserCircle className="h-8 w-8 absolute right-8 top-8 cursor-pointer" />
+					</Link>
+				)}
+			</main>
 		</>
 	);
 };
