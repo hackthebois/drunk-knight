@@ -8,6 +8,7 @@ const Account = () => {
 		<div>
 			<p>{user?.email}</p>
 			<p>{user?.username}</p>
+			<p>Email Confirmed: {user?.email_confirmation ? "True" : "False"}</p>
 			<button className="gbtn" onClick={() => signout()}>
 				Sign out
 			</button>

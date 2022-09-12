@@ -6,6 +6,7 @@ export const UserSchema = z.object({
 	id: z.string().cuid(),
 	email: z.string().email(),
 	username: z.string(),
+	email_confirmation: z.boolean().default(false),
 });
 export type User = z.input<typeof UserSchema>;
 const getUserReq = async () => {
@@ -21,43 +22,6 @@ const getUserReq = async () => {
 	});
 	const data: unknown = await res.json();
 	return UserSchema.parse(data);
-};
-
-export const SignInInputSchema = z.object({
-	username: z.string().min(1),
-	password: z.string().min(1),
-});
-export type SignInInput = z.input<typeof SignInInputSchema>;
-const signInReq = async (input: SignInInput) => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(input),
-	});
-	const data: unknown = await res.text();
-	return z.string().parse(data);
-};
-
-export const SignUpInputSchema = z.object({
-	email: z.string().email(),
-	username: z.string().min(4, "Username must contain at least 4 character(s)"),
-	password: z.string().min(8, "Password must contain at least 8 character(s)"),
-});
-export type SignUpInput = z.input<typeof SignUpInputSchema>;
-const signUpReq = async (input: SignUpInput) => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(input),
-	});
-	const data: unknown = res.text();
-	return z.string().parse(data);
 };
 
 export const UpdateUserSchema = z.object({
@@ -100,29 +64,13 @@ const useAuth = () => {
 		onSuccess: () => queryClient.invalidateQueries(["user"]),
 	});
 
-	const signin = useMutation(signInReq, {
-		onSuccess: (data) => {
-			localStorage.setItem("access_token", data);
-			queryClient.invalidateQueries(["user"]);
-			router.push("/auth/confirm");
-		},
-	});
-
-	const signup = useMutation(signUpReq, {
-		onSuccess: (data) => {
-			localStorage.setItem("access_token", data);
-			queryClient.invalidateQueries(["user"]);
-			router.push("/auth/confirm");
-		},
-	});
-
 	const signout = () => {
 		localStorage.setItem("access_token", "");
 		queryClient.resetQueries(["user"]);
 		router.push("/");
 	};
 
-	return { findUser, signin, signup, signout, update };
+	return { findUser, signout, update };
 };
 
 export default useAuth;
