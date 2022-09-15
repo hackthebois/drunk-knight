@@ -24,3 +24,9 @@ export class SignInDto {
     @IsNotEmpty()
     password: string;
 }
+
+export class PasswordResetDto {
+    @IsString()
+    @IsNotEmpty()
+    password: string
+}

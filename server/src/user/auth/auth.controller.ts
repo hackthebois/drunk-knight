@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { User, UserInfo } from '../decorators/user.decorator';
-import { SignInDto, SignUpDto } from '../dtos/auth.dto';
+import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
+import { PasswordResetDto, SignInDto, SignUpDto } from '../dtos/auth.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -17,14 +16,21 @@ export class AuthController {
         return this.authService.signin(body);
     }
 
-    // @Get("/profile")
-    // async userProfile(@User() user: UserInfo){
-    //     const userDetails = await this.authService.getUserProfile(user.id);
-    //     return {token: user, userDetails: userDetails};
-    // }
-
     @Get("confirm/:token")
+    @Redirect("http://localhost:8000/auth/confirm", 301)
     emailVarification(@Param("token") token: string){
         return this.authService.verifyEmailConfirmation(token);
+    }
+
+    @Get("/confirm")
+    confirmedEmailVarification(@Param("error") error: string){
+        if(error && error.includes("jwt")) return "JWT ERROR";
+        
+        return "CONFIRMED EMAIL";
+    }
+
+    @Get("/password-reset")
+    passwordReset(@Body() body: PasswordResetDto){
+        return this.authService.passwordReset(body);
     }
 }

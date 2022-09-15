@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SignInDto, SignUpDto } from '../dtos/auth.dto';
+import { PasswordResetDto, SignInDto, SignUpDto } from '../dtos/auth.dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UserType } from '@prisma/client';
@@ -95,8 +95,6 @@ export class AuthService {
           }
         });
 
-        if(user.email_confirmation) return "Already Confirmed Email";
-
         await this.prismaService.user.update({
           where: {
             email: payload.name,
@@ -105,11 +103,11 @@ export class AuthService {
             email_confirmation: true
           }
         });
-      }catch (error) {
-        return "Unsuccessfull Confirmation :("
-      }
 
-      return "Successfull Confirmation :)"
+        return user;
+      }catch (error) {
+        return { url: "http://localhost:8000/auth/confirm?error=jwt", statusbar: 400 }
+      }
     }
 
     private async sendEmailConfirmation(email: string) {
@@ -131,6 +129,12 @@ export class AuthService {
       html: htmlToSend,
       });
     }
+
+    async passwordReset({ password }: PasswordResetDto) {
+      
+    }
+
+
 
     private generateEmailJWT(email: string){
       return jwt.sign(
