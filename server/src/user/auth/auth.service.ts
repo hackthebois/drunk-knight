@@ -8,6 +8,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import {
   PasswordResetDto,
   PasswordUpdateDto,
+  ResendEmailDto,
   SignInDto,
   SignUpDto,
 } from '../dtos/auth.dto';
@@ -85,6 +86,10 @@ export class AuthService {
     if (!isValidPassword) throw new HttpException('Invalid credentials', 400);
 
     return this.generateJWT(user.username, user.id);
+  }
+
+  async resendEmailVarification({ email }: ResendEmailDto) {
+    return this.sendEmailConfirmation(email);
   }
 
   async verifyEmailConfirmation(token: string) {

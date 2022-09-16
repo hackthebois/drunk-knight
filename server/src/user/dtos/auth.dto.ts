@@ -34,3 +34,8 @@ export class PasswordUpdateDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class ResendEmailDto {
+  @IsEmail()
+  email: string;
+}

@@ -10,6 +10,7 @@ import {
 import {
   PasswordResetDto,
   PasswordUpdateDto,
+  ResendEmailDto,
   SignInDto,
   SignUpDto,
 } from '../dtos/auth.dto';
@@ -27,6 +28,11 @@ export class AuthController {
   @Post('/signin')
   signin(@Body() body: SignInDto) {
     return this.authService.signin(body);
+  }
+
+  @Post('resend-email')
+  resendEmailVarification(@Body() body: ResendEmailDto) {
+    return this.authService.resendEmailVarification(body);
   }
 
   @Get('confirm/:token')
