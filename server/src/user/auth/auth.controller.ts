@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @Get('confirm/:token')
-  @Redirect('http://localhost:8000/auth/confirm', 301)
+  @Redirect(`${process.env.HOST_URL}/auth/confirm`, 301)
   emailVarification(@Param('token') token: string) {
     return this.authService.verifyEmailConfirmation(token);
   }
@@ -55,7 +55,7 @@ export class AuthController {
   }
 
   @Post('/password-reset/:token')
-  @Redirect('http://localhost:8000/home', 301)
+  @Redirect(`${process.env.HOST_URL}/home`, 301)
   passwordUpdate(
     @Param('token') token: string,
     @Body() body: PasswordUpdateDto,
