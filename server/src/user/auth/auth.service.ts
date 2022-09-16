@@ -117,7 +117,7 @@ export class AuthService {
       return user;
     } catch (error) {
       return {
-        url: 'http://localhost:8000/auth/confirm?error=jwt',
+        url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
         statusbar: 400,
       };
     }
@@ -147,14 +147,14 @@ export class AuthService {
       });
     } catch (error) {
       return {
-        url: 'http://localhost:8000/auth/confirm?error=jwt',
+        url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
         statusbar: 400,
       };
     }
   }
 
   private async sendEmailConfirmation(email: string) {
-    const url = `http://localhost:8000/auth/confirm/${this.generateEmailJWT(
+    const url = `${process.env.HOST_URL}/auth/confirm/${this.generateEmailJWT(
       email,
       process.env.JSON_PASSWORD_RESET_SECRET_KEY,
     )}`;
@@ -170,7 +170,9 @@ export class AuthService {
   }
 
   async passwordReset({ email }: PasswordResetDto) {
-    const url = `http://localhost:8000/auth/password-reset/${this.generateEmailJWT(
+    const url = `${
+      process.env.HOST_URL
+    }/auth/password-reset/${this.generateEmailJWT(
       email,
       process.env.JSON_EMAIL_SECRET_KEY,
     )}`;
