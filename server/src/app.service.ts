@@ -2,40 +2,40 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { UserInfo } from './user/decorators/user.decorator';
 import { Card, UserType } from '@prisma/client';
+import { CardResponseDto } from './card/dto/card.dto';
 
 @Injectable()
 export class AppService {
-
   constructor(private readonly prismaService: PrismaService) {}
 
   async getGameplayCards(user: UserInfo) {
     const gameplayDecks = await this.prismaService.user.findFirst({
-      where:{
-        user_type: UserType.ADMIN
+      where: {
+        user_type: UserType.ADMIN,
       },
-      select:{
+      select: {
         decks: {
-          select:{
-            cards: true
-          }
-        }
-      }
+          select: {
+            cards: true,
+          },
+        },
+      },
     });
-    
+
     const standardCards = gameplayDecks?.decks[0].cards;
 
-    if(user && user.name != "__admin"){
+    if (user && user.name != '__admin') {
       const userCards = await this.prismaService.deck.findFirst({
         where: {
           user_id: user.id,
-          selected: true
+          selected: true,
         },
         select: {
-          cards: true
-        }
+          cards: true,
+        },
       });
       return [...standardCards, ...userCards.cards];
     }
-    return standardCards;
+    return standardCards.map((card) => new CardResponseDto(card));
   }
 }
