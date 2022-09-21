@@ -1,16 +1,16 @@
 import {
-  BadRequestException,
-  ConflictException,
-  HttpException,
-  Injectable,
+	BadRequestException,
+	ConflictException,
+	HttpException,
+	Injectable,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
-  PasswordResetDto,
-  PasswordUpdateDto,
-  ResendEmailDto,
-  SignInDto,
-  SignUpDto,
+	PasswordResetDto,
+	PasswordUpdateDto,
+	ResendEmailDto,
+	SignInDto,
+	SignUpDto,
 } from '../dtos/auth.dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -21,207 +21,212 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const transport = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USERNAME,
-    pass: process.env.EMAIL_PASSWORD,
-  },
+	host: 'smtp.gmail.com',
+	port: 465,
+	secure: true,
+	auth: {
+		user: process.env.EMAIL_USERNAME,
+		pass: process.env.EMAIL_PASSWORD,
+	},
 });
 
 interface JWTPayload {
-  name: string;
-  iat: number;
-  exp: number;
+	name: string;
+	iat: number;
+	exp: number;
 }
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prismaService: PrismaService) {}
+	constructor(private readonly prismaService: PrismaService) {}
 
-  async signup({ email, password, username }: SignUpDto) {
-    const userExists = await this.prismaService.user.findUnique({
-      where: {
-        email,
-      },
-    });
+	async signup({ email, password, username }: SignUpDto) {
+		const userExists = await this.prismaService.user.findUnique({
+			where: {
+				email,
+			},
+		});
 
-    if (userExists) throw new ConflictException();
+		if (userExists) throw new ConflictException();
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.prismaService.user.create({
-      data: {
-        email: email,
-        username: username,
-        password: hashedPassword,
-        user_type: UserType.DEFAULT,
-      },
-    });
+		const user = await this.prismaService.user.create({
+			data: {
+				email: email,
+				username: username,
+				password: hashedPassword,
+				user_type: UserType.DEFAULT,
+			},
+		});
 
-    this.sendEmailConfirmation(email);
+		this.sendEmailConfirmation(email);
 
-    return { token: this.generateJWT(user.username, user.id) };
-  }
+		return { token: this.generateJWT(user.username, user.id) };
+	}
 
-  async signin({ username, password }: SignInDto) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        username,
-      },
-    });
+	async signin({ username, password }: SignInDto) {
+		const user = await this.prismaService.user.findUnique({
+			where: {
+				username,
+			},
+		});
 
-    if (!user) throw new HttpException('Invalid credentials', 400);
+		if (!user) throw new HttpException('Invalid credentials', 400);
 
-    if (!user.email_confirmation)
-      throw new BadRequestException(
-        'Please Confirm Email Before Attemping to Log In',
-      );
+		if (!user.email_confirmation)
+			throw new BadRequestException(
+				'Please Confirm Email Before Attemping to Log In',
+			);
 
-    const hashedPassword = user.password;
+		const hashedPassword = user.password;
 
-    const isValidPassword = await bcrypt.compare(password, hashedPassword);
+		const isValidPassword = await bcrypt.compare(password, hashedPassword);
 
-    if (!isValidPassword) throw new HttpException('Invalid credentials', 400);
+		if (!isValidPassword)
+			throw new HttpException('Invalid credentials', 400);
 
-    return { token: this.generateJWT(user.username, user.id) };
-  }
+		return { token: this.generateJWT(user.username, user.id) };
+	}
 
-  async resendEmailVarification({ email }: ResendEmailDto) {
-    return this.sendEmailConfirmation(email);
-  }
+	async resendEmailVarification({ email }: ResendEmailDto) {
+		return this.sendEmailConfirmation(email);
+	}
 
-  async verifyEmailConfirmation(token: string) {
-    try {
-      const payload = jwt.verify(
-        token,
-        process.env.JSON_EMAIL_SECRET_KEY,
-      ) as JWTPayload;
+	async verifyEmailConfirmation(token: string) {
+		try {
+			const payload = jwt.verify(
+				token,
+				process.env.JSON_EMAIL_SECRET_KEY,
+			) as JWTPayload;
 
-      const user = await this.prismaService.user.findUnique({
-        where: {
-          email: payload.name,
-        },
-      });
+			const user = await this.prismaService.user.findUnique({
+				where: {
+					email: payload.name,
+				},
+			});
 
-      await this.prismaService.user.update({
-        where: {
-          email: payload.name,
-        },
-        data: {
-          email_confirmation: true,
-        },
-      });
+			await this.prismaService.user.update({
+				where: {
+					email: payload.name,
+				},
+				data: {
+					email_confirmation: true,
+				},
+			});
 
-      return user;
-    } catch (error) {
-      return {
-        url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
-        statusbar: 400,
-      };
-    }
-  }
+			return user;
+		} catch (error) {
+			return {
+				url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
+				statusbar: 400,
+			};
+		}
+	}
 
-  async passwordUpdate(token: string, { password }: PasswordUpdateDto) {
-    try {
-      const payload = jwt.verify(
-        token,
-        process.env.JSON_EMAIL_SECRET_KEY,
-      ) as JWTPayload;
-      const user = await this.prismaService.user.findUnique({
-        where: {
-          email: payload.name,
-        },
-      });
+	async passwordUpdate(token: string, { password }: PasswordUpdateDto) {
+		try {
+			const payload = jwt.verify(
+				token,
+				process.env.JSON_PASSWORD_RESET_SECRET_KEY,
+			) as JWTPayload;
+			const user = await this.prismaService.user.findUnique({
+				where: {
+					email: payload.name,
+				},
+			});
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+			const hashedPassword = await bcrypt.hash(password, 10);
 
-      await this.prismaService.user.update({
-        where: {
-          email: payload.name,
-        },
-        data: {
-          password: hashedPassword,
-        },
-      });
-    } catch (error) {
-      return {
-        url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
-        statusbar: 400,
-      };
-    }
-  }
+			await this.prismaService.user.update({
+				where: {
+					email: payload.name,
+				},
+				data: {
+					password: hashedPassword,
+				},
+			});
 
-  private async sendEmailConfirmation(email: string) {
-    const url = `${process.env.HOST_URL}/auth/confirm/${this.generateEmailJWT(
-      email,
-      process.env.JSON_PASSWORD_RESET_SECRET_KEY,
-    )}`;
+			return user;
+		} catch (error) {
+			return {
+				url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
+				statusbar: 400,
+			};
+		}
+	}
 
-    const htmlToSend = this.emailHtml('email.html', { email, url });
+	private async sendEmailConfirmation(email: string) {
+		const url = `${
+			process.env.HOST_URL
+		}/auth/confirm/${this.generateEmailJWT(
+			email,
+			process.env.JSON_EMAIL_SECRET_KEY,
+		)}`;
 
-    await transport.sendMail({
-      from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
-      to: email,
-      subject: 'Email Confirmation',
-      html: htmlToSend,
-    });
-  }
+		const htmlToSend = this.emailHtml('email.html', { email, url });
 
-  async passwordReset({ email }: PasswordResetDto) {
-    const url = `${
-      process.env.HOST_URL
-    }/auth/password-reset/${this.generateEmailJWT(
-      email,
-      process.env.JSON_EMAIL_SECRET_KEY,
-    )}`;
+		await transport.sendMail({
+			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
+			to: email,
+			subject: 'Email Confirmation',
+			html: htmlToSend,
+		});
+	}
 
-    const htmlToSend = this.emailHtml('passwordreset.html', { email, url });
+	async passwordReset({ email }: PasswordResetDto) {
+		const url = `${
+			process.env.HOST_URL
+		}/auth/password-reset/${this.generateEmailJWT(
+			email,
+			process.env.JSON_PASSWORD_RESET_SECRET_KEY,
+		)}`;
 
-    await transport.sendMail({
-      from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
-      to: email,
-      subject: 'Password Reset',
-      html: htmlToSend,
-    });
-  }
+		const htmlToSend = this.emailHtml('passwordreset.html', { email, url });
 
-  private emailHtml(fileName: string, replacements: {}) {
-    const filePath = path.join(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      `src/user/html/${fileName}`,
-    );
-    const source = fs.readFileSync(filePath, 'utf-8').toString();
-    const template = handlebars.compile(source);
-    return template(replacements);
-  }
+		await transport.sendMail({
+			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
+			to: email,
+			subject: 'Password Reset',
+			html: htmlToSend,
+		});
+	}
 
-  private generateEmailJWT(email: string, secretKey: string) {
-    return jwt.sign(
-      {
-        name: email,
-      },
-      secretKey,
-      {
-        expiresIn: 900,
-      },
-    );
-  }
+	private emailHtml(fileName: string, replacements: {}) {
+		const filePath = path.join(
+			__dirname,
+			'..',
+			'..',
+			'..',
+			`src/user/html/${fileName}`,
+		);
+		const source = fs.readFileSync(filePath, 'utf-8').toString();
+		const template = handlebars.compile(source);
+		return template(replacements);
+	}
 
-  private generateJWT(name: string, id: string) {
-    return jwt.sign(
-      {
-        name,
-        id,
-      },
-      process.env.JSON_SECRET_KEY,
-      {
-        expiresIn: 3600000,
-      },
-    );
-  }
+	private generateEmailJWT(email: string, secretKey: string) {
+		return jwt.sign(
+			{
+				name: email,
+			},
+			secretKey,
+			{
+				expiresIn: 900,
+			},
+		);
+	}
+
+	private generateJWT(name: string, id: string) {
+		return jwt.sign(
+			{
+				name,
+				id,
+			},
+			process.env.JSON_SECRET_KEY,
+			{
+				expiresIn: 3600000,
+			},
+		);
+	}
 }
