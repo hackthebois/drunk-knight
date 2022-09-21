@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+import { env } from "../env/client.mjs";
 
 export const UserSchema = z.object({
 	id: z.string().cuid(),
@@ -12,7 +13,7 @@ export type User = z.input<typeof UserSchema>;
 const getUserReq = async () => {
 	const accessToken = localStorage.getItem("access_token");
 
-	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/account`, {
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
 		method: "GET",
 		headers: {
 			Accept: "application/json",
@@ -29,16 +30,10 @@ export const UpdateUserSchema = z.object({
 	username: z.string().min(4, "Username must contain at least 4 character(s)"),
 });
 export type UpdateUser = z.input<typeof UpdateUserSchema>;
-const updateUserReq = async ({
-	username,
-	email,
-}: {
-	username: User["username"];
-	email: User["email"];
-}) => {
+const updateUserReq = async ({ username, email }: UpdateUser) => {
 	const accessToken = localStorage.getItem("access_token");
 
-	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/account`, {
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
 		method: "PUT",
 		headers: {
 			Accept: "application/json",

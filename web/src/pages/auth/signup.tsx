@@ -68,7 +68,7 @@ const SignUp = () => {
 				</label>
 				<input
 					id="username"
-					className="input"
+					className="input mb-4 mt-2"
 					{...register("username")}
 					placeholder="Username here..."
 				/>
@@ -77,7 +77,7 @@ const SignUp = () => {
 				</label>
 				<input
 					id="email"
-					className="input"
+					className="input mb-4 mt-2"
 					{...register("email")}
 					placeholder="Email here..."
 				/>
@@ -87,7 +87,7 @@ const SignUp = () => {
 				<input
 					id="password"
 					type="password"
-					className="input"
+					className="input mb-4 mt-2"
 					{...register("password")}
 					placeholder="Password here..."
 				/>

@@ -67,7 +67,7 @@ const SignIn = () => {
 				</label>
 				<input
 					id="username"
-					className="input"
+					className="input mb-4 mt-2"
 					{...register("username")}
 					placeholder="Username here..."
 				/>
@@ -77,7 +77,7 @@ const SignIn = () => {
 				<input
 					id="password"
 					type="password"
-					className="input"
+					className="input mb-4 mt-2"
 					{...register("password")}
 					placeholder="Password here..."
 				/>
