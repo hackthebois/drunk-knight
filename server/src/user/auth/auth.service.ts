@@ -62,7 +62,7 @@ export class AuthService {
 
     this.sendEmailConfirmation(email);
 
-    return this.generateJWT(user.username, user.id);
+    return { token: this.generateJWT(user.username, user.id) };
   }
 
   async signin({ username, password }: SignInDto) {
@@ -85,7 +85,7 @@ export class AuthService {
 
     if (!isValidPassword) throw new HttpException('Invalid credentials', 400);
 
-    return this.generateJWT(user.username, user.id);
+    return { token: this.generateJWT(user.username, user.id) };
   }
 
   async resendEmailVarification({ email }: ResendEmailDto) {
