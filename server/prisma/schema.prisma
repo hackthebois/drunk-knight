@@ -2,52 +2,48 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
+
 datasource db {
-  provider = "mysql"
-  url = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
-
 model User {
-  id                    String   @id @default(cuid())
-  username              String   @unique
-  email                 String   @unique
-  email_confirmation    Boolean  @default(false)
-  password              String
-  created_at            DateTime @default(now())
-  updated_at            DateTime @updatedAt
-  user_type             UserType
-  decks                 Deck[]
+  id                 String   @id @default(cuid())
+  username           String   @unique
+  email              String   @unique
+  email_confirmation Boolean  @default(false)
+  password           String
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  user_type          UserType
+  decks              Deck[]
 }
 
 model Deck {
-  id                    String @id @default(cuid())
-  name                  String
-  selected              Boolean
-  created_at            DateTime @default(now())
-  updated_at            DateTime @updatedAt
-  user_id               String
-  user                  User     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  cards                 Card[]
+  id         String   @id @default(cuid())
+  name       String
+  selected   Boolean
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  cards      Card[]
 }
 
 model Card {
-  id                    String   @id @default(cuid())
-  name                  String
-  description           String
-  card_type             CardType
-  created_at            DateTime @default(now())
-  updated_at            DateTime @updatedAt
-  deck_id               String
-  deck                  Deck     @relation(fields: [deck_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  card_type   CardType
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  deck_id     String
+  deck        Deck     @relation(fields: [deck_id], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 enum CardType {
