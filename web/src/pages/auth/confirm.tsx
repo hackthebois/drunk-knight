@@ -8,7 +8,7 @@ const Confirm = () => {
 	const { data: user } = findUser;
 	return (
 		<main className="text-center flex flex-col items-center justify-center">
-			{user && user.email_confirmation ? (
+			{user && user.emailConfirmation ? (
 				<>
 					<h1 className="text-3xl font-bold">Email confirmed!</h1>
 					<p className="text-lg mt-4">
