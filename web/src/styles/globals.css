@@ -4,10 +4,10 @@
 
 @layer base {
 	body {
-		@apply bg-background w-[100vw] h-[100vh] overflow-hidden text-white flex items-center justify-center;
+		@apply bg-background w-[100vw] text-white flex items-center justify-center;
 	}
 	main {
-		@apply w-[100vw] h-[100vh] p-8;
+		@apply max-w-screen-lg w-[100vw] p-6 md:p-10 font-default;
 	}
 }
 
@@ -19,15 +19,28 @@
 		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
 	}
 	.ebtn {
-		@apply rounded border-[1px] border-red-500 py-2 px-4 text-white font-bold hover:bg-opacity-90 transition-colors bg-red-500;
+		@apply rounded border-[1px] border-red-500 py-2 px-4 text-red-500 font-bold transition-colors hover:bg-white hover:bg-opacity-5;
 	}
 	.item {
 		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
 	}
 	.form {
-		@apply border-[1px] border-[#ccc] rounded max-w-[400px] p-10;
+		@apply flex flex-col;
 	}
-	.input {
-		@apply w-full rounded border-[1px] border-[#ccc] py-2 px-4 text-text;
+	.form input[type='text'],
+	.form input[type='password'] {
+		@apply rounded border-[1px] border-border py-3 px-4 bg-background;
+	}
+	.form input[type='submit'] {
+		@apply rounded py-3 px-4 bg-primary font-bold cursor-pointer hover:opacity-90;
+	}
+	.form label {
+		@apply text-white text-lg opacity-70;
+	}
+}
+
+@layer utilities {
+	.background {
+		@apply rounded-md p-6 md:p-10 bg-lightbackground shadow-xl;
 	}
 }

@@ -75,13 +75,13 @@ export class DeckService {
 	}
 
 	async deleteDeckById(id: string) {
-		await this.prismaService.deck.delete({
+		const deletedDeck = await this.prismaService.deck.delete({
 			where: {
 				id,
 			},
 		});
 
-		return 'Deck Successfully Deleted';
+		return new DeckResponseDto(deletedDeck);
 	}
 
 	async getUserByDeckId(id: string) {

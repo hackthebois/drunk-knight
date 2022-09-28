@@ -38,6 +38,22 @@ const getDeck = async (id: string) => {
 	return DeckSchema.parse(data);
 };
 
+const deleteDeck = async (id: string) => {
+	const accessToken = localStorage.getItem('access_token');
+
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
+		method: 'DELETE',
+		body: JSON.stringify({ id }),
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+	const data: unknown = await res.json();
+	return DeckSchema.parse(data);
+};
+
 const createCard = async ({
 	name,
 	description,
@@ -71,7 +87,6 @@ const DeckPage = () => {
 	const { data: deck, error } = useQuery(['deck', deckId], () =>
 		getDeck(deckId),
 	);
-	console.log(error);
 
 	const {
 		register,
@@ -103,39 +118,55 @@ const DeckPage = () => {
 			),
 	});
 
+	const deleteDeckMutation = useMutation(deleteDeck, {
+		onSuccess: ({ id }) => {
+			queryClient.setQueryData<Deck[] | undefined>(['decks'], (old) =>
+				old ? old.filter((deck) => deck.id !== id) : [],
+			);
+			router.push('/account');
+		},
+	});
+
 	const onCreateCard = (data: CreateCard) => {
 		createCardMutation.mutate(data);
 	};
 
 	return (
-		<main>
-			{errors.cardType && <div>{errors.cardType.message}</div>}
-			{errors.name && <div>{errors.name.message}</div>}
-			{errors.description && <div>{errors.description.message}</div>}
-			{deck && <h2 className="text-2xl my-3">{deck.name}</h2>}
-			<form className="flex" onSubmit={handleSubmit(onCreateCard)}>
-				{errors.name && <p className="ebtn">{errors.name.message}</p>}
-				<input
-					type="text"
-					placeholder="Card name..."
-					className="input mr-2"
-					{...register('name')}
-				/>
-				<input
-					type="text"
-					placeholder="Card description..."
-					className="input mr-2"
-					{...register('description')}
-				/>
-				<input type="submit" value="Add New" className="gbtn" />
-			</form>
-			<>
+		<main className="flex flex-col justify-between">
+			<div className="background">
+				{errors.cardType && <div>{errors.cardType.message}</div>}
+				{errors.name && <div>{errors.name.message}</div>}
+				{errors.description && <div>{errors.description.message}</div>}
+				{deck && <h2 className="text-2xl mb-8">{deck.name}</h2>}
+				<form
+					className="form flex flex-col md:flex-row mb-6"
+					onSubmit={handleSubmit(onCreateCard)}
+				>
+					{errors.name && (
+						<p className="ebtn">{errors.name.message}</p>
+					)}
+					<input
+						type="text"
+						placeholder="Card Name"
+						className="flex-1 mb-2 md:mr-2 md:mb-0"
+						{...register('name')}
+					/>
+					<input
+						type="text"
+						placeholder="Card Description"
+						className="flex-1 md:mr-2 mb-2 md:mb-0"
+						{...register('description')}
+					/>
+					<input type="submit" value="Add New" />
+				</form>
 				{deck &&
 					deck.cards &&
 					deck.cards.map(({ id, name, description }) => (
 						<div
 							key={id}
-							className="item mt-4 flex flex-col justify-between align-center"
+							className="item cursor-default mt-4 flex flex-col justify-between align-center
+							hover:bg-lightbackground hover:bg-opacity-100
+							"
 						>
 							<p className="flex items-center text-lg mb-2">
 								{name}
@@ -145,7 +176,13 @@ const DeckPage = () => {
 							</p>
 						</div>
 					))}
-			</>
+			</div>
+			<button
+				className="ebtn mt-8"
+				onClick={() => deleteDeckMutation.mutate(deckId)}
+			>
+				Delete Deck
+			</button>
 		</main>
 	);
 };

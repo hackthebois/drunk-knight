@@ -62,9 +62,12 @@ const SignUp = () => {
 
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-full">
-			<form onSubmit={handleSubmit(onSubmit)} className="form">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="form w-96 background"
+			>
 				<h2 className="text-white font-bold text-3xl mb-8 text-center">
-					Sign up
+					Sign Up
 				</h2>
 				{errors.username ? (
 					<p className="ebtn mb-4">{errors.username.message}</p>
@@ -75,35 +78,28 @@ const SignUp = () => {
 						<p className="ebtn mb-4">{errors.password.message}</p>
 					)
 				)}
-				<label htmlFor="username" className="text-white text-xl">
-					Username
-				</label>
+				<label htmlFor="username">Username</label>
 				<input
 					id="username"
-					className="input mb-4 mt-2"
+					type="text"
+					className="mb-4 mt-2"
 					{...register('username')}
-					placeholder="Username here..."
 				/>
-				<label htmlFor="email" className="text-white text-xl">
-					Email
-				</label>
+				<label htmlFor="email">Email</label>
 				<input
 					id="email"
-					className="input mb-4 mt-2"
+					type="text"
+					className="mb-4 mt-2"
 					{...register('email')}
-					placeholder="Email here..."
 				/>
-				<label htmlFor="password" className="text-white text-xl">
-					Password
-				</label>
+				<label htmlFor="password">Password</label>
 				<input
 					id="password"
 					type="password"
-					className="input mb-4 mt-2"
+					className="mb-4 mt-2"
 					{...register('password')}
-					placeholder="Password here..."
 				/>
-				<input type="submit" value="Submit" className="gbtn mt-4" />
+				<input type="submit" value="Submit" className="mt-4" />
 				<div className="flex justify-center items-center mt-8">
 					<p className="text-white">{`Already have an account?`}</p>
 					<Link href="/auth/signin">

@@ -105,66 +105,76 @@ const Account = () => {
 
 	return (
 		<main>
-			<h2 className="text-2xl my-3">Profile</h2>
-			<p className="my-2">{user?.email}</p>
-			<p className="my-2">{user?.username}</p>
-			<p className="my-2">
-				Email Confirmed: {user?.emailConfirmation ? 'True' : 'False'}
-			</p>
-			<button className="gbtn my-3" onClick={() => signout()}>
-				Sign out
-			</button>
-			<h2 className="text-2xl my-3">Decks</h2>
-			<form className="flex" onSubmit={handleSubmit(onCreateDeck)}>
-				{errors.name && <p className="ebtn">{errors.name.message}</p>}
-				<input
-					type="text"
-					placeholder="Deck Name"
-					className="input mr-2"
-					{...register('name')}
-				/>
-				<input type="submit" value="Add New" className="gbtn" />
-			</form>
-			<>
-				{decks?.map(({ name, id, selected }) => (
-					<div className="flex mt-2">
-						<div
-							key={id}
-							onClick={() => router.push(`/deck/${id}`)}
-							className="flex-1 item rounded-r-none"
-						>
-							<p className="flex items-center">{name}</p>
+			<div className="background mb-8">
+				<h2 className="text-2xl font-bold mb-8">Profile</h2>
+				<p className="my-2">{user?.email}</p>
+				<p className="my-2">{user?.username}</p>
+				<p className="my-2">
+					Email Confirmed:{' '}
+					{user?.emailConfirmation ? 'True' : 'False'}
+				</p>
+				<button className="gbtn my-3" onClick={() => signout()}>
+					Sign out
+				</button>
+			</div>
+			<div className="background">
+				<h2 className="text-2xl mb-8 font-bold">Decks</h2>
+				<form
+					className="form sm:flex-row w-full mb-6"
+					onSubmit={handleSubmit(onCreateDeck)}
+				>
+					{errors.name && (
+						<p className="ebtn">{errors.name.message}</p>
+					)}
+					<input
+						type="text"
+						placeholder="Deck Name"
+						className="sm:mr-2 mb-2 sm:mb-0 flex-1"
+						{...register('name')}
+					/>
+					<input type="submit" value="Add New" />
+				</form>
+				<>
+					{decks?.map(({ name, id, selected }) => (
+						<div className="flex mt-2">
+							<div
+								key={id}
+								onClick={() => router.push(`/deck/${id}`)}
+								className="flex-1 item rounded-r-none"
+							>
+								<p className="flex items-center">{name}</p>
+							</div>
+							{selected ? (
+								<button
+									className="btn rounded-l-none"
+									onClick={() =>
+										updateDeckMutation.mutate({
+											name,
+											id,
+											selected: false,
+										})
+									}
+								>
+									Unselect
+								</button>
+							) : (
+								<button
+									className="btn rounded-l-none"
+									onClick={() =>
+										updateDeckMutation.mutate({
+											name,
+											id,
+											selected: true,
+										})
+									}
+								>
+									Select
+								</button>
+							)}
 						</div>
-						{selected ? (
-							<button
-								className="btn -mr-2 rounded-l-none"
-								onClick={() =>
-									updateDeckMutation.mutate({
-										name,
-										id,
-										selected: false,
-									})
-								}
-							>
-								Unselect
-							</button>
-						) : (
-							<button
-								className="btn -mr-2 rounded-l-none"
-								onClick={() =>
-									updateDeckMutation.mutate({
-										name,
-										id,
-										selected: true,
-									})
-								}
-							>
-								Select
-							</button>
-						)}
-					</div>
-				))}
-			</>
+					))}
+				</>
+			</div>
 		</main>
 	);
 };
