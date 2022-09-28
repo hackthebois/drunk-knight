@@ -1,10 +1,4 @@
-import {
-	BadRequestException,
-	HttpException,
-	Injectable,
-	NotFoundException,
-} from '@nestjs/common';
-import { UserType } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto, UserResponseDto } from './dtos/user.dto';
 

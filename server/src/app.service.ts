@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { UserInfo } from './user/decorators/user.decorator';
-import { Card, UserType } from '@prisma/client';
+import { UserType } from '@prisma/client';
 import { CardResponseDto } from './card/dto/card.dto';
 
 @Injectable()
