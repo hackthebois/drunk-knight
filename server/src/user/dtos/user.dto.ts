@@ -1,24 +1,25 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
-
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UserResponseDto {
-    id: string;
-    username: string;
-    email: string;
+	id: string;
+	username: string;
+	email: string;
+	emailConfirmation: boolean;
 
-    constructor(paritial: Partial<UserResponseDto>) {
-        this.id = paritial.id;
-        this.username = paritial.username;
-        this.email = paritial.email;
-      }
+	constructor(partial: any) {
+		this.id = partial.id;
+		this.username = partial.username;
+		this.email = partial.email;
+		this.emailConfirmation = partial.email_confirmation;
+	}
 }
 
 export class UpdateUserDto {
-  @IsString()
-  @IsOptional()
-  username: string;
+	@IsString()
+	@IsOptional()
+	username: string;
 
-  @IsEmail()
-  @IsOptional()
-  email: string;
+	@IsEmail()
+	@IsOptional()
+	email: string;
 }

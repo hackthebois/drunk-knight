@@ -1,5 +1,8 @@
-import Link from "next/link";
-import useAuth from "../../hooks/useAuth";
+import Link from 'next/link';
+import useAuth from '../../hooks/useAuth';
+
+const resendEmail = () => {};
+
 const Confirm = () => {
 	const { findUser } = useAuth();
 	const { data: user } = findUser;
@@ -9,7 +12,8 @@ const Confirm = () => {
 				<>
 					<h1 className="text-3xl font-bold">Email confirmed!</h1>
 					<p className="text-lg mt-4">
-						Thank you for verifying your email, you may now proceed to the game.
+						Thank you for verifying your email, you may now proceed
+						to the game.
 					</p>
 					<Link href="/">
 						<a className="gbtn mt-4">Home</a>
@@ -17,10 +21,16 @@ const Confirm = () => {
 				</>
 			) : (
 				<>
-					<h1 className="text-3xl font-bold">Please confirm email!</h1>
-					<p className="text-lg mt-4">
-						To finalize account, please click the link in the email sent to you.
+					<h1 className="text-3xl font-bold">
+						Please confirm email!
+					</h1>
+					<p className="text-lg my-4">
+						To finalize account, please click the link in the email
+						sent to you.
 					</p>
+					<button className="gbtn" onClick={() => resendEmail()}>
+						Resend email
+					</button>
 				</>
 			)}
 		</main>

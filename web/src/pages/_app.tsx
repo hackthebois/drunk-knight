@@ -1,6 +1,6 @@
-import "../styles/globals.css";
-import type { AppType } from "next/dist/shared/lib/utils";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import '../styles/globals.css';
+import type { AppType } from 'next/dist/shared/lib/utils';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 

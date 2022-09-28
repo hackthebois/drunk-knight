@@ -28,6 +28,8 @@ export class DeckResponseDto {
 		this.id = partial.id;
 		this.name = partial.name;
 		this.selected = partial.selected;
-		this.cards = cards.map((card) => new CardResponseDto(card));
+		this.cards = cards
+			? cards.map((card) => new CardResponseDto(card))
+			: [];
 	}
 }

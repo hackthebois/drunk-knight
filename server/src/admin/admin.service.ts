@@ -1,4 +1,9 @@
-import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+	BadRequestException,
+	HttpException,
+	Injectable,
+	NotFoundException,
+} from '@nestjs/common';
 import { CardType, UserType } from '@prisma/client';
 import { UpdateCardDto } from 'src/card/dto/card.dto';
 import { UpdateDeckDto } from 'src/deck/dto/deck.dto';
@@ -6,204 +11,207 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from 'src/user/dtos/user.dto';
 
 interface UserFilter {
-    user_type: UserType;
+	user_type: UserType;
 }
 
 interface CardFilter {
-    card_type: CardType;
+	card_type: CardType;
 }
 
 @Injectable()
 export class AdminService {
+	constructor(private readonly prismaService: PrismaService) {}
 
-    constructor(private readonly prismaService: PrismaService) {}
+	async getAllUsers(filter: UserFilter) {
+		return await this.prismaService.user.findMany({
+			where: filter,
+		});
+	}
 
-    async getAllUsers(filter: UserFilter) {
-        return await this.prismaService.user.findMany({
-            where: filter
-        });
-    }
+	async getAllDecks() {
+		return await this.prismaService.deck.findMany();
+	}
 
-    async getAllDecks(){
-        return await this.prismaService.deck.findMany();
-    }
+	async getAllCards(filter: CardFilter) {
+		return await this.prismaService.card.findMany({
+			where: filter,
+		});
+	}
 
-    async getAllCards(filter: CardFilter) {
-        return await this.prismaService.card.findMany({
-            where: filter
-        });
-    }
+	async getUser(userId: string) {
+		const user = await this.prismaService.user.findFirst({
+			where: {
+				id: userId,
+			},
+		});
 
-    async getUser(userId: string) {
-        const user = await this.prismaService.user.findFirst({
-            where: {
-                id: userId
-            }
-        });
+		if (!user) throw new NotFoundException();
 
-        if(!user) throw new NotFoundException();
+		return user;
+	}
 
-        return user;
-    }
+	async updateUser(userId: string, data: UpdateUserDto) {
+		const userExists = await this.prismaService.user.findUnique({
+			where: data,
+		});
 
-    async updateUser(userId: string, data: UpdateUserDto) {
-        const userExists = await this.prismaService.user.findUnique({
-            where:data
-        });
+		if (userExists) throw new BadRequestException();
 
-        if(userExists) throw new BadRequestException();
+		this.isAdmin(userId);
 
-        this.isAdmin(userId);
+		const updatedUser = await this.prismaService.user.update({
+			where: {
+				id: userId,
+			},
+			data,
+		});
 
-        const updatedUser = await this.prismaService.user.update({
-            where: {
-                id: userId
-            },
-            data
-        });
+		return updatedUser;
+	}
 
-        return updatedUser;
-    }
+	async deleteUser(userId: string) {
+		this.isAdmin(userId);
 
-    async deleteUser(userId: string){
+		await this.prismaService.user.delete({
+			where: {
+				id: userId,
+			},
+		});
 
-        this.isAdmin(userId);
+		return 'Deleted Successfully';
+	}
 
-        await this.prismaService.user.delete({
-          where: {
-            id: userId
-          }  
-        });
+	async getUserDecks(userId: string) {
+		const decks = await this.prismaService.deck.findMany({
+			where: {
+				user_id: userId,
+			},
+		});
 
-        return "Deleted Successfully";
-    }
+		return decks;
+	}
 
-    async getUserDecks(userId: string) {
-        
-        const decks = await this.prismaService.deck.findMany({
-            where: {
-                user_id: userId
-            }
-        });
+	async updateUserDeckById(
+		userId: string,
+		deckId: string,
+		data: UpdateDeckDto,
+	) {
+		this.isAdmin(userId);
 
-        return decks;
-    }
+		const deckExists = await this.prismaService.deck.findFirst({
+			where: {
+				id: deckId,
+				user_id: userId,
+			},
+		});
 
-    async updateUserDeckById(userId: string, deckId: string, data: UpdateDeckDto){
+		if (!deckExists) throw new NotFoundException();
 
-        this.isAdmin(userId);
+		return await this.prismaService.deck.update({
+			where: {
+				id: deckId,
+			},
+			data: data,
+		});
+	}
 
-        const deckExists = await this.prismaService.deck.findFirst({
-            where: {
-                id: deckId,
-                user_id: userId
-            }
-        });
+	async deleteUserDeckById(userId: string, deckId: string) {
+		this.isAdmin(userId);
 
-        if (!deckExists) throw new NotFoundException();
+		const deckExists = await this.prismaService.deck.findFirst({
+			where: {
+				id: deckId,
+				user_id: userId,
+			},
+		});
 
-        return await this.prismaService.deck.update({
-            where: {
-                id: deckId
-            },
-            data: data
-        });
-    }
+		if (!deckExists) throw new NotFoundException();
 
-    async deleteUserDeckById(userId: string, deckId: string) {
+		await this.prismaService.deck.delete({
+			where: {
+				id: deckId,
+			},
+		});
 
-        this.isAdmin(userId);
+		return `Successfully Delete Deck named "${deckExists.name}"`;
+	}
 
-        const deckExists = await this.prismaService.deck.findFirst({
-            where: {
-                id: deckId,
-                user_id: userId
-            }
-        });
+	async getDeckCards(userId: string, deckId: string, filter: CardFilter) {
+		const deck = await this.prismaService.deck.findFirst({
+			where: {
+				id: deckId,
+				user_id: userId,
+			},
+			select: {
+				cards: {
+					where: filter,
+				},
+			},
+		});
 
-        if (!deckExists) throw new NotFoundException();
+		if (!deck) throw new NotFoundException();
 
-        await this.prismaService.deck.delete({
-            where:{
-                id:deckId
-            }
-        });
+		return deck.cards;
+	}
 
-        return `Successfully Delete Deck named "${deckExists.name}"`
-    }
+	async updateDeckCard(
+		userId: string,
+		deckId: string,
+		cardId: string,
+		data: UpdateCardDto,
+	) {
+		this.isAdmin(userId);
 
-    async getDeckCards(userId: string, deckId: string, filter: CardFilter,) {
-        const deck = await this.prismaService.deck.findFirst({
-            where: {
-                id: deckId,
-                user_id: userId
-            },
-            select: {
-                cards: {
-                    where: filter
-                }
-            }
-        });
+		const cardExists = await this.prismaService.card.findFirst({
+			where: {
+				id: cardId,
+				deck_id: deckId,
+				deck: {
+					user_id: userId,
+				},
+			},
+		});
 
-        if (!deck) throw new NotFoundException();
+		if (!cardExists) throw new NotFoundException();
 
-        return deck.cards;
-    }
+		const updatedCard = await this.prismaService.card.update({
+			where: {
+				id: cardId,
+			},
+			data,
+		});
 
-    async updateDeckCard(userId: string, deckId: string, cardId: string, data: UpdateCardDto) {
+		return updatedCard;
+	}
 
-        this.isAdmin(userId)
+	async deleteDeckCard(userId: string, deckId: string, cardId: string) {
+		this.isAdmin(userId);
 
-        const cardExists = await this.prismaService.card.findFirst({
-            where: {
-                id: cardId,
-                deck_id: deckId,
-                deck:{
-                    user_id: userId
-                }
-            }
-        });
+		const cardExists = await this.prismaService.card.findFirst({
+			where: {
+				id: cardId,
+				deck_id: deckId,
+				deck: {
+					user_id: userId,
+				},
+			},
+		});
 
-        if (!cardExists) throw new NotFoundException();
+		if (!cardExists) throw new NotFoundException();
 
-        const updatedCard = await this.prismaService.card.update({
-            where:{
-                id: cardId
-            },
-            data,
-        });
+		await this.prismaService.card.delete({
+			where: {
+				id: cardId,
+			},
+		});
 
-        return updatedCard;
-    }
+		return `Successfully Delete Card named "${cardExists.name}"`;
+	}
 
-    async deleteDeckCard(userId: string, deckId: string, cardId: string) {
+	private async isAdmin(id: string) {
+		const user = await this.getUser(id);
 
-        this.isAdmin(userId);
-
-        const cardExists = await this.prismaService.card.findFirst({
-            where: {
-                id: cardId,
-                deck_id: deckId,
-                deck:{
-                    user_id: userId
-                }
-            }
-        });
-
-        if (!cardExists) throw new NotFoundException();
-
-        await this.prismaService.card.delete({
-            where:{
-                id: cardId,
-            }
-        });
-
-        return `Successfully Delete Card named "${cardExists.name}"`;
-    }
-
-    private async isAdmin(id: string) {
-        const user = await this.getUser(id);
-
-        if(user.user_type === UserType.ADMIN) throw new HttpException("You Cannot Modify the Admin Account", 400);
-    }
+		if (user.user_type === UserType.ADMIN)
+			throw new HttpException('You Cannot Modify the Admin Account', 400);
+	}
 }

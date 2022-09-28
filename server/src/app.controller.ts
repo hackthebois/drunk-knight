@@ -5,16 +5,16 @@ import { User, UserInfo } from './user/decorators/user.decorator';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+	constructor(private readonly appService: AppService) {}
 
-  @Roles()
-  @Get('play')
-  getGameplayCards(@User() user: UserInfo) {
-    return this.appService.getGameplayCards(user);
-  }
+	@Roles()
+	@Get('play')
+	getGameplayCards(@User() user: UserInfo) {
+		return this.appService.getGameplayCards(user);
+	}
 
-  @Post('home')
-  homePage() {
-    return 'Welcome to drunk knight';
-  }
+	@Post('home')
+	homePage() {
+		return 'Welcome to drunk knight';
+	}
 }

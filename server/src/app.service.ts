@@ -6,36 +6,39 @@ import { CardResponseDto } from './card/dto/card.dto';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly prismaService: PrismaService) {}
+	constructor(private readonly prismaService: PrismaService) {}
 
-  async getGameplayCards(user: UserInfo) {
-    const gameplayDecks = await this.prismaService.user.findFirst({
-      where: {
-        user_type: UserType.ADMIN,
-      },
-      select: {
-        decks: {
-          select: {
-            cards: true,
-          },
-        },
-      },
-    });
+	async getGameplayCards(user: UserInfo) {
+		const gameplayDecks = await this.prismaService.user.findFirst({
+			where: {
+				user_type: UserType.ADMIN,
+			},
+			select: {
+				decks: {
+					select: {
+						cards: true,
+					},
+				},
+			},
+		});
 
-    const standardCards = gameplayDecks?.decks[0].cards;
+		const standardCards = gameplayDecks?.decks[0].cards;
 
-    if (user && user.name != '__admin') {
-      const userCards = await this.prismaService.deck.findFirst({
-        where: {
-          user_id: user.id,
-          selected: true,
-        },
-        select: {
-          cards: true,
-        },
-      });
-      return [...standardCards, ...userCards.cards];
-    }
-    return standardCards.map((card) => new CardResponseDto(card));
-  }
+		if (user && user.name != '__admin') {
+			const deckCards = await this.prismaService.deck.findMany({
+				where: {
+					user_id: user.id,
+					selected: true,
+				},
+				select: {
+					cards: true,
+				},
+			});
+			const userCards = deckCards.map((deck) => deck.cards).flat(3);
+			return [...standardCards, ...userCards].map(
+				(card) => new CardResponseDto(card),
+			);
+		}
+		return standardCards.map((card) => new CardResponseDto(card));
+	}
 }

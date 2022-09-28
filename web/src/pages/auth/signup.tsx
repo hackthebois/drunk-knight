@@ -1,25 +1,32 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
 
 export const SignUpInputSchema = z.object({
 	email: z.string().email(),
-	username: z.string().min(4, "Username must contain at least 4 character(s)"),
-	password: z.string().min(8, "Password must contain at least 8 character(s)"),
+	username: z
+		.string()
+		.min(4, 'Username must contain at least 4 character(s)'),
+	password: z
+		.string()
+		.min(8, 'Password must contain at least 8 character(s)'),
 });
 export type SignUpInput = z.input<typeof SignUpInputSchema>;
 const signUpReq = async (input: SignUpInput) => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`,
+		{
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(input),
 		},
-		body: JSON.stringify(input),
-	});
+	);
 	const data: any = await res.json();
 	if (!res.ok) throw new Error((data && data.message) || res.status);
 	return z.object({ token: z.string() }).parse(data);
@@ -39,12 +46,13 @@ const SignUp = () => {
 
 	const signup = useMutation(signUpReq, {
 		onSuccess: ({ token }) => {
-			localStorage.setItem("access_token", token);
-			queryClient.invalidateQueries(["user"]);
-			router.push("/auth/confirm");
+			localStorage.setItem('access_token', token);
+			queryClient.invalidateQueries(['user']);
+			router.push('/auth/confirm');
 		},
 		onError: (error: any) => {
-			if (error && error.message) setError("username", { message: error.message });
+			if (error && error.message)
+				setError('username', { message: error.message });
 		},
 	});
 
@@ -55,13 +63,17 @@ const SignUp = () => {
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-full">
 			<form onSubmit={handleSubmit(onSubmit)} className="form">
-				<h2 className="text-white font-bold text-3xl mb-8 text-center">Sign up</h2>
+				<h2 className="text-white font-bold text-3xl mb-8 text-center">
+					Sign up
+				</h2>
 				{errors.username ? (
 					<p className="ebtn mb-4">{errors.username.message}</p>
 				) : errors.email ? (
 					<p className="ebtn mb-4">{errors.email.message}</p>
 				) : (
-					errors.password && <p className="ebtn mb-4">{errors.password.message}</p>
+					errors.password && (
+						<p className="ebtn mb-4">{errors.password.message}</p>
+					)
 				)}
 				<label htmlFor="username" className="text-white text-xl">
 					Username
@@ -69,7 +81,7 @@ const SignUp = () => {
 				<input
 					id="username"
 					className="input mb-4 mt-2"
-					{...register("username")}
+					{...register('username')}
 					placeholder="Username here..."
 				/>
 				<label htmlFor="email" className="text-white text-xl">
@@ -78,7 +90,7 @@ const SignUp = () => {
 				<input
 					id="email"
 					className="input mb-4 mt-2"
-					{...register("email")}
+					{...register('email')}
 					placeholder="Email here..."
 				/>
 				<label htmlFor="password" className="text-white text-xl">
@@ -88,7 +100,7 @@ const SignUp = () => {
 					id="password"
 					type="password"
 					className="input mb-4 mt-2"
-					{...register("password")}
+					{...register('password')}
 					placeholder="Password here..."
 				/>
 				<input type="submit" value="Submit" className="gbtn mt-4" />

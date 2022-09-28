@@ -22,7 +22,7 @@ export class DeckService {
 
 		if (!user) throw new NotFoundException();
 
-		return user.decks.map((card) => new DeckResponseDto(card));
+		return user.decks.map((deck) => new DeckResponseDto(deck));
 	}
 
 	async getDeckById(id: string) {
@@ -64,14 +64,14 @@ export class DeckService {
 	}
 
 	async updateDeckById(id: string, data: UpdateDeckDto) {
-		const updatedCard = await this.prismaService.deck.update({
+		const updatedDeck = await this.prismaService.deck.update({
 			where: {
 				id,
 			},
 			data,
 		});
 
-		return new DeckResponseDto(updatedCard);
+		return new DeckResponseDto(updatedDeck);
 	}
 
 	async deleteDeckById(id: string) {

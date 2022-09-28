@@ -35,7 +35,6 @@ const getDeck = async (id: string) => {
 		},
 	});
 	const data: unknown = await res.json();
-	console.log(data);
 	return DeckSchema.parse(data);
 };
 
@@ -136,10 +135,14 @@ const DeckPage = () => {
 					deck.cards.map(({ id, name, description }) => (
 						<div
 							key={id}
-							className="item mt-4 flex flex-row justify-between align-center"
+							className="item mt-4 flex flex-col justify-between align-center"
 						>
-							<p className="flex items-center">{name}</p>
-							<p className="flex items-center">{description}</p>
+							<p className="flex items-center text-lg mb-2">
+								{name}
+							</p>
+							<p className="flex items-center opacity-70">
+								{description}
+							</p>
 						</div>
 					))}
 			</>

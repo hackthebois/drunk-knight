@@ -9,8 +9,5 @@ export const CardSchema = z.object({
 	name: z.string(),
 	description: z.string(),
 	cardType: z.enum(['CATEGORIES', 'ACTION', 'MEMORY', 'MAJORITY']),
-	created_at: DateSchema,
-	updated_at: DateSchema,
-	deck_id: z.string().cuid(),
 });
 export type Card = z.infer<typeof CardSchema>;

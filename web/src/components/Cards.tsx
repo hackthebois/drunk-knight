@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { Card } from "../types/Card";
+import { useState } from 'react';
+import { Card } from '../types/Card';
 
 const typeColours = {
-	CATEGORIES: "#449e46",
-	ACTION: "#FFA500",
-	MEMORY: "#0DA2FF",
-	MAJORITY: "#937DC2",
+	CATEGORIES: '#449e46',
+	ACTION: '#FFA500',
+	MEMORY: '#0DA2FF',
+	MAJORITY: '#937DC2',
 };
 
 const CardItem = ({ card }: { card?: Card }) => {
 	if (!card) {
 		return <div>Empty card</div>;
 	}
-	const { card_type, name, description } = card;
+	const { cardType, name, description } = card;
 
 	return (
 		<div className="w-full h-full text-text flex flex-col shadow">
 			<div
 				className="p-4 relative flex items-start justify-between rounded-t"
-				style={{ backgroundColor: typeColours[card_type] }}
+				style={{ backgroundColor: typeColours[cardType] }}
 			>
 				<div className="bg-white flex p-2 items-center rounded font-bold h-10">
-					{card_type}
+					{cardType}
 				</div>
 			</div>
 			<div className="bg-white p-8 flex-1 rounded-b">
@@ -60,20 +60,20 @@ const Cards = ({ cards }: { cards: Card[] }) => {
 					className="relative w-full h-full duration-1000"
 					style={{
 						transform: `rotateY(${degrees}deg)`,
-						transformStyle: "preserve-3d",
+						transformStyle: 'preserve-3d',
 					}}
 				>
 					<div
 						className="absolute w-full h-full"
-						style={{ backfaceVisibility: "hidden" }}
+						style={{ backfaceVisibility: 'hidden' }}
 					>
 						<CardItem card={cards[firstCard]} />
 					</div>
 					<div
 						className="absolute w-full h-full"
 						style={{
-							backfaceVisibility: "hidden",
-							transform: "rotateY(180deg)",
+							backfaceVisibility: 'hidden',
+							transform: 'rotateY(180deg)',
 						}}
 					>
 						<CardItem card={cards[secondCard]} />

@@ -4,8 +4,8 @@ import { DeckController } from './deck.controller';
 import { DeckService } from './deck.service';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [DeckController],
-  providers: [DeckService]
+	imports: [PrismaModule],
+	controllers: [DeckController],
+	providers: [DeckService],
 })
 export class DeckModule {}

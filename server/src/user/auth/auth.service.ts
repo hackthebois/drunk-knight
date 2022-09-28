@@ -92,11 +92,12 @@ export class AuthService {
 	async resendEmailVarification({ email }: ResendEmailDto) {
 		const user = await this.prismaService.user.findFirst({
 			where: {
-				email: email
-			}
+				email: email,
+			},
 		});
 
-		if(!user) throw new BadRequestException("No User with this email Exists");
+		if (!user)
+			throw new BadRequestException('No User with this email Exists');
 
 		return this.sendEmailConfirmation(email);
 	}

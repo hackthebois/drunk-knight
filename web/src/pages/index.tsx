@@ -1,21 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
-import type { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import Cards from "../components/Cards";
-import { env } from "../env/client.mjs";
-import useAuth from "../hooks/useAuth";
-import { CardSchema } from "../types/Card";
-import { FaUserCircle } from "react-icons/fa";
+import { useQuery } from '@tanstack/react-query';
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import Cards from '../components/Cards';
+import { env } from '../env/client.mjs';
+import useAuth from '../hooks/useAuth';
+import { CardSchema } from '../types/Card';
+import { FaUserCircle } from 'react-icons/fa';
 
 const play = async () => {
-	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`);
+	const accessToken = localStorage.getItem('access_token');
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
 	const data: unknown = await res.json();
 	return await CardSchema.array().min(1).parse(data);
 };
 
 const Home: NextPage = () => {
-	const { data: cards } = useQuery(["play"], play);
+	const { data: cards } = useQuery(['play'], play);
 	const { findUser } = useAuth();
 	const { data: user } = findUser;
 
@@ -31,18 +39,20 @@ const Home: NextPage = () => {
 				{cards && <Cards cards={cards} />}
 				{!user ? (
 					<div className="text-white absolute bottom-8">
-						Your are playing as guest.{" "}
+						Your are playing as guest.{' '}
 						<Link href="/auth/signin">
 							<a className=" text-blue-400">Sign in</a>
-						</Link>{" "}
-						or{" "}
+						</Link>{' '}
+						or{' '}
 						<Link href="/auth/signup">
 							<a className=" text-blue-400">Sign up</a>
 						</Link>
 					</div>
 				) : (
 					<Link href="/account">
-						<FaUserCircle className="h-8 w-8 absolute right-8 top-8 cursor-pointer" />
+						<a>
+							<FaUserCircle className="h-8 w-8 absolute right-8 top-8 cursor-pointer" />
+						</a>
 					</Link>
 				)}
 			</main>

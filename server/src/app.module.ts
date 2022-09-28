@@ -12,15 +12,25 @@ import { DeckModule } from './deck/deck.module';
 import { SearchModule } from './search/search.module';
 
 @Module({
-  imports: [UserModule, PrismaModule, CardModule, AdminModule, DeckModule, SearchModule],
-  controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_INTERCEPTOR,
-    useClass: UserInterceptor
-  },
-  {
-    provide: APP_GUARD,
-    useClass: AuthGuard
-  }]
+	imports: [
+		UserModule,
+		PrismaModule,
+		CardModule,
+		AdminModule,
+		DeckModule,
+		SearchModule,
+	],
+	controllers: [AppController],
+	providers: [
+		AppService,
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: UserInterceptor,
+		},
+		{
+			provide: APP_GUARD,
+			useClass: AuthGuard,
+		},
+	],
 })
 export class AppModule {}
