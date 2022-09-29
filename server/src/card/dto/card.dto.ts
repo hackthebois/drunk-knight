@@ -1,31 +1,38 @@
 import { CardType } from '@prisma/client';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCardDto {
 	@IsString()
 	@IsNotEmpty()
+	@ApiProperty()
 	name: string;
 
 	@IsString()
 	@IsNotEmpty()
+	@ApiProperty()
 	description: string;
 
 	@IsEnum(CardType)
 	@IsNotEmpty()
+	@ApiProperty()
 	cardType: CardType;
 }
 
 export class UpdateCardDto {
 	@IsString()
 	@IsOptional()
+	@ApiProperty()
 	name?: string;
 
 	@IsString()
 	@IsOptional()
+	@ApiProperty()
 	description?: string;
 
 	@IsEnum(CardType)
 	@IsOptional()
+	@ApiProperty()
 	cardType?: CardType;
 }
 

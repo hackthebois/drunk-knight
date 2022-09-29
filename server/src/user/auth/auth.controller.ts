@@ -7,6 +7,7 @@ import {
 	Query,
 	Redirect,
 } from '@nestjs/common';
+import { ApiBody } from '@nestjs/swagger';
 import {
 	PasswordResetDto,
 	PasswordUpdateDto,
@@ -20,6 +21,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
+	@ApiBody({type: SignUpDto})
 	@Post('/signup')
 	signup(@Body() body: SignUpDto) {
 		return this.authService.signup(body);
