@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserType } from '@prisma/client';
 import { Roles } from 'src/decorators/roles.decorator';
 import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { SearchDto } from './dtos/search.dto';
 import { SearchService } from './search.service';
 
+@ApiBearerAuth()
 @Controller('search')
 export class SearchController {
 	constructor(private readonly searchService: SearchService) {}

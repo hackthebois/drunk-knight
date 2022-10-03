@@ -7,7 +7,7 @@ import {
 	Query,
 	Redirect,
 } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import {
 	PasswordResetDto,
 	PasswordUpdateDto,

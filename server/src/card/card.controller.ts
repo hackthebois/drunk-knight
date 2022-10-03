@@ -14,11 +14,13 @@ import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { CardService } from './card.service';
 import { CreateCardDto, UpdateCardDto } from './dto/card.dto';
 import { Roles } from 'src/decorators/roles.decorator';
+import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('/deck/:deckId/card')
 export class CardController {
 	constructor(private readonly cardService: CardService) {}
-
+	@ApiQuery({ name: 'cardtype', enum: CardType })
 	@Roles(UserType.DEFAULT, UserType.ADMIN)
 	@Get()
 	getAllCards(

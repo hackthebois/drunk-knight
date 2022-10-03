@@ -8,12 +8,14 @@ import {
 	Put,
 	UnauthorizedException,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserType } from '@prisma/client';
 import { Roles } from 'src/decorators/roles.decorator';
 import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { DeckService } from './deck.service';
 import { CreateDeckDto, UpdateDeckDto } from './dto/deck.dto';
 
+@ApiBearerAuth()
 @Controller('/deck')
 export class DeckController {
 	constructor(private readonly deckService: DeckService) {}

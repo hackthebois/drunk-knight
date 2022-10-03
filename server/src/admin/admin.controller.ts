@@ -9,6 +9,7 @@ import {
 	Put,
 	Query,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { CardType, UserType } from '@prisma/client';
 import { UpdateCardDto } from 'src/card/dto/card.dto';
 import { UpdateDeckDto } from 'src/deck/dto/deck.dto';
@@ -16,6 +17,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { UpdateUserDto } from 'src/user/dtos/user.dto';
 import { AdminService } from './admin.service';
 
+@ApiBearerAuth()
 @Controller('admin')
 export class AdminController {
 	constructor(private readonly adminService: AdminService) {}

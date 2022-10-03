@@ -1,8 +1,10 @@
 import { Controller, Get, Post } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Roles } from './decorators/roles.decorator';
 import { User, UserInfo } from './user/decorators/user.decorator';
 
+@ApiBearerAuth()
 @Controller()
 export class AppController {
 	constructor(private readonly appService: AppService) {}

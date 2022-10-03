@@ -15,7 +15,7 @@ export class CreateCardDto {
 
 	@IsEnum(CardType)
 	@IsNotEmpty()
-	@ApiProperty()
+	@ApiProperty({enum: CardType})
 	cardType: CardType;
 }
 
@@ -32,7 +32,7 @@ export class UpdateCardDto {
 
 	@IsEnum(CardType)
 	@IsOptional()
-	@ApiProperty()
+	@ApiProperty({enum: CardType})
 	cardType?: CardType;
 }
 

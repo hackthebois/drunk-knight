@@ -15,7 +15,8 @@ async function bootstrap() {
 		}),
 	);
 	const config = new DocumentBuilder()
-		.setTitle('DK')
+		.addBearerAuth()
+		.setTitle('Drunk Knight')
 		.setDescription('DK API description')
 		.setVersion('1.0')
 		.build();

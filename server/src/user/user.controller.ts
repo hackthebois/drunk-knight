@@ -8,12 +8,14 @@ import {
 	Param,
 	Put,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserType } from '@prisma/client';
 import { Roles } from 'src/decorators/roles.decorator';
 import { User, UserInfo } from './decorators/user.decorator';
 import { UpdateUserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
 
+@ApiBearerAuth()
 @Controller('/account')
 export class UserController {
 	constructor(private readonly userService: UserService) {}
