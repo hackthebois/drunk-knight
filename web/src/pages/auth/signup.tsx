@@ -61,7 +61,7 @@ const SignUp = () => {
 	};
 
 	return (
-		<main className="flex justify-center items-center flex-col w-full h-full">
+		<main className="flex justify-center items-center flex-col w-full h-[100vh]">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="form w-96 background"

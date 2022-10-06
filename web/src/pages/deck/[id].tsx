@@ -1,92 +1,96 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { env } from '../../env/client.mjs';
-import { CardSchema } from '../../types/Card';
-import { Deck, DeckSchema } from '../../types/Deck';
+import CardItem from '../../components/CardItem';
+import Loader from '../../components/Loader';
+import {
+	CreateCard,
+	CreateCardSchema,
+	UpdateCard,
+	UpdateCardSchema,
+	useCreateCard,
+	useUpdateCard,
+} from '../../hooks/card';
+import { useDeck, useDeleteDeck } from '../../hooks/deck';
+import { Card } from '../../types/Card';
 
-export const CreateCardSchema = z.object({
-	name: CardSchema.shape.name,
-	description: CardSchema.shape.description,
-	cardType: CardSchema.shape.cardType,
-	deckId: DeckSchema.shape.id,
-});
-export type CreateCard = z.infer<typeof CreateCardSchema>;
-
-export const UpdateCardSchema = z.object({
-	name: CardSchema.shape.name.optional(),
-	description: CardSchema.shape.description.optional(),
-	cardType: CardSchema.shape.cardType.optional(),
-});
-export type UpdateCard = z.infer<typeof UpdateCardSchema>;
-
-const getDeck = async (id: string) => {
-	const accessToken = localStorage.getItem('access_token');
-
-	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
-		method: 'GET',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
-	const data: unknown = await res.json();
-	return DeckSchema.parse(data);
-};
-
-const deleteDeck = async (id: string) => {
-	const accessToken = localStorage.getItem('access_token');
-
-	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
-		method: 'DELETE',
-		body: JSON.stringify({ id }),
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
-	const data: unknown = await res.json();
-	return DeckSchema.parse(data);
-};
-
-const createCard = async ({
-	name,
-	description,
-	cardType,
+const CardEditor = ({
+	card,
 	deckId,
-}: CreateCard) => {
-	const accessToken = localStorage.getItem('access_token');
+	cancel,
+}: {
+	card: Card;
+	deckId: string;
+	cancel: () => void;
+}) => {
+	const updateCardMutation = useUpdateCard();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isDirty },
+		watch,
+	} = useForm<UpdateCard>({
+		defaultValues: { ...card, deckId },
+		resolver: zodResolver(UpdateCardSchema),
+	});
 
-	const res = await fetch(
-		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/create`,
-		{
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify({ name, description, cardType }),
-		},
+	const cardState = watch();
+
+	const onUpdateCard = (data: UpdateCard) => {
+		updateCardMutation.mutate(data, { onSuccess: () => cancel() });
+	};
+
+	return (
+		<div className="background">
+			<h2 className="text-2xl mb-8">Card Editor</h2>
+			<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
+				{errors.name && <p className="ebtn">{errors.name.message}</p>}
+				<div className="flex flex-col md:flex-row">
+					<input
+						type="text"
+						placeholder="Card Name"
+						className="flex-1 mb-2 md:mr-2 md:mb-0"
+						{...register('name')}
+					/>
+					<input
+						type="text"
+						placeholder="Card Description"
+						className="flex-1"
+						{...register('description')}
+					/>
+				</div>
+			</form>
+			<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
+				<CardItem card={cardState} />
+			</div>
+			<div className="mt-4 flex flex-row justify-between">
+				<button className="btn bg-border" onClick={cancel}>
+					Cancel
+				</button>
+				<button
+					className={`btn ${
+						isDirty
+							? ''
+							: 'opacity-50 cursor-not-allowed !important hover:opacity-50 !important'
+					}`}
+					onClick={() => handleSubmit(onUpdateCard)()}
+				>
+					Save
+				</button>
+			</div>
+		</div>
 	);
-	const data: unknown = await res.json();
-	return CardSchema.parse(data);
 };
 
 const DeckPage = () => {
-	const queryClient = useQueryClient();
 	const router = useRouter();
+	const [editCard, setEditCard] = useState<Card | undefined>();
 
 	const deckId = typeof router.query.id === 'string' ? router.query.id : '';
-
-	const { data: deck, error } = useQuery(['deck', deckId], () =>
-		getDeck(deckId),
-	);
+	const { data: deck } = useDeck(deckId);
+	const createCardMutation = useCreateCard();
+	const deleteDeckMutation = useDeleteDeck();
 
 	const {
 		register,
@@ -107,82 +111,76 @@ const DeckPage = () => {
 		setValue('deckId', deckId);
 	}, [deckId]);
 
-	const createCardMutation = useMutation(createCard, {
-		onSuccess: (card) =>
-			queryClient.setQueryData<Deck | undefined>(
-				['deck', deckId],
-				(old) =>
-					old && old.cards
-						? { ...old, cards: [...old.cards, card] }
-						: old,
-			),
-	});
-
-	const deleteDeckMutation = useMutation(deleteDeck, {
-		onSuccess: ({ id }) => {
-			queryClient.setQueryData<Deck[] | undefined>(['decks'], (old) =>
-				old ? old.filter((deck) => deck.id !== id) : [],
-			);
-			router.push('/account');
-		},
-	});
-
 	const onCreateCard = (data: CreateCard) => {
 		createCardMutation.mutate(data);
 	};
 
 	return (
 		<main className="flex flex-col justify-between">
-			<div className="background">
-				{errors.cardType && <div>{errors.cardType.message}</div>}
-				{errors.name && <div>{errors.name.message}</div>}
-				{errors.description && <div>{errors.description.message}</div>}
-				{deck && <h2 className="text-2xl mb-8">{deck.name}</h2>}
-				<form
-					className="form flex flex-col md:flex-row mb-6"
-					onSubmit={handleSubmit(onCreateCard)}
-				>
-					{errors.name && (
-						<p className="ebtn">{errors.name.message}</p>
-					)}
-					<input
-						type="text"
-						placeholder="Card Name"
-						className="flex-1 mb-2 md:mr-2 md:mb-0"
-						{...register('name')}
-					/>
-					<input
-						type="text"
-						placeholder="Card Description"
-						className="flex-1 md:mr-2 mb-2 md:mb-0"
-						{...register('description')}
-					/>
-					<input type="submit" value="Add New" />
-				</form>
-				{deck &&
-					deck.cards &&
-					deck.cards.map(({ id, name, description }) => (
-						<div
-							key={id}
-							className="item cursor-default mt-4 flex flex-col justify-between align-center
-							hover:bg-lightbackground hover:bg-opacity-100
-							"
+			{editCard ? (
+				<CardEditor
+					card={editCard}
+					deckId={deckId}
+					cancel={() => setEditCard(undefined)}
+				/>
+			) : (
+				<>
+					<div className="background">
+						{errors.cardType && (
+							<div>{errors.cardType.message}</div>
+						)}
+						{errors.name && <div>{errors.name.message}</div>}
+						{errors.description && (
+							<div>{errors.description.message}</div>
+						)}
+						{deck && <h2 className="text-2xl mb-8">{deck.name}</h2>}
+						<form
+							className="form flex flex-col md:flex-row mb-6"
+							onSubmit={handleSubmit(onCreateCard)}
 						>
-							<p className="flex items-center text-lg mb-2">
-								{name}
-							</p>
-							<p className="flex items-center opacity-70">
-								{description}
-							</p>
-						</div>
-					))}
-			</div>
-			<button
-				className="ebtn mt-8"
-				onClick={() => deleteDeckMutation.mutate(deckId)}
-			>
-				Delete Deck
-			</button>
+							{errors.name && (
+								<p className="ebtn">{errors.name.message}</p>
+							)}
+							<input
+								type="text"
+								placeholder="Card Name"
+								className="flex-1 mb-2 md:mr-2 md:mb-0"
+								{...register('name')}
+							/>
+							<input
+								type="text"
+								placeholder="Card Description"
+								className="flex-1 md:mr-2 mb-2 md:mb-0"
+								{...register('description')}
+							/>
+							<input type="submit" value="Add New" />
+						</form>
+						{deck &&
+							deck.cards &&
+							deck.cards.map((card) => (
+								<div
+									key={card.id}
+									className="item mt-4 flex flex-col justify-between align-center"
+									onClick={() => setEditCard(card)}
+								>
+									<p className="flex items-center text-lg mb-2">
+										{card.name}
+									</p>
+									<p className="flex items-center opacity-70">
+										{card.description}
+									</p>
+								</div>
+							))}
+						<Loader visible={createCardMutation.isLoading} />
+					</div>
+					<button
+						className="ebtn mt-8"
+						onClick={() => deleteDeckMutation.mutate(deckId)}
+					>
+						Delete Deck
+					</button>
+				</>
+			)}
 		</main>
 	);
 };

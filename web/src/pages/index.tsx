@@ -4,9 +4,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Cards from '../components/Cards';
 import { env } from '../env/client.mjs';
-import useAuth from '../hooks/useAuth';
 import { CardSchema } from '../types/Card';
 import { FaUserCircle } from 'react-icons/fa';
+import { useUser } from '../hooks/user';
 
 const play = async () => {
 	const accessToken = localStorage.getItem('access_token');
@@ -24,8 +24,7 @@ const play = async () => {
 
 const Home: NextPage = () => {
 	const { data: cards } = useQuery(['play'], play);
-	const { findUser } = useAuth();
-	const { data: user } = findUser;
+	const { data: user } = useUser();
 
 	return (
 		<>

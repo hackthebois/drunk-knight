@@ -1,11 +1,10 @@
 import Link from 'next/link';
-import useAuth from '../../hooks/useAuth';
+import { useUser } from '../../hooks/user';
 
 const resendEmail = () => {};
 
 const Confirm = () => {
-	const { findUser } = useAuth();
-	const { data: user } = findUser;
+	const { data: user } = useUser();
 	return (
 		<main className="text-center flex flex-col items-center justify-center">
 			{user && user.emailConfirmation ? (

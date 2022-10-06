@@ -4,16 +4,16 @@
 
 @layer base {
 	body {
-		@apply bg-background w-[100vw] text-white flex items-center justify-center;
+		@apply bg-background w-[100vw] min-h-[100vh] text-white;
 	}
 	main {
-		@apply max-w-screen-lg w-[100vw] p-6 md:p-10 font-default;
+		@apply max-w-screen-lg w-[100vw] p-6 md:p-10 font-default m-auto;
 	}
 }
 
 @layer components {
 	.btn {
-		@apply bg-white font-bold px-4 py-2 rounded shadow text-text;
+		@apply bg-primary font-bold px-4 py-2 rounded shadow text-white cursor-pointer hover:opacity-90 transition;
 	}
 	.gbtn {
 		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;

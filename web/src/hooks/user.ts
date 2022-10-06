@@ -2,15 +2,10 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { env } from '../env/client.mjs';
+import { UpdateUser, UserSchema } from '../types/User';
 
-export const UserSchema = z.object({
-	id: z.string().cuid(),
-	email: z.string().email(),
-	username: z.string(),
-	emailConfirmation: z.boolean().default(false),
-});
-export type User = z.input<typeof UserSchema>;
-const getUserReq = async () => {
+// GET USER (GET /account)
+const getUser = async () => {
 	const accessToken = localStorage.getItem('access_token');
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
@@ -24,14 +19,12 @@ const getUserReq = async () => {
 	const data: unknown = await res.json();
 	return UserSchema.parse(data);
 };
+export const useUser = () =>
+	useQuery(['user'], getUser, {
+		refetchOnWindowFocus: false,
+	});
 
-export const UpdateUserSchema = z.object({
-	email: z.string().email(),
-	username: z
-		.string()
-		.min(4, 'Username must contain at least 4 character(s)'),
-});
-export type UpdateUser = z.input<typeof UpdateUserSchema>;
+// UPDATE USER (PUT /account)
 const updateUserReq = async ({ username, email }: UpdateUser) => {
 	const accessToken = localStorage.getItem('access_token');
 
@@ -50,26 +43,19 @@ const updateUserReq = async ({ username, email }: UpdateUser) => {
 	const data: unknown = await res.json();
 	return UserSchema.parse(data);
 };
+export const useUpdateUser = () => {
+	const queryClient = useQueryClient();
+	return useMutation(updateUserReq, {
+		onSuccess: () => queryClient.invalidateQueries(['user']),
+	});
+};
 
-const useAuth = () => {
+// SIGN OUT
+export const useSignOut = () => () => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
 
-	const findUser = useQuery(['user'], getUserReq, {
-		refetchOnWindowFocus: false,
-	});
-
-	const update = useMutation(updateUserReq, {
-		onSuccess: () => queryClient.invalidateQueries(['user']),
-	});
-
-	const signout = () => {
-		localStorage.setItem('access_token', '');
-		queryClient.resetQueries(['user']);
-		router.push('/');
-	};
-
-	return { findUser, signout, update };
+	localStorage.setItem('access_token', '');
+	queryClient.resetQueries(['user']);
+	router.push('/');
 };
-
-export default useAuth;

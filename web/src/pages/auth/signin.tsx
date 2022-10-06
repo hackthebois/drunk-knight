@@ -62,7 +62,7 @@ const SignIn = () => {
 	};
 
 	return (
-		<main className="flex justify-center items-center flex-col w-full h-full">
+		<main className="flex justify-center items-center flex-col w-full h-[100vh]">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="form w-96 background"
@@ -83,7 +83,6 @@ const SignIn = () => {
 					type="text"
 					className="mb-4 mt-2"
 					{...register('username')}
-					placeholder="Username here..."
 				/>
 				<label htmlFor="password">Password</label>
 				<input
@@ -91,7 +90,6 @@ const SignIn = () => {
 					type="password"
 					className="mb-4 mt-2"
 					{...register('password')}
-					placeholder="Password here..."
 				/>
 				<input type="submit" value="Submit" className="mt-4" />
 				<div className="flex justify-center items-center mt-8">
