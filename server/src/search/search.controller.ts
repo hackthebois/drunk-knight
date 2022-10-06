@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserType } from '@prisma/client';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -12,7 +12,7 @@ export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
 	@Roles(UserType.DEFAULT, UserType.ADMIN)
-	@Get('/deck')
+	@Put('/deck')
 	searchDecks(@Body() body: SearchDto) {
 		return this.searchService.searchDecks(body);
 	}
