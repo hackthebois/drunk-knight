@@ -1,9 +1,9 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import CardItem from '../../components/CardItem';
-import Loader from '../../components/Loader';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import CardItem from "../../components/CardItem";
+import Loader from "../../components/Loader";
 import {
 	CreateCard,
 	CreateCardSchema,
@@ -12,9 +12,9 @@ import {
 	useCreateCard,
 	useDeleteCard,
 	useUpdateCard,
-} from '../../hooks/card';
-import { useDeck, useDeleteDeck } from '../../hooks/deck';
-import { Card } from '../../types/Card';
+} from "../../hooks/card";
+import { useDeck, useDeleteDeck } from "../../hooks/deck";
+import { Card, cardTypes } from "../../types/Card";
 
 const CardEditor = ({
 	card,
@@ -53,13 +53,13 @@ const CardEditor = ({
 							type="text"
 							placeholder="Card Name"
 							className="flex-1 mb-2 md:mr-2 md:mb-0"
-							{...register('name')}
+							{...register("name")}
 						/>
 						<input
 							type="text"
 							placeholder="Card Description"
 							className="flex-1"
-							{...register('description')}
+							{...register("description")}
 						/>
 					</div>
 				</form>
@@ -73,8 +73,8 @@ const CardEditor = ({
 					<button
 						className={`btn ${
 							isDirty
-								? ''
-								: 'opacity-50 cursor-not-allowed !important hover:opacity-50 !important'
+								? ""
+								: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
 						}`}
 						onClick={() => handleSubmit(onUpdateCard)()}
 					>
@@ -89,7 +89,7 @@ const CardEditor = ({
 						{ id: card.id, deckId },
 						{
 							onSuccess: () => {
-								console.log('success');
+								console.log("success");
 								cancel();
 							},
 						},
@@ -106,7 +106,7 @@ const DeckPage = () => {
 	const router = useRouter();
 	const [editCard, setEditCard] = useState<Card | undefined>();
 
-	const deckId = typeof router.query.id === 'string' ? router.query.id : '';
+	const deckId = typeof router.query.id === "string" ? router.query.id : "";
 	const { data: deck } = useDeck(deckId);
 	const createCardMutation = useCreateCard();
 	const deleteDeckMutation = useDeleteDeck();
@@ -118,16 +118,16 @@ const DeckPage = () => {
 		setValue,
 	} = useForm<CreateCard>({
 		defaultValues: {
-			name: '',
-			description: '',
-			cardType: 'ACTION',
+			name: "",
+			description: "",
+			cardType: "ACTION",
 			deckId,
 		},
 		resolver: zodResolver(CreateCardSchema),
 	});
 
 	useEffect(() => {
-		setValue('deckId', deckId);
+		setValue("deckId", deckId);
 	}, [deckId]);
 
 	const onCreateCard = (data: CreateCard) => {
@@ -160,23 +160,34 @@ const DeckPage = () => {
 							)
 						)}
 						<form
-							className="form flex flex-col md:flex-row mb-6"
+							className="form flex flex-col lg:flex-row mb-6"
 							onSubmit={handleSubmit(onCreateCard)}
 						>
 							<input
 								type="text"
 								placeholder="Card Name"
-								className="flex-1 mb-2 md:mr-2 md:mb-0"
-								{...register('name', { required: true })}
+								className="flex-1 mb-2 lg:mr-2 lg:mb-0"
+								{...register("name", { required: true })}
 								autoComplete="off"
 							/>
 							<input
 								type="text"
 								placeholder="Card Description"
-								className="flex-1 md:mr-2 mb-2 md:mb-0"
-								{...register('description', { required: true })}
+								className="flex-1 lg:mr-2 mb-2 lg:mb-0"
+								{...register("description", { required: true })}
 								autoComplete="off"
 							/>
+							<select
+								className="lg:mr-2 mb-2 lg:mb-0"
+								{...register("cardType")}
+							>
+								<option value="" disabled selected>
+									Card Category
+								</option>
+								{cardTypes.map((cardType) => (
+									<option value={cardType}>{cardType}</option>
+								))}
+							</select>
 							<input type="submit" value="Add New" />
 						</form>
 						<div className="flex-1 overflow-auto -mr-2 pr-2">
@@ -185,17 +196,22 @@ const DeckPage = () => {
 								deck.cards.map((card, index) => (
 									<div
 										key={card.id}
-										className={`item flex flex-col justify-between align-center ${
-											index !== 0 && 'mt-4'
+										className={`item flex flex-row justify-between align-center ${
+											index !== 0 && "mt-4"
 										}`}
 										onClick={() => setEditCard(card)}
 									>
-										<p className="flex items-center text-lg mb-2">
-											{card.name}
-										</p>
-										<p className="flex items-center opacity-70">
-											{card.description}
-										</p>
+										<div>
+											<p className="flex items-center text-lg mb-2">
+												{card.name}
+											</p>
+											<p className="flex items-center opacity-70">
+												{card.description}
+											</p>
+										</div>
+										<div className="flex justify-center items-center">
+											<p>{card.cardType}</p>
+										</div>
 									</div>
 								))}
 							<div className="mt-4">

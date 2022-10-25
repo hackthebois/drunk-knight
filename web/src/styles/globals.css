@@ -30,11 +30,12 @@
 	.form {
 		@apply flex flex-col;
 	}
-	.form input[type='text'],
-	.form input[type='password'] {
+	.form input[type="text"],
+	.form input[type="password"],
+	.form select {
 		@apply rounded border-[1px] border-border py-3 px-4 bg-background;
 	}
-	.form input[type='submit'] {
+	.form input[type="submit"] {
 		@apply rounded py-3 px-4 bg-primary font-bold cursor-pointer hover:opacity-90;
 	}
 	.form label {
