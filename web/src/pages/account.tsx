@@ -13,12 +13,12 @@ import { useSignOut, useUser } from '../hooks/user';
 
 const Account = () => {
 	const router = useRouter();
+	const signOut = useSignOut();
 
 	const { data: user } = useUser();
 	const { data: decks } = useDecks();
 	const createDeckMutation = useCreateDeck();
 	const updateDeckMutation = useUpdateDeck();
-	const signout = useSignOut();
 
 	const {
 		register,
@@ -42,7 +42,7 @@ const Account = () => {
 					Email Confirmed:{' '}
 					{user?.emailConfirmation ? 'True' : 'False'}
 				</p>
-				<button className="gbtn my-3" onClick={() => signout()}>
+				<button className="gbtn my-3" onClick={() => signOut()}>
 					Sign out
 				</button>
 			</div>

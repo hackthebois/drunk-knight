@@ -51,11 +51,13 @@ export const useUpdateUser = () => {
 };
 
 // SIGN OUT
-export const useSignOut = () => () => {
+export const useSignOut = () => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
-
-	localStorage.setItem('access_token', '');
-	queryClient.resetQueries(['user']);
-	router.push('/');
+	const signOut = () => {
+		localStorage.setItem('access_token', '');
+		queryClient.clear();
+		router.push('/');
+	};
+	return signOut;
 };
