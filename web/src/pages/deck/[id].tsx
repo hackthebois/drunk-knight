@@ -48,9 +48,6 @@ const CardEditor = ({
 			<div className="background">
 				<h2 className="text-2xl mb-8">Card Editor</h2>
 				<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
-					{errors.name && (
-						<p className="ebtn">{errors.name.message}</p>
-					)}
 					<div className="flex flex-col md:flex-row">
 						<input
 							type="text"
@@ -147,53 +144,66 @@ const DeckPage = () => {
 				/>
 			) : (
 				<>
-					<div className="background">
-						{errors.cardType && (
-							<div>{errors.cardType.message}</div>
-						)}
-						{errors.name && <div>{errors.name.message}</div>}
-						{errors.description && (
-							<div>{errors.description.message}</div>
-						)}
+					<div className="background flex flex-col flex-1 overflow-auto">
 						{deck && <h2 className="text-2xl mb-8">{deck.name}</h2>}
+						{errors.name ? (
+							<p className="emsg mb-4">{errors.name.message}</p>
+						) : errors.description ? (
+							<p className="emsg mb-4">
+								{errors.description.message}
+							</p>
+						) : (
+							errors.cardType && (
+								<p className="emsg mb-4">
+									{errors.cardType.message}
+								</p>
+							)
+						)}
 						<form
 							className="form flex flex-col md:flex-row mb-6"
 							onSubmit={handleSubmit(onCreateCard)}
 						>
-							{errors.name && (
-								<p className="ebtn">{errors.name.message}</p>
-							)}
 							<input
 								type="text"
 								placeholder="Card Name"
 								className="flex-1 mb-2 md:mr-2 md:mb-0"
-								{...register('name')}
+								{...register('name', { required: true })}
+								autoComplete="off"
 							/>
 							<input
 								type="text"
 								placeholder="Card Description"
 								className="flex-1 md:mr-2 mb-2 md:mb-0"
-								{...register('description')}
+								{...register('description', { required: true })}
+								autoComplete="off"
 							/>
 							<input type="submit" value="Add New" />
 						</form>
-						{deck &&
-							deck.cards &&
-							deck.cards.map((card) => (
-								<div
-									key={card.id}
-									className="item mt-4 flex flex-col justify-between align-center"
-									onClick={() => setEditCard(card)}
-								>
-									<p className="flex items-center text-lg mb-2">
-										{card.name}
-									</p>
-									<p className="flex items-center opacity-70">
-										{card.description}
-									</p>
-								</div>
-							))}
-						<Loader visible={createCardMutation.isLoading} />
+						<div className="flex-1 overflow-auto -mr-2 pr-2">
+							{deck &&
+								deck.cards &&
+								deck.cards.map((card, index) => (
+									<div
+										key={card.id}
+										className={`item flex flex-col justify-between align-center ${
+											index !== 0 && 'mt-4'
+										}`}
+										onClick={() => setEditCard(card)}
+									>
+										<p className="flex items-center text-lg mb-2">
+											{card.name}
+										</p>
+										<p className="flex items-center opacity-70">
+											{card.description}
+										</p>
+									</div>
+								))}
+							<div className="mt-4">
+								<Loader
+									visible={createCardMutation.isLoading}
+								/>
+							</div>
+						</div>
 					</div>
 					<button
 						className="ebtn mt-8"

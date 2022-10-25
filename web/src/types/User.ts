@@ -10,8 +10,6 @@ export type User = z.input<typeof UserSchema>;
 
 export const UpdateUserSchema = z.object({
 	email: z.string().email(),
-	username: z
-		.string()
-		.min(4, 'Username must contain at least 4 character(s)'),
+	username: z.string().min(4, 'Username must contain at least 4 characters'),
 });
 export type UpdateUser = z.input<typeof UpdateUserSchema>;

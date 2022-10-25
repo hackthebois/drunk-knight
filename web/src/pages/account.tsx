@@ -23,17 +23,18 @@ const Account = () => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm<CreateDeck>({
 		resolver: zodResolver(CreateDeckSchema),
 	});
 
 	const onCreateDeck = ({ name }: CreateDeck) => {
-		createDeckMutation.mutate({ name });
+		createDeckMutation.mutate({ name }, { onSuccess: () => reset() });
 	};
 
 	return (
-		<main>
+		<main className="flex flex-col justify-between">
 			<div className="background mb-8">
 				<h2 className="text-2xl font-bold mb-8">Profile</h2>
 				<p className="my-2">{user?.email}</p>
@@ -46,26 +47,30 @@ const Account = () => {
 					Sign out
 				</button>
 			</div>
-			<div className="background">
+			<div className="background flex-1 flex flex-col">
 				<h2 className="text-2xl mb-8 font-bold">Decks</h2>
+				{errors.name && (
+					<p className="emsg mb-4">{errors.name.message}</p>
+				)}
 				<form
 					className="form sm:flex-row w-full mb-6"
 					onSubmit={handleSubmit(onCreateDeck)}
 				>
-					{errors.name && (
-						<p className="ebtn">{errors.name.message}</p>
-					)}
 					<input
 						type="text"
 						placeholder="Deck Name"
 						className="sm:mr-2 mb-2 sm:mb-0 flex-1"
 						{...register('name')}
+						autoComplete="off"
 					/>
 					<input type="submit" value="Add New" />
 				</form>
-				<>
-					{decks?.map(({ name, id, selected }) => (
-						<div className="flex mt-2">
+				<div className="flex-1 overflow-auto -mr-2 pr-2">
+					{decks?.map(({ name, id, selected }, index) => (
+						<div
+							className={`flex ${index !== 0 && 'mt-2'}`}
+							key={id}
+						>
 							<div
 								key={id}
 								onClick={() => router.push(`/deck/${id}`)}
@@ -103,7 +108,7 @@ const Account = () => {
 						</div>
 					))}
 					<Loader visible={createDeckMutation.isLoading} />
-				</>
+				</div>
 			</div>
 		</main>
 	);

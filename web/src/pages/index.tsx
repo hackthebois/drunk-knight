@@ -36,7 +36,7 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className="w-[100vw] h-[100vh] p-8 flex flex-col items-center justify-center">
+			<main className="flex flex-col items-center justify-center">
 				{cards && <Cards cards={cards} />}
 				{!user ? (
 					<div className="text-white absolute bottom-8">

@@ -7,7 +7,7 @@
 		@apply bg-background w-[100vw] min-h-[100vh] text-white;
 	}
 	main {
-		@apply max-w-screen-lg w-[100vw] p-6 md:p-10 font-default m-auto;
+		@apply max-w-screen-lg w-[100vw] h-[100vh] p-6 md:p-10 font-default m-auto overflow-hidden;
 	}
 }
 
@@ -19,7 +19,10 @@
 		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
 	}
 	.ebtn {
-		@apply rounded border-[1px] border-red-500 py-2 px-4 text-red-500 font-bold transition-colors hover:bg-white hover:bg-opacity-5;
+		@apply rounded border-[1px] border-red-500 py-2 px-4 text-red-500 font-bold transition-colors hover:bg-white hover:bg-opacity-5 cursor-pointer;
+	}
+	.emsg {
+		@apply rounded border-[1px] border-red-700 py-2 px-4 bg-red-700 font-bold;
 	}
 	.item {
 		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
