@@ -10,6 +10,7 @@ import {
 	UpdateCard,
 	UpdateCardSchema,
 	useCreateCard,
+	useDeleteCard,
 	useUpdateCard,
 } from '../../hooks/card';
 import { useDeck, useDeleteDeck } from '../../hooks/deck';
@@ -25,6 +26,7 @@ const CardEditor = ({
 	cancel: () => void;
 }) => {
 	const updateCardMutation = useUpdateCard();
+	const deleteCardMutation = useDeleteCard();
 	const {
 		register,
 		handleSubmit,
@@ -42,44 +44,64 @@ const CardEditor = ({
 	};
 
 	return (
-		<div className="background">
-			<h2 className="text-2xl mb-8">Card Editor</h2>
-			<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
-				{errors.name && <p className="ebtn">{errors.name.message}</p>}
-				<div className="flex flex-col md:flex-row">
-					<input
-						type="text"
-						placeholder="Card Name"
-						className="flex-1 mb-2 md:mr-2 md:mb-0"
-						{...register('name')}
-					/>
-					<input
-						type="text"
-						placeholder="Card Description"
-						className="flex-1"
-						{...register('description')}
-					/>
+		<>
+			<div className="background">
+				<h2 className="text-2xl mb-8">Card Editor</h2>
+				<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
+					{errors.name && (
+						<p className="ebtn">{errors.name.message}</p>
+					)}
+					<div className="flex flex-col md:flex-row">
+						<input
+							type="text"
+							placeholder="Card Name"
+							className="flex-1 mb-2 md:mr-2 md:mb-0"
+							{...register('name')}
+						/>
+						<input
+							type="text"
+							placeholder="Card Description"
+							className="flex-1"
+							{...register('description')}
+						/>
+					</div>
+				</form>
+				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
+					<CardItem card={cardState} />
 				</div>
-			</form>
-			<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
-				<CardItem card={cardState} />
+				<div className="mt-4 flex flex-row justify-between">
+					<button className="btn bg-border" onClick={cancel}>
+						Cancel
+					</button>
+					<button
+						className={`btn ${
+							isDirty
+								? ''
+								: 'opacity-50 cursor-not-allowed !important hover:opacity-50 !important'
+						}`}
+						onClick={() => handleSubmit(onUpdateCard)()}
+					>
+						Save
+					</button>
+				</div>
 			</div>
-			<div className="mt-4 flex flex-row justify-between">
-				<button className="btn bg-border" onClick={cancel}>
-					Cancel
-				</button>
-				<button
-					className={`btn ${
-						isDirty
-							? ''
-							: 'opacity-50 cursor-not-allowed !important hover:opacity-50 !important'
-					}`}
-					onClick={() => handleSubmit(onUpdateCard)()}
-				>
-					Save
-				</button>
-			</div>
-		</div>
+			<button
+				className="ebtn mt-8"
+				onClick={() =>
+					deleteCardMutation.mutate(
+						{ id: card.id, deckId },
+						{
+							onSuccess: () => {
+								console.log('success');
+								cancel();
+							},
+						},
+					)
+				}
+			>
+				Delete Card
+			</button>
+		</>
 	);
 };
 

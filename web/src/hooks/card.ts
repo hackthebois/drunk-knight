@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router.js';
 import { z } from 'zod';
 import { env } from '../env/client.mjs';
 import { CardSchema } from '../types/Card';
@@ -38,14 +39,16 @@ const createCard = async ({
 export const useCreateCard = () => {
 	const queryClient = useQueryClient();
 	return useMutation(createCard, {
-		onSuccess: (card, { deckId }) =>
+		onSuccess: (card, { deckId }) => {
 			queryClient.setQueryData<Deck | undefined>(
 				['deck', deckId],
 				(old) =>
 					old && old.cards
 						? { ...old, cards: [...old.cards, card] }
 						: old,
-			),
+			);
+			queryClient.invalidateQueries(['decks']);
+		},
 	});
 };
 
@@ -85,7 +88,7 @@ export const updateCard = async ({
 export const useUpdateCard = () => {
 	const queryClient = useQueryClient();
 	return useMutation(updateCard, {
-		onSuccess: (card, { deckId }) =>
+		onSuccess: (card, { deckId }) => {
 			queryClient.setQueryData<Deck | undefined>(
 				['deck', deckId],
 				(old) =>
@@ -97,6 +100,53 @@ export const useUpdateCard = () => {
 								),
 						  }
 						: old,
-			),
+			);
+			queryClient.invalidateQueries(['decks']);
+		},
+	});
+};
+
+// DELETE CARD (DELETE /deck/:deckId/card/:id)
+export const DeleteCardSchema = z.object({
+	id: CardSchema.shape.id,
+	deckId: DeckSchema.shape.id,
+});
+export type DeleteCard = z.infer<typeof DeleteCardSchema>;
+const deleteCard = async ({ id, deckId }: DeleteCard) => {
+	const accessToken = localStorage.getItem('access_token');
+
+	const res = await fetch(
+		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,
+		{
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${accessToken}`,
+			},
+		},
+	);
+	const data: unknown = await res.json();
+	return CardSchema.parse(data);
+};
+export const useDeleteCard = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation(deleteCard, {
+		onSuccess: (card, { deckId }) => {
+			queryClient.setQueryData<Deck | undefined>(
+				['deck', deckId],
+				(old) =>
+					old && old.cards
+						? {
+								...old,
+								cards: old.cards.filter(
+									(oldCard) => oldCard.id !== card.id,
+								),
+						  }
+						: old,
+			);
+			queryClient.invalidateQueries(['decks']);
+		},
 	});
 };

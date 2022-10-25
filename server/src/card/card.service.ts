@@ -99,13 +99,13 @@ export class CardService {
 	}
 
 	async deleteCardById(id: string) {
-		await this.prismaService.card.delete({
+		const card = await this.prismaService.card.delete({
 			where: {
 				id,
 			},
 		});
 
-		return 'Successfully Deleted';
+		return new CardResponseDto(card);
 	}
 
 	async getDeckByCardId(id: string) {
