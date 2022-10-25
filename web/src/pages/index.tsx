@@ -15,7 +15,9 @@ const play = async () => {
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `${
+				accessToken && accessToken !== '' ? `Bearer ${accessToken}` : ''
+			}`,
 		},
 	});
 	const data: unknown = await res.json();
