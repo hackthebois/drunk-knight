@@ -21,7 +21,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
-	@ApiBody({type: SignUpDto})
+	@ApiBody({ type: SignUpDto })
 	@Post('/signup')
 	signup(@Body() body: SignUpDto) {
 		return this.authService.signup(body);
@@ -38,7 +38,7 @@ export class AuthController {
 	}
 
 	@Get('/confirm/:token')
-	@Redirect(`${process.env.HOST_URL}/auth/confirm`, 301)
+	@Redirect(`${process.env.FRONTEND_URL}/auth/confirm`, 301)
 	emailVarification(@Param('token') token: string) {
 		return this.authService.verifyEmailConfirmation(token);
 	}
@@ -49,7 +49,7 @@ export class AuthController {
 	}
 
 	@Post('/password-reset/:token')
-	@Redirect(`${process.env.HOST_URL}/home`, 301)
+	@Redirect(`${process.env.FRONTEND_URL}/home`, 301)
 	passwordUpdate(
 		@Param('token') token: string,
 		@Body() body: PasswordUpdateDto,

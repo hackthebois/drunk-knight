@@ -127,7 +127,7 @@ export class AuthService {
 			return user;
 		} catch (error) {
 			return {
-				url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
+				url: `${process.env.FRONTEND_URL}/auth/confirm?error=jwt`,
 				statusbar: 400,
 			};
 		}
@@ -159,7 +159,7 @@ export class AuthService {
 			return user;
 		} catch (error) {
 			return {
-				url: `${process.env.HOST_URL}/auth/confirm?error=jwt`,
+				url: `${process.env.FRONTEND_URL}/auth/confirm?error=jwt`,
 				statusbar: 400,
 			};
 		}
@@ -167,7 +167,7 @@ export class AuthService {
 
 	private async sendEmailConfirmation(email: string) {
 		const url = `${
-			process.env.HOST_URL
+			process.env.BACKEND_URL
 		}/auth/confirm/${this.generateEmailJWT(
 			email,
 			process.env.JSON_EMAIL_SECRET_KEY,
@@ -185,7 +185,7 @@ export class AuthService {
 
 	async passwordReset({ email }: PasswordResetDto) {
 		const url = `${
-			process.env.HOST_URL
+			process.env.BACKEND_URL
 		}/auth/password-reset/${this.generateEmailJWT(
 			email,
 			process.env.JSON_PASSWORD_RESET_SECRET_KEY,
