@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+	html {
+		@apply overflow-hidden;
+	}
 	body {
-		@apply bg-background w-[100vw] min-h-[100vh] text-white;
+		@apply bg-background w-[100vw] min-h-[100vh] text-white overflow-hidden relative;
 	}
 	main {
 		@apply max-w-screen-lg w-[100vw] h-[100vh] p-6 md:p-10 font-default m-auto overflow-hidden;

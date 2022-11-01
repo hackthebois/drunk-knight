@@ -115,12 +115,13 @@ const DeckPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		resetField,
 		setValue,
 	} = useForm<CreateCard>({
 		defaultValues: {
 			name: "",
 			description: "",
-			cardType: "ACTION",
+			cardType: "CATEGORIES",
 			deckId,
 		},
 		resolver: zodResolver(CreateCardSchema),
@@ -131,7 +132,12 @@ const DeckPage = () => {
 	}, [deckId]);
 
 	const onCreateCard = (data: CreateCard) => {
-		createCardMutation.mutate(data);
+		createCardMutation.mutate(data, {
+			onSuccess: () => {
+				resetField("name");
+				resetField("description");
+			},
+		});
 	};
 
 	return (
@@ -181,11 +187,10 @@ const DeckPage = () => {
 								className="lg:mr-2 mb-2 lg:mb-0"
 								{...register("cardType")}
 							>
-								<option value="" disabled selected>
-									Card Category
-								</option>
 								{cardTypes.map((cardType) => (
-									<option value={cardType}>{cardType}</option>
+									<option value={cardType} key={cardType}>
+										{cardType}
+									</option>
 								))}
 							</select>
 							<input type="submit" value="Add New" />
