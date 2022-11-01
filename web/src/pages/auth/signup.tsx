@@ -1,28 +1,28 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 
 export const SignUpInputSchema = z.object({
 	email: z.string().email(),
 	username: z
 		.string()
-		.min(4, 'Username must contain at least 4 character(s)'),
+		.min(4, "Username must contain at least 4 character(s)"),
 	password: z
 		.string()
-		.min(8, 'Password must contain at least 8 character(s)'),
+		.min(8, "Password must contain at least 8 character(s)"),
 });
 export type SignUpInput = z.input<typeof SignUpInputSchema>;
 const signUpReq = async (input: SignUpInput) => {
 	const res = await fetch(
 		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`,
 		{
-			method: 'POST',
+			method: "POST",
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				Accept: "application/json",
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(input),
 		},
@@ -46,13 +46,13 @@ const SignUp = () => {
 
 	const signup = useMutation(signUpReq, {
 		onSuccess: ({ token }) => {
-			localStorage.setItem('access_token', token);
-			queryClient.invalidateQueries(['user']);
-			router.push('/auth/confirm');
+			localStorage.setItem("access_token", token);
+			queryClient.invalidateQueries(["user"]);
+			router.push("/auth/confirm");
 		},
 		onError: (error: any) => {
 			if (error && error.message)
-				setError('username', { message: error.message });
+				setError("username", { message: error.message });
 		},
 	});
 
@@ -61,10 +61,10 @@ const SignUp = () => {
 	};
 
 	return (
-		<main className="flex justify-center items-center flex-col w-full h-[100vh]">
+		<main className="flex justify-center items-center flex-col w-full h-[90vh]">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="form w-96 background"
+				className="form w-full max-w-md background"
 			>
 				<h2 className="text-white font-bold text-3xl mb-8 text-center">
 					Sign Up
@@ -83,21 +83,21 @@ const SignUp = () => {
 					id="username"
 					type="text"
 					className="mb-4 mt-2"
-					{...register('username')}
+					{...register("username")}
 				/>
 				<label htmlFor="email">Email</label>
 				<input
 					id="email"
 					type="text"
 					className="mb-4 mt-2"
-					{...register('email')}
+					{...register("email")}
 				/>
 				<label htmlFor="password">Password</label>
 				<input
 					id="password"
 					type="password"
 					className="mb-4 mt-2"
-					{...register('password')}
+					{...register("password")}
 				/>
 				<input type="submit" value="Submit" className="mt-4" />
 				<div className="flex justify-center items-center mt-8">

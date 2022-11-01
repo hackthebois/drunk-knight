@@ -1,23 +1,23 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export const SignInInputSchema = z.object({
-	username: z.string().min(1, 'Username cannot be empty.'),
-	password: z.string().min(1, 'Password cannot be empty.'),
+	username: z.string().min(1, "Username cannot be empty."),
+	password: z.string().min(1, "Password cannot be empty."),
 });
 export type SignInInput = z.input<typeof SignInInputSchema>;
 const signInReq = async (input: SignInInput) => {
 	const res = await fetch(
 		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`,
 		{
-			method: 'POST',
+			method: "POST",
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				Accept: "application/json",
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(input),
 		},
@@ -41,19 +41,19 @@ const SignIn = () => {
 
 	const signin = useMutation(signInReq, {
 		onSuccess: ({ token }) => {
-			localStorage.setItem('access_token', token);
-			queryClient.invalidateQueries(['user']);
-			router.push('/');
+			localStorage.setItem("access_token", token);
+			queryClient.invalidateQueries(["user"]);
+			router.push("/");
 		},
 		onError: (error: any) => {
 			if (
 				error &&
 				error.message ===
-					'Please Confirm Email Before Attemping to Log In'
+					"Please Confirm Email Before Attemping to Log In"
 			)
-				router.push('/auth/confirm');
+				router.push("/auth/confirm");
 			else if (error && error.message)
-				setError('username', { message: error.message });
+				setError("username", { message: error.message });
 		},
 	});
 
@@ -62,10 +62,10 @@ const SignIn = () => {
 	};
 
 	return (
-		<main className="flex justify-center items-center flex-col w-full h-[100vh]">
+		<main className="flex justify-center items-center flex-col w-full h-[90vh]">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="form w-96 background"
+				className="form w-full max-w-md background"
 			>
 				<h2 className="text-white font-bold text-3xl mb-8 text-center">
 					Sign in
@@ -82,14 +82,14 @@ const SignIn = () => {
 					id="username"
 					type="text"
 					className="mb-4 mt-2"
-					{...register('username')}
+					{...register("username")}
 				/>
 				<label htmlFor="password">Password</label>
 				<input
 					id="password"
 					type="password"
 					className="mb-4 mt-2"
-					{...register('password')}
+					{...register("password")}
 				/>
 				<input type="submit" value="Submit" className="mt-4" />
 				<div className="flex justify-center items-center mt-8">

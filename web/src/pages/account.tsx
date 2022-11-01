@@ -1,15 +1,17 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/router.js';
-import { useForm } from 'react-hook-form';
-import Loader from '../components/Loader';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router.js";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaPlus, FaTimes } from "react-icons/fa";
+import Loader from "../components/Loader";
 import {
 	CreateDeck,
 	CreateDeckSchema,
 	useCreateDeck,
 	useDecks,
 	useUpdateDeck,
-} from '../hooks/deck';
-import { useSignOut, useUser } from '../hooks/user';
+} from "../hooks/deck";
+import { useSignOut, useUser } from "../hooks/user";
 
 const Account = () => {
 	const router = useRouter();
@@ -28,47 +30,67 @@ const Account = () => {
 	} = useForm<CreateDeck>({
 		resolver: zodResolver(CreateDeckSchema),
 	});
+	const [addDeck, setAddDeck] = useState(false);
 
 	const onCreateDeck = ({ name }: CreateDeck) => {
 		createDeckMutation.mutate({ name }, { onSuccess: () => reset() });
 	};
 
 	return (
-		<main className="flex flex-col justify-between">
+		<main className="flex flex-col justify-between max-h-[100vh]">
 			<div className="background mb-8">
-				<h2 className="text-2xl font-bold mb-8">Profile</h2>
+				<h2 className="text-2xl font-bold mb-4">Profile</h2>
 				<p className="my-2">{user?.email}</p>
 				<p className="my-2">{user?.username}</p>
 				<p className="my-2">
-					Email Confirmed:{' '}
-					{user?.emailConfirmation ? 'True' : 'False'}
+					Email Confirmed:{" "}
+					{user?.emailConfirmation ? "True" : "False"}
 				</p>
-				<button className="gbtn my-3" onClick={() => signOut()}>
+				<button className="gbtn mt-3" onClick={() => signOut()}>
 					Sign out
 				</button>
 			</div>
-			<div className="background flex-1 flex flex-col">
-				<h2 className="text-2xl mb-8 font-bold">Decks</h2>
-				{errors.name && (
-					<p className="emsg mb-4">{errors.name.message}</p>
+			<div className="background flex-1 flex flex-col overflow-auto">
+				<div className="flex justify-between items-center mb-4">
+					<h2 className="text-2xl font-bold">Decks</h2>
+					{addDeck ? (
+						<FaTimes
+							onClick={() => setAddDeck(false)}
+							size={34}
+							className="p-2 cursor-pointer"
+						/>
+					) : (
+						<FaPlus
+							onClick={() => setAddDeck(true)}
+							size={34}
+							className="p-2 cursor-pointer"
+						/>
+					)}
+				</div>
+				{addDeck && (
+					<>
+						{errors.name && (
+							<p className="emsg mb-4">{errors.name.message}</p>
+						)}
+						<form
+							className="form sm:flex-row w-full mb-6"
+							onSubmit={handleSubmit(onCreateDeck)}
+						>
+							<input
+								type="text"
+								placeholder="Deck Name"
+								className="sm:mr-2 mb-2 sm:mb-0 flex-1"
+								{...register("name")}
+								autoComplete="off"
+							/>
+							<input type="submit" value="Add New" />
+						</form>
+					</>
 				)}
-				<form
-					className="form sm:flex-row w-full mb-6"
-					onSubmit={handleSubmit(onCreateDeck)}
-				>
-					<input
-						type="text"
-						placeholder="Deck Name"
-						className="sm:mr-2 mb-2 sm:mb-0 flex-1"
-						{...register('name')}
-						autoComplete="off"
-					/>
-					<input type="submit" value="Add New" />
-				</form>
-				<div className="flex-1 overflow-auto -mr-2 pr-2">
+				<div className="flex-1 overflow-y-scroll -mr-2 pr-2">
 					{decks?.map(({ name, id, selected }, index) => (
 						<div
-							className={`flex ${index !== 0 && 'mt-2'}`}
+							className={`flex ${index !== 0 && "mt-2"}`}
 							key={id}
 						>
 							<div
