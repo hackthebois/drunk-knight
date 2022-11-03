@@ -1,17 +1,19 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router.js";
+import { useRouter } from "next/navigation.js";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaPlus, FaTimes } from "react-icons/fa";
-import Loader from "../components/Loader";
+import Loader from "../../components/Loader";
 import {
 	CreateDeck,
 	CreateDeckSchema,
 	useCreateDeck,
 	useDecks,
 	useUpdateDeck,
-} from "../hooks/deck";
-import { useSignOut, useUser } from "../hooks/user";
+} from "../../hooks/deck";
+import { useSignOut, useUser } from "../../hooks/user";
 
 const Account = () => {
 	const router = useRouter();

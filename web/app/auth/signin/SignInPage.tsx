@@ -1,23 +1,20 @@
-import { useForm } from "react-hook-form";
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export const SignUpInputSchema = z.object({
-	email: z.string().email(),
-	username: z
-		.string()
-		.min(4, "Username must contain at least 4 character(s)"),
-	password: z
-		.string()
-		.min(8, "Password must contain at least 8 character(s)"),
+export const SignInInputSchema = z.object({
+	username: z.string().min(1, "Username cannot be empty."),
+	password: z.string().min(1, "Password cannot be empty."),
 });
-export type SignUpInput = z.input<typeof SignUpInputSchema>;
-const signUpReq = async (input: SignUpInput) => {
+export type SignInInput = z.input<typeof SignInInputSchema>;
+const signInReq = async (input: SignInInput) => {
 	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`,
+		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`,
 		{
 			method: "POST",
 			headers: {
@@ -32,32 +29,38 @@ const signUpReq = async (input: SignUpInput) => {
 	return z.object({ token: z.string() }).parse(data);
 };
 
-const SignUp = () => {
+const SignIn = () => {
 	const queryClient = useQueryClient();
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
 		setError,
-	} = useForm<SignUpInput>({
-		resolver: zodResolver(SignUpInputSchema),
+		formState: { errors },
+	} = useForm<SignInInput>({
+		resolver: zodResolver(SignInInputSchema),
 	});
-	const router = useRouter();
 
-	const signup = useMutation(signUpReq, {
+	const signin = useMutation(signInReq, {
 		onSuccess: ({ token }) => {
 			localStorage.setItem("access_token", token);
 			queryClient.invalidateQueries(["user"]);
-			router.push("/auth/confirm");
+			router.push("/");
 		},
 		onError: (error: any) => {
-			if (error && error.message)
+			if (
+				error &&
+				error.message ===
+					"Please Confirm Email Before Attemping to Log In"
+			)
+				router.push("/auth/confirm");
+			else if (error && error.message)
 				setError("username", { message: error.message });
 		},
 	});
 
-	const onSubmit = (data: SignUpInput) => {
-		signup.mutate(data);
+	const onSubmit = (data: SignInInput) => {
+		signin.mutate(data);
 	};
 
 	return (
@@ -67,12 +70,10 @@ const SignUp = () => {
 				className="form w-full max-w-md background"
 			>
 				<h2 className="text-white font-bold text-3xl mb-8 text-center">
-					Sign Up
+					Sign in
 				</h2>
 				{errors.username ? (
 					<p className="ebtn mb-4">{errors.username.message}</p>
-				) : errors.email ? (
-					<p className="ebtn mb-4">{errors.email.message}</p>
 				) : (
 					errors.password && (
 						<p className="ebtn mb-4">{errors.password.message}</p>
@@ -85,13 +86,6 @@ const SignUp = () => {
 					className="mb-4 mt-2"
 					{...register("username")}
 				/>
-				<label htmlFor="email">Email</label>
-				<input
-					id="email"
-					type="text"
-					className="mb-4 mt-2"
-					{...register("email")}
-				/>
 				<label htmlFor="password">Password</label>
 				<input
 					id="password"
@@ -101,9 +95,12 @@ const SignUp = () => {
 				/>
 				<input type="submit" value="Submit" className="mt-4" />
 				<div className="flex justify-center items-center mt-8">
-					<p className="text-white">{`Already have an account?`}</p>
-					<Link href="/auth/signin">
-						<a className=" text-blue-400 underline ml-2">Sign in</a>
+					<p className="text-white">{`Don't have an account?`}</p>
+					<Link
+						href="/auth/signup"
+						className="text-blue-400 underline ml-2"
+					>
+						Sign up
 					</Link>
 				</div>
 			</form>
@@ -111,4 +108,4 @@ const SignUp = () => {
 	);
 };
 
-export default SignUp;
+export default SignIn;

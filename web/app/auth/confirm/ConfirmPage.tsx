@@ -1,5 +1,7 @@
-import Link from 'next/link';
-import { useUser } from '../../hooks/user';
+"use client";
+
+import Link from "next/link";
+import { useUser } from "../../../hooks/user";
 
 const resendEmail = () => {};
 
@@ -14,8 +16,8 @@ const Confirm = () => {
 						Thank you for verifying your email, you may now proceed
 						to the game.
 					</p>
-					<Link href="/">
-						<a className="gbtn mt-4">Home</a>
+					<Link href="/" className="gbtn mt-4">
+						Home
 					</Link>
 				</>
 			) : (

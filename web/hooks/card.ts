@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router.js';
-import { z } from 'zod';
-import { env } from '../env/client.mjs';
-import { CardSchema } from '../types/Card';
-import { Deck, DeckSchema } from '../types/Deck';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation.js";
+import { z } from "zod";
+import { env } from "../env/client.mjs";
+import { CardSchema } from "../types/Card";
+import { Deck, DeckSchema } from "../types/Deck";
 
 // CREATE CARD (POST /deck/:deckId/card/create)
 export const CreateCardSchema = z.object({
@@ -19,15 +19,15 @@ const createCard = async ({
 	cardType,
 	deckId,
 }: CreateCard) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/create`,
 		{
-			method: 'POST',
+			method: "POST",
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				Accept: "application/json",
+				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
 			},
 			body: JSON.stringify({ name, description, cardType }),
@@ -41,13 +41,13 @@ export const useCreateCard = () => {
 	return useMutation(createCard, {
 		onSuccess: (card, { deckId }) => {
 			queryClient.setQueryData<Deck | undefined>(
-				['deck', deckId],
+				["deck", deckId],
 				(old) =>
 					old && old.cards
 						? { ...old, cards: [...old.cards, card] }
 						: old,
 			);
-			queryClient.invalidateQueries(['decks']);
+			queryClient.invalidateQueries(["decks"]);
 		},
 	});
 };
@@ -68,15 +68,15 @@ export const updateCard = async ({
 	cardType,
 	deckId,
 }: UpdateCard) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,
 		{
-			method: 'PUT',
+			method: "PUT",
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				Accept: "application/json",
+				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
 			},
 			body: JSON.stringify({ name, description, cardType }),
@@ -90,7 +90,7 @@ export const useUpdateCard = () => {
 	return useMutation(updateCard, {
 		onSuccess: (card, { deckId }) => {
 			queryClient.setQueryData<Deck | undefined>(
-				['deck', deckId],
+				["deck", deckId],
 				(old) =>
 					old && old.cards
 						? {
@@ -101,7 +101,7 @@ export const useUpdateCard = () => {
 						  }
 						: old,
 			);
-			queryClient.invalidateQueries(['decks']);
+			queryClient.invalidateQueries(["decks"]);
 		},
 	});
 };
@@ -113,15 +113,15 @@ export const DeleteCardSchema = z.object({
 });
 export type DeleteCard = z.infer<typeof DeleteCardSchema>;
 const deleteCard = async ({ id, deckId }: DeleteCard) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,
 		{
-			method: 'DELETE',
+			method: "DELETE",
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
+				Accept: "application/json",
+				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
 			},
 		},
@@ -135,7 +135,7 @@ export const useDeleteCard = () => {
 	return useMutation(deleteCard, {
 		onSuccess: (card, { deckId }) => {
 			queryClient.setQueryData<Deck | undefined>(
-				['deck', deckId],
+				["deck", deckId],
 				(old) =>
 					old && old.cards
 						? {
@@ -146,7 +146,7 @@ export const useDeleteCard = () => {
 						  }
 						: old,
 			);
-			queryClient.invalidateQueries(['decks']);
+			queryClient.invalidateQueries(["decks"]);
 		},
 	});
 };

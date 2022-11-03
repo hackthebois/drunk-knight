@@ -1,10 +1,11 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
-import CardItem from "../../components/CardItem";
-import Loader from "../../components/Loader";
+import CardItem from "../../../components/CardItem";
 import {
 	CreateCard,
 	CreateCardSchema,
@@ -13,9 +14,9 @@ import {
 	useCreateCard,
 	useDeleteCard,
 	useUpdateCard,
-} from "../../hooks/card";
-import { useDeck, useDeleteDeck } from "../../hooks/deck";
-import { Card, cardTypes } from "../../types/Card";
+} from "../../../hooks/card";
+import { useDeck, useDeleteDeck } from "../../../hooks/deck";
+import { Card, cardTypes } from "../../../types/Card";
 
 const CardEditor = ({
 	card,
@@ -212,12 +213,11 @@ const CardAdd = ({
 		</div>
 	);
 };
-const DeckPage = () => {
-	const router = useRouter();
+
+const DeckPage = ({ id: deckId }: { id: string }) => {
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 
-	const deckId = typeof router.query.id === "string" ? router.query.id : "";
 	const { data: deck } = useDeck(deckId);
 	const deleteDeckMutation = useDeleteDeck();
 

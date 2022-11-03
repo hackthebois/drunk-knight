@@ -1,35 +1,35 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import { z } from 'zod';
-import { env } from '../env/client.mjs';
-import { Deck, DeckSchema } from '../types/Deck';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { env } from "../env/client.mjs";
+import { Deck, DeckSchema } from "../types/Deck";
 
 // GET DECKS (GET /deck)
 
 const getDecks = async () => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
-		method: 'GET',
+		method: "GET",
 		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
+			Accept: "application/json",
+			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
 	const data: unknown = await res.json();
 	return DeckSchema.array().parse(data);
 };
-export const useDecks = () => useQuery(['decks'], getDecks);
+export const useDecks = () => useQuery(["decks"], getDecks);
 
 const getDeck = async (id: string) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
-		method: 'GET',
+		method: "GET",
 		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
+			Accept: "application/json",
+			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
@@ -37,7 +37,7 @@ const getDeck = async (id: string) => {
 	return DeckSchema.parse(data);
 };
 export const useDeck = (id: string) =>
-	useQuery(['deck', id], () => getDeck(id));
+	useQuery(["deck", id], () => getDeck(id));
 
 // CREATE DECK (POST /deck/create)
 export const CreateDeckSchema = z.object({
@@ -45,13 +45,13 @@ export const CreateDeckSchema = z.object({
 });
 export type CreateDeck = z.input<typeof CreateDeckSchema>;
 const createDeck = async ({ name }: CreateDeck) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/create`, {
-		method: 'POST',
+		method: "POST",
 		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
+			Accept: "application/json",
+			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
 		},
 		body: JSON.stringify({ name }),
@@ -63,10 +63,10 @@ export const useCreateDeck = () => {
 	const queryClient = useQueryClient();
 	return useMutation(createDeck, {
 		onSuccess: (deck) => {
-			queryClient.setQueryData<Deck[] | undefined>(['decks'], (old) =>
+			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
 				old ? [...old, deck] : [],
 			),
-				queryClient.invalidateQueries(['decks']);
+				queryClient.invalidateQueries(["decks"]);
 		},
 	});
 };
@@ -79,13 +79,13 @@ export const UpdateDeckSchema = z.object({
 });
 export type UpdateDeck = z.input<typeof UpdateDeckSchema>;
 const updateDeck = async ({ id, name, selected }: UpdateDeck) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
-		method: 'PUT',
+		method: "PUT",
 		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
+			Accept: "application/json",
+			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
 		},
 		body: JSON.stringify({ name, selected }),
@@ -97,7 +97,7 @@ export const useUpdateDeck = () => {
 	const queryClient = useQueryClient();
 	return useMutation(updateDeck, {
 		onSuccess: (deck) =>
-			queryClient.setQueryData<Deck[] | undefined>(['decks'], (old) =>
+			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
 				old
 					? old.map((oldDeck) =>
 							oldDeck.id === deck.id ? deck : oldDeck,
@@ -109,14 +109,14 @@ export const useUpdateDeck = () => {
 
 // DELETE DECK (DELETE /deck/:id)
 const deleteDeck = async (id: string) => {
-	const accessToken = localStorage.getItem('access_token');
+	const accessToken = localStorage.getItem("access_token");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
-		method: 'DELETE',
+		method: "DELETE",
 		body: JSON.stringify({ id }),
 		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
+			Accept: "application/json",
+			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
@@ -129,10 +129,10 @@ export const useDeleteDeck = () => {
 
 	return useMutation(deleteDeck, {
 		onSuccess: ({ id }) => {
-			queryClient.setQueryData<Deck[] | undefined>(['decks'], (old) =>
+			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
 				old ? old.filter((deck) => deck.id !== id) : [],
 			);
-			router.push('/account');
+			router.push("/account");
 		},
 	});
 };
