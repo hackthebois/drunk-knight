@@ -1,10 +1,10 @@
-import { Card } from '../types/Card';
+import { Card } from "../types/Card";
 
 const typeColours = {
-	CATEGORIES: '#449e46',
-	ACTION: '#FFA500',
-	MEMORY: '#0DA2FF',
-	MAJORITY: '#937DC2',
+	CATEGORIES: "#449e46",
+	ACTION: "#FFA500",
+	MEMORY: "#0DA2FF",
+	MAJORITY: "#937DC2",
 };
 
 const CardItem = ({ card }: { card?: Card }) => {

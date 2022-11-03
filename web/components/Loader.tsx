@@ -1,4 +1,6 @@
-import { ThreeDots } from 'react-loader-spinner';
+"use client";
+
+import { ThreeDots } from "react-loader-spinner";
 
 type Props = {
 	visible: boolean;
