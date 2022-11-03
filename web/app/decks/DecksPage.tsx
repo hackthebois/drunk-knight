@@ -81,7 +81,7 @@ const DecksPage = () => {
 						>
 							<div
 								key={id}
-								onClick={() => router.push(`/deck/${id}`)}
+								onClick={() => router.push(`/decks/${id}`)}
 								className="flex-1 item rounded-r-none border-r-0"
 							>
 								<p className="flex items-center">{name}</p>

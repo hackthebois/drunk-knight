@@ -47,7 +47,7 @@ const CardEditor = ({
 
 	return (
 		<>
-			<div className="background">
+			<div className="background w-full">
 				<h2 className="text-2xl mb-8">Card Editor</h2>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
@@ -104,7 +104,7 @@ const CardEditor = ({
 				</div>
 			</div>
 			<button
-				className="ebtn mt-8"
+				className="ebtn mt-8 w-full"
 				onClick={() =>
 					deleteCardMutation.mutate(
 						{ id: card.id, deckId },
@@ -155,7 +155,7 @@ const CardAdd = ({
 	};
 
 	return (
-		<div className="background">
+		<div className="background w-full">
 			<h2 className="text-2xl mb-8">Card Creator</h2>
 			{errors.name ? (
 				<p className="emsg mb-4">{errors.name.message}</p>
@@ -233,7 +233,7 @@ const DeckPage = ({ id: deckId }: { id: string }) => {
 				<CardAdd deckId={deckId} cancel={() => setAddCard(false)} />
 			) : (
 				<>
-					<div className="background flex flex-col flex-1 overflow-auto">
+					<div className="background flex flex-col flex-1 overflow-auto w-full">
 						{deck && (
 							<div className="flex justify-between items-center mb-8">
 								<h2 className="text-2xl">{deck.name}</h2>
@@ -271,7 +271,7 @@ const DeckPage = ({ id: deckId }: { id: string }) => {
 						</div>
 					</div>
 					<button
-						className="ebtn mt-8"
+						className="ebtn mt-8 w-full"
 						onClick={() => deleteDeckMutation.mutate(deckId)}
 					>
 						Delete Deck
