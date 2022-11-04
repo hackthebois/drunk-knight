@@ -3,7 +3,7 @@ import { FaChessKnight, FaPlay, FaUserCircle } from "react-icons/fa";
 import "../styles/globals.css";
 import ReactQueryWrapper from "./ReactQueryWrapper";
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 	return (
 		<html lang="en">
 			<head>
@@ -22,19 +22,19 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 					<nav className="flex flex-row fixed bottom-0 left-0 w-full justify-center items-center border-t-[1px] h-12 bg-background">
 						<Link
 							href="/decks"
-							className="flex-1 p-4 flex justify-center items-center"
+							className="flex-1 p-4 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaChessKnight size={20} />
 						</Link>
 						<Link
 							href="/"
-							className="flex-1 p-4 flex justify-center items-center"
+							className="flex-1 p-4 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaPlay size={19} />
 						</Link>
 						<Link
 							href="/account"
-							className="flex-1 p-4 flex justify-center items-center"
+							className="flex-1 p-4 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaUserCircle size={20} />
 						</Link>

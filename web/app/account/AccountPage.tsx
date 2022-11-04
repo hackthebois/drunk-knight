@@ -1,11 +1,14 @@
 "use client";
 
-import { useSignOut, useUser } from "../../hooks/user";
+import { useRouter } from "next/navigation";
+import { User } from "../../types/User";
 
-const Account = () => {
-	const signOut = useSignOut();
+const signOut = async () => {
+	await fetch("/api/auth/signout");
+};
 
-	const { data: user } = useUser();
+const Account = ({ user }: { user: User }) => {
+	const router = useRouter();
 
 	return (
 		<main>
@@ -17,7 +20,10 @@ const Account = () => {
 					Email Confirmed:{" "}
 					{user?.emailConfirmation ? "True" : "False"}
 				</p>
-				<button className="gbtn mt-3" onClick={() => signOut()}>
+				<button
+					className="gbtn mt-3"
+					onClick={() => signOut().then(() => router.push("/"))}
+				>
 					Sign out
 				</button>
 			</div>

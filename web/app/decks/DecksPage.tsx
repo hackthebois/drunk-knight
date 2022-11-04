@@ -13,10 +13,10 @@ import {
 	useDecks,
 	useUpdateDeck,
 } from "../../hooks/deck";
+import { Deck } from "../../types/Deck";
 
-const DecksPage = () => {
+const DecksPage = ({ decks }: { decks: Deck[] }) => {
 	const router = useRouter();
-	const { data: decks } = useDecks();
 
 	const createDeckMutation = useCreateDeck();
 	const updateDeckMutation = useUpdateDeck();

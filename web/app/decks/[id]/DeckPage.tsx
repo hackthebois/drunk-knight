@@ -15,8 +15,9 @@ import {
 	useDeleteCard,
 	useUpdateCard,
 } from "../../../hooks/card";
-import { useDeck, useDeleteDeck } from "../../../hooks/deck";
+import { useDeleteDeck } from "../../../hooks/deck";
 import { Card, cardTypes } from "../../../types/Card";
+import { Deck } from "../../../types/Deck";
 
 const CardEditor = ({
 	card,
@@ -214,11 +215,10 @@ const CardAdd = ({
 	);
 };
 
-const DeckPage = ({ id: deckId }: { id: string }) => {
+const DeckPage = ({ deck }: { deck: Deck }) => {
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 
-	const { data: deck } = useDeck(deckId);
 	const deleteDeckMutation = useDeleteDeck();
 
 	return (
@@ -226,11 +226,11 @@ const DeckPage = ({ id: deckId }: { id: string }) => {
 			{editCard ? (
 				<CardEditor
 					card={editCard}
-					deckId={deckId}
+					deckId={deck.id}
 					cancel={() => setEditCard(undefined)}
 				/>
 			) : addCard ? (
-				<CardAdd deckId={deckId} cancel={() => setAddCard(false)} />
+				<CardAdd deckId={deck.id} cancel={() => setAddCard(false)} />
 			) : (
 				<>
 					<div className="background flex flex-col flex-1 overflow-auto w-full">
@@ -272,7 +272,7 @@ const DeckPage = ({ id: deckId }: { id: string }) => {
 					</div>
 					<button
 						className="ebtn mt-8 w-full"
-						onClick={() => deleteDeckMutation.mutate(deckId)}
+						onClick={() => deleteDeckMutation.mutate(deck.id)}
 					>
 						Delete Deck
 					</button>

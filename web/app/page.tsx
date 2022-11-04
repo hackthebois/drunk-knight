@@ -1,18 +1,15 @@
 import { env } from "../env/client.mjs";
 import { CardSchema } from "../types/Card";
 import Home from "./HomePage";
+import { cookies } from "next/headers";
 
-const play = async () => {
-	// const accessToken = localStorage.getItem("access_token");
+const play = async ({ token }: { token?: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`, {
 		method: "GET",
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
-			Authorization: `${
-				// accessToken && accessToken !== "" ? `Bearer ${accessToken}` : ""
-				""
-			}`,
+			Authorization: `${token && token !== "" ? `Bearer ${token}` : ""}`,
 		},
 	});
 	const data: unknown = await res.json();
@@ -20,7 +17,8 @@ const play = async () => {
 };
 
 const Page = async () => {
-	const cards = await play();
+	const nextCookies = cookies();
+	const cards = await play({ token: nextCookies.get("accessToken")?.value });
 
 	return <Home cards={cards} />;
 };

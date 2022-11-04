@@ -13,20 +13,15 @@ export const SignInInputSchema = z.object({
 });
 export type SignInInput = z.input<typeof SignInInputSchema>;
 const signInReq = async (input: SignInInput) => {
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`,
-		{
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(input),
+	const res = await fetch(`/api/auth/signin`, {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
 		},
-	);
-	const data: any = await res.json();
-	if (!res.ok) throw new Error((data && data.message) || res.status);
-	return z.object({ token: z.string() }).parse(data);
+		body: JSON.stringify(input),
+	});
+	console.log(res);
 };
 
 const SignIn = () => {
@@ -42,8 +37,7 @@ const SignIn = () => {
 	});
 
 	const signin = useMutation(signInReq, {
-		onSuccess: ({ token }) => {
-			localStorage.setItem("access_token", token);
+		onSuccess: () => {
 			queryClient.invalidateQueries(["user"]);
 			router.push("/");
 		},

@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useUser } from "../../../hooks/user";
+import { User } from "../../../types/User";
 
 const resendEmail = () => {};
 
-const Confirm = () => {
-	const { data: user } = useUser();
+const Confirm = ({ user }: { user: User | null }) => {
 	return (
 		<main className="text-center flex flex-col items-center justify-center">
 			{user && user.emailConfirmation ? (
