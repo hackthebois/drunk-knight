@@ -4,7 +4,7 @@ import { UserSchema } from "../../types/User";
 import Account from "./AccountPage";
 import GuestPage from "./GuestPage";
 
-export const getUser = async ({ token }: { token: string }) => {
+const getUser = async ({ token }: { token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
 		method: "GET",
 		headers: {

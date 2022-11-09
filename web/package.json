@@ -18,7 +18,8 @@
 		"react-hook-form": "^7.34.2",
 		"react-icons": "^4.4.0",
 		"react-loader-spinner": "^5.3.4",
-		"zod": "^3.18.0"
+		"zod": "^3.18.0",
+		"zustand": "^4.1.4"
 	},
 	"devDependencies": {
 		"@types/cookie": "^0.5.1",

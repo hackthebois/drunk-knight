@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { serialize } from "cookie";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 import { SignInInputSchema } from "../../../app/auth/signin/SignInPage";
 import { serialize } from "cookie";

@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 import { env } from "../../../env/client.mjs";
-import { UserSchema } from "../../../types/User.js";
+import { UserSchema } from "../../../types/User";
 import Confirm from "./ConfirmPage";
 
-export const getUser = async ({ token }: { token: string }) => {
+const getUser = async ({ token }: { token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
 		method: "GET",
 		headers: {

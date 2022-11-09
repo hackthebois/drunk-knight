@@ -1,4 +1,4 @@
-import { Card } from "../types/Card";
+import type { Card } from "../types/Card";
 
 const typeColours = {
 	CATEGORIES: "#449e46",
