@@ -31,7 +31,8 @@ const signUpReq = async (input: SignUpInput) => {
 	);
 	const data: any = await res.json();
 	if (!res.ok) throw new Error((data && data.message) || res.status);
-	return z.object({ token: z.string() }).parse(data);
+	const { token } = z.object({ token: z.string() }).parse(data);
+	localStorage.setItem("accessToken", token);
 };
 
 const SignUp = () => {
@@ -47,9 +48,7 @@ const SignUp = () => {
 	const router = useRouter();
 
 	const signup = useMutation(signUpReq, {
-		onSuccess: ({ token }) => {
-			localStorage.setItem("access_token", token);
-			queryClient.invalidateQueries(["user"]);
+		onSuccess: () => {
 			router.push("/auth/confirm");
 		},
 		onError: (error: any) => {

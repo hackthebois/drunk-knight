@@ -7,7 +7,7 @@ import { Deck, DeckSchema } from "../types/Deck";
 // GET DECKS (GET /deck)
 
 const getDecks = async () => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
 		method: "GET",
@@ -23,7 +23,7 @@ const getDecks = async () => {
 export const useDecks = () => useQuery(["decks"], getDecks);
 
 const getDeck = async (id: string) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
 		method: "GET",
@@ -45,7 +45,7 @@ export const CreateDeckSchema = z.object({
 });
 export type CreateDeck = z.input<typeof CreateDeckSchema>;
 const createDeck = async ({ name }: CreateDeck) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/create`, {
 		method: "POST",
@@ -79,7 +79,7 @@ export const UpdateDeckSchema = z.object({
 });
 export type UpdateDeck = z.input<typeof UpdateDeckSchema>;
 const updateDeck = async ({ id, name, selected }: UpdateDeck) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
 		method: "PUT",
@@ -109,7 +109,7 @@ export const useUpdateDeck = () => {
 
 // DELETE DECK (DELETE /deck/:id)
 const deleteDeck = async (id: string) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
 		method: "DELETE",

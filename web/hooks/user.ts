@@ -6,7 +6,7 @@ import { UpdateUser, UserSchema } from "../types/User";
 
 // UPDATE USER (PUT /account)
 const updateUserReq = async ({ username, email }: UpdateUser) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
 		method: "PUT",
@@ -35,7 +35,7 @@ export const useSignOut = () => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
 	const signOut = () => {
-		localStorage.setItem("access_token", "");
+		localStorage.setItem("accessToken", "");
 		queryClient.clear();
 		router.push("/");
 	};

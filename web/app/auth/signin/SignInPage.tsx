@@ -21,7 +21,10 @@ const signInReq = async (input: SignInInput) => {
 		},
 		body: JSON.stringify(input),
 	});
-	console.log(res);
+	const data = await res.json();
+	if (!res.ok) throw new Error((data && data.message) || res.status);
+	const { token } = z.object({ token: z.string() }).parse(data);
+	localStorage.setItem("accessToken", token);
 };
 
 const SignIn = () => {
@@ -38,7 +41,6 @@ const SignIn = () => {
 
 	const signin = useMutation(signInReq, {
 		onSuccess: () => {
-			queryClient.invalidateQueries(["user"]);
 			router.push("/");
 		},
 		onError: (error: any) => {

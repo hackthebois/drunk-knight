@@ -4,22 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPause, FaPlay, FaPlus, FaTimes } from "react-icons/fa";
 import Loader from "../../components/Loader";
-import {
-	CreateDeck,
-	CreateDeckSchema,
-	useCreateDeck,
-	useDecks,
-	useUpdateDeck,
-} from "../../hooks/deck";
+import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
 import { Deck } from "../../types/Deck";
+import DeckItem from "./DeckItem";
 
 const DecksPage = ({ decks }: { decks: Deck[] }) => {
 	const router = useRouter();
-
 	const createDeckMutation = useCreateDeck();
-	const updateDeckMutation = useUpdateDeck();
 
 	const {
 		register,
@@ -32,7 +25,15 @@ const DecksPage = ({ decks }: { decks: Deck[] }) => {
 	const [addDeck, setAddDeck] = useState(false);
 
 	const onCreateDeck = ({ name }: CreateDeck) => {
-		createDeckMutation.mutate({ name }, { onSuccess: () => reset() });
+		createDeckMutation.mutate(
+			{ name },
+			{
+				onSuccess: () => {
+					router.refresh();
+					reset();
+				},
+			},
+		);
 	};
 	return (
 		<main>
@@ -74,46 +75,8 @@ const DecksPage = ({ decks }: { decks: Deck[] }) => {
 					</>
 				)}
 				<div className="flex-1 overflow-y-scroll -mr-2 pr-2">
-					{decks?.map(({ name, id, selected }, index) => (
-						<div
-							className={`flex ${index !== 0 && "mt-2"}`}
-							key={id}
-						>
-							<div
-								key={id}
-								onClick={() => router.push(`/decks/${id}`)}
-								className="flex-1 item rounded-r-none border-r-0"
-							>
-								<p className="flex items-center">{name}</p>
-							</div>
-							{selected ? (
-								<button
-									className="btn rounded-l-none"
-									onClick={() =>
-										updateDeckMutation.mutate({
-											name,
-											id,
-											selected: false,
-										})
-									}
-								>
-									Unselect
-								</button>
-							) : (
-								<button
-									className="btn rounded-l-none"
-									onClick={() =>
-										updateDeckMutation.mutate({
-											name,
-											id,
-											selected: true,
-										})
-									}
-								>
-									Select
-								</button>
-							)}
-						</div>
+					{decks?.map((deck) => (
+						<DeckItem deck={deck} />
 					))}
 					<Loader visible={createDeckMutation.isLoading} />
 				</div>

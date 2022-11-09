@@ -19,7 +19,7 @@ const createCard = async ({
 	cardType,
 	deckId,
 }: CreateCard) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/create`,
@@ -68,7 +68,7 @@ export const updateCard = async ({
 	cardType,
 	deckId,
 }: UpdateCard) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,
@@ -113,7 +113,7 @@ export const DeleteCardSchema = z.object({
 });
 export type DeleteCard = z.infer<typeof DeleteCardSchema>;
 const deleteCard = async ({ id, deckId }: DeleteCard) => {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = localStorage.getItem("accessToken");
 
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,

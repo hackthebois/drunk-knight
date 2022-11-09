@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	});
 
 	res.setHeader("Set-Cookie", serialized);
-	res.status(200).json({ message: "Success." });
+	res.status(200).json({ token });
 };
 
 export default handler;

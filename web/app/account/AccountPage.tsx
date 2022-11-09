@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { User } from "../../types/User";
 
 const signOut = async () => {
-	await fetch("/api/auth/signout");
+	await fetch("/api/auth/signout").then(() => {
+		localStorage.removeItem("accessToken");
+	});
 };
 
 const Account = ({ user }: { user: User }) => {
@@ -22,7 +24,12 @@ const Account = ({ user }: { user: User }) => {
 				</p>
 				<button
 					className="gbtn mt-3"
-					onClick={() => signOut().then(() => router.push("/"))}
+					onClick={() =>
+						signOut().then(() => {
+							router.refresh();
+							router.push("/");
+						})
+					}
 				>
 					Sign out
 				</button>

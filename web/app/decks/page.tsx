@@ -16,16 +16,6 @@ const getDecks = async ({ token }: { token: string }) => {
 	return DeckSchema.array().parse(data);
 };
 
-const guestDecks: Deck[] = [
-	{
-		id: "",
-		name: "Guest",
-		cards: [
-			{ id: "", name: "deck", description: "fake", cardType: "ACTION" },
-		],
-	},
-];
-
 const Page = async () => {
 	const nextCookies = cookies();
 	const token = nextCookies.get("accessToken")?.value;
@@ -33,9 +23,9 @@ const Page = async () => {
 	if (token) {
 		const decks = await getDecks({ token });
 
-		return <DecksPage decks={[...guestDecks, ...decks]} />;
+		return <DecksPage decks={decks} />;
 	} else {
-		return <DecksPage decks={guestDecks} />;
+		return <DecksPage decks={[]} />;
 	}
 };
 

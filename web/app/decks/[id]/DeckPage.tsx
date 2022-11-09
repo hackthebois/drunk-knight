@@ -28,6 +28,7 @@ const CardEditor = ({
 	deckId: string;
 	cancel: () => void;
 }) => {
+	const router = useRouter();
 	const updateCardMutation = useUpdateCard();
 	const deleteCardMutation = useDeleteCard();
 	const {
@@ -43,7 +44,12 @@ const CardEditor = ({
 	const cardState = watch();
 
 	const onUpdateCard = (data: UpdateCard) => {
-		updateCardMutation.mutate(data, { onSuccess: () => cancel() });
+		updateCardMutation.mutate(data, {
+			onSuccess: () => {
+				router.refresh();
+				cancel();
+			},
+		});
 	};
 
 	return (
@@ -132,6 +138,7 @@ const CardAdd = ({
 	cancel: () => void;
 }) => {
 	const createCardMutation = useCreateCard();
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -151,7 +158,10 @@ const CardAdd = ({
 
 	const onCreateCard = (data: CreateCard) => {
 		createCardMutation.mutate(data, {
-			onSuccess: () => cancel(),
+			onSuccess: () => {
+				router.refresh();
+				cancel();
+			},
 		});
 	};
 
@@ -216,6 +226,7 @@ const CardAdd = ({
 };
 
 const DeckPage = ({ deck }: { deck: Deck }) => {
+	const router = useRouter();
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 
@@ -272,7 +283,13 @@ const DeckPage = ({ deck }: { deck: Deck }) => {
 					</div>
 					<button
 						className="ebtn mt-8 w-full"
-						onClick={() => deleteDeckMutation.mutate(deck.id)}
+						onClick={() =>
+							deleteDeckMutation.mutate(deck.id, {
+								onSuccess: () => {
+									router.refresh();
+								},
+							})
+						}
 					>
 						Delete Deck
 					</button>
