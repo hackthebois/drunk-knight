@@ -54,80 +54,78 @@ const CardEditor = ({
 	};
 
 	return (
-		<>
-			<div className="background w-full">
-				<h2 className="text-2xl mb-8 font-bold">Card Editor</h2>
-				{errors.name ? (
-					<p className="emsg mb-4">{errors.name.message}</p>
-				) : errors.description ? (
-					<p className="emsg mb-4">{errors.description.message}</p>
-				) : (
-					errors.cardType && (
-						<p className="emsg mb-4">{errors.cardType.message}</p>
-					)
-				)}
-				<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
-					<div className="flex flex-col md:flex-row">
-						<input
-							type="text"
-							placeholder="Card Name"
-							className="flex-1 mb-2 md:mr-2 md:mb-0"
-							{...register("name")}
-						/>
-						<input
-							type="text"
-							placeholder="Card Description"
-							className="flex-1 mb-2 md:mr-2 md:mb-0"
-							{...register("description")}
-						/>
-						<select
-							className="lg:mr-2 lg:mb-0"
-							{...register("cardType")}
-						>
-							{cardTypes.map((cardType) => (
-								<option value={cardType} key={cardType}>
-									{cardType}
-								</option>
-							))}
-						</select>
-					</div>
-				</form>
-				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
-					<CardItem card={cardState} />
-				</div>
-				<div className="mt-4 flex flex-row justify-between">
-					<button className="gbtn" onClick={cancel}>
-						Cancel
-					</button>
-					<button
-						className={`btn ${
-							isDirty
-								? ""
-								: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
-						}`}
-						onClick={() => handleSubmit(onUpdateCard)()}
+		<div className="background flex flex-col flex-1 overflow-auto w-full">
+			<h2 className="text-2xl mb-8 font-bold">Card Editor</h2>
+			{errors.name ? (
+				<p className="emsg mb-4">{errors.name.message}</p>
+			) : errors.description ? (
+				<p className="emsg mb-4">{errors.description.message}</p>
+			) : (
+				errors.cardType && (
+					<p className="emsg mb-4">{errors.cardType.message}</p>
+				)
+			)}
+			<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
+				<div className="flex flex-col md:flex-row">
+					<input
+						type="text"
+						placeholder="Card Name"
+						className="flex-1 mb-2 md:mr-2 md:mb-0"
+						{...register("name")}
+					/>
+					<input
+						type="text"
+						placeholder="Card Description"
+						className="flex-1 mb-2 md:mr-2 md:mb-0"
+						{...register("description")}
+					/>
+					<select
+						className="lg:mr-2 lg:mb-0"
+						{...register("cardType")}
 					>
-						Save
-					</button>
+						{cardTypes.map((cardType) => (
+							<option value={cardType} key={cardType}>
+								{cardType}
+							</option>
+						))}
+					</select>
 				</div>
+			</form>
+			<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
+				<CardItem card={cardState} />
+			</div>
+			<div className="mt-4 flex flex-row justify-between">
+				<button className="gbtn" onClick={cancel}>
+					Cancel
+				</button>
 				<button
-					className="ebtn mt-8 w-full"
-					onClick={() =>
-						deleteCardMutation.mutate(
-							{ id: card.id, deckId },
-							{
-								onSuccess: () => {
-									console.log("success");
-									cancel();
-								},
-							},
-						)
-					}
+					className={`btn ${
+						isDirty
+							? ""
+							: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
+					}`}
+					onClick={() => handleSubmit(onUpdateCard)()}
 				>
-					Delete Card
+					Save
 				</button>
 			</div>
-		</>
+			<button
+				className="ebtn mt-8 w-full"
+				onClick={() =>
+					deleteCardMutation.mutate(
+						{ id: card.id, deckId },
+						{
+							onSuccess: () => {
+								console.log("success");
+								cancel();
+							},
+						},
+					)
+				}
+			>
+				Delete Card
+			</button>
+		</div>
 	);
 };
 
@@ -167,7 +165,7 @@ const CardAdd = ({
 	};
 
 	return (
-		<div className="background w-full">
+		<div className="background flex flex-col flex-1 overflow-auto w-full">
 			<h2 className="text-2xl mb-8 font-bold">Card Creator</h2>
 			{errors.name ? (
 				<p className="emsg mb-4">{errors.name.message}</p>
@@ -244,64 +242,60 @@ const DeckPage = ({ deck }: { deck: Deck }) => {
 			) : addCard ? (
 				<CardAdd deckId={deck.id} cancel={() => setAddCard(false)} />
 			) : (
-				<>
-					<div className="background flex flex-col flex-1 overflow-auto w-full">
-						{deck && (
-							<div className="flex justify-between items-center mb-8">
-								<h2 className="text-2xl font-bold">
-									{deck.name}
-								</h2>
-								<FaPlus
-									onClick={() => setAddCard(true)}
-									size={34}
-									className="p-2 cursor-pointer"
-								/>
-							</div>
-						)}
-						<div className="flex-1 overflow-auto -mr-2 pr-2">
-							{deck &&
-								deck.cards &&
-								deck.cards.map((card, index) => (
-									<div
-										key={card.id}
-										className={`item flex flex-row justify-between align-center ${
-											index !== 0 && "mt-4"
-										}`}
-										onClick={() => setEditCard(card)}
-									>
-										<div>
-											<p className="flex items-center text-lg mb-2">
-												{card.name}
-											</p>
-											<p className="flex items-center opacity-70">
-												{card.description}
-											</p>
-										</div>
-										<div className="flex justify-center items-center">
-											<p>{card.cardType}</p>
-										</div>
-									</div>
-								))}
+				<div className="background flex flex-col flex-1 overflow-auto w-full">
+					{deck && (
+						<div className="flex justify-between items-center mb-8">
+							<h2 className="text-2xl font-bold">{deck.name}</h2>
+							<FaPlus
+								onClick={() => setAddCard(true)}
+								size={34}
+								className="p-2 cursor-pointer"
+							/>
 						</div>
-						<button
-							className="ebtn mt-8 w-full"
-							onClick={() =>
-								deleteDeckMutation.mutate(deck.id, {
-									onSuccess: () => {
-										router.push("/decks");
-										router.refresh();
-									},
-								})
-							}
-						>
-							{deleteDeckMutation.isLoading ? (
-								<Loader visible size={18} />
-							) : (
-								"Delete Deck"
-							)}
-						</button>
+					)}
+					<div className="flex-1 overflow-auto -mr-2 pr-2">
+						{deck &&
+							deck.cards &&
+							deck.cards.map((card, index) => (
+								<div
+									key={card.id}
+									className={`item flex flex-row justify-between align-center ${
+										index !== 0 && "mt-4"
+									}`}
+									onClick={() => setEditCard(card)}
+								>
+									<div>
+										<p className="flex items-center text-lg mb-2">
+											{card.name}
+										</p>
+										<p className="flex items-center opacity-70">
+											{card.description}
+										</p>
+									</div>
+									<div className="flex justify-center items-center">
+										<p>{card.cardType}</p>
+									</div>
+								</div>
+							))}
 					</div>
-				</>
+					<button
+						className="ebtn mt-8 w-full"
+						onClick={() =>
+							deleteDeckMutation.mutate(deck.id, {
+								onSuccess: () => {
+									router.push("/decks");
+									router.refresh();
+								},
+							})
+						}
+					>
+						{deleteDeckMutation.isLoading ? (
+							<Loader visible size={18} />
+						) : (
+							"Delete Deck"
+						)}
+					</button>
+				</div>
 			)}
 		</main>
 	);
