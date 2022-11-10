@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import CardItem from "../../../components/CardItem";
+import Loader from "../../../components/Loader";
 import {
 	CreateCard,
 	CreateCardSchema,
@@ -55,7 +56,7 @@ const CardEditor = ({
 	return (
 		<>
 			<div className="background w-full">
-				<h2 className="text-2xl mb-8">Card Editor</h2>
+				<h2 className="text-2xl mb-8 font-bold">Card Editor</h2>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
 				) : errors.description ? (
@@ -95,7 +96,7 @@ const CardEditor = ({
 					<CardItem card={cardState} />
 				</div>
 				<div className="mt-4 flex flex-row justify-between">
-					<button className="btn bg-border" onClick={cancel}>
+					<button className="gbtn" onClick={cancel}>
 						Cancel
 					</button>
 					<button
@@ -109,23 +110,23 @@ const CardEditor = ({
 						Save
 					</button>
 				</div>
-			</div>
-			<button
-				className="ebtn mt-8 w-full"
-				onClick={() =>
-					deleteCardMutation.mutate(
-						{ id: card.id, deckId },
-						{
-							onSuccess: () => {
-								console.log("success");
-								cancel();
+				<button
+					className="ebtn mt-8 w-full"
+					onClick={() =>
+						deleteCardMutation.mutate(
+							{ id: card.id, deckId },
+							{
+								onSuccess: () => {
+									console.log("success");
+									cancel();
+								},
 							},
-						},
-					)
-				}
-			>
-				Delete Card
-			</button>
+						)
+					}
+				>
+					Delete Card
+				</button>
+			</div>
 		</>
 	);
 };
@@ -167,7 +168,7 @@ const CardAdd = ({
 
 	return (
 		<div className="background w-full">
-			<h2 className="text-2xl mb-8">Card Creator</h2>
+			<h2 className="text-2xl mb-8 font-bold">Card Creator</h2>
 			{errors.name ? (
 				<p className="emsg mb-4">{errors.name.message}</p>
 			) : errors.description ? (
@@ -207,7 +208,7 @@ const CardAdd = ({
 				<CardItem card={{ id: "123", ...cardState }} />
 			</div>
 			<div className="mt-4 flex flex-row justify-between">
-				<button className="btn bg-border" onClick={cancel}>
+				<button className="gbtn" onClick={cancel}>
 					Cancel
 				</button>
 				<button
@@ -247,7 +248,9 @@ const DeckPage = ({ deck }: { deck: Deck }) => {
 					<div className="background flex flex-col flex-1 overflow-auto w-full">
 						{deck && (
 							<div className="flex justify-between items-center mb-8">
-								<h2 className="text-2xl">{deck.name}</h2>
+								<h2 className="text-2xl font-bold">
+									{deck.name}
+								</h2>
 								<FaPlus
 									onClick={() => setAddCard(true)}
 									size={34}
@@ -280,19 +283,24 @@ const DeckPage = ({ deck }: { deck: Deck }) => {
 									</div>
 								))}
 						</div>
+						<button
+							className="ebtn mt-8 w-full"
+							onClick={() =>
+								deleteDeckMutation.mutate(deck.id, {
+									onSuccess: () => {
+										router.push("/decks");
+										router.refresh();
+									},
+								})
+							}
+						>
+							{deleteDeckMutation.isLoading ? (
+								<Loader visible size={18} />
+							) : (
+								"Delete Deck"
+							)}
+						</button>
 					</div>
-					<button
-						className="ebtn mt-8 w-full"
-						onClick={() =>
-							deleteDeckMutation.mutate(deck.id, {
-								onSuccess: () => {
-									router.refresh();
-								},
-							})
-						}
-					>
-						Delete Deck
-					</button>
 				</>
 			)}
 		</main>

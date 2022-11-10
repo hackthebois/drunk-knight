@@ -1,19 +1,21 @@
 "use client";
 
-import { ThreeDots } from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 
 type Props = {
 	visible: boolean;
+	color?: string;
+	size?: number;
 };
 
-const Loader = ({ visible }: Props) => {
+const Loader = ({ visible, color = "#AE76A6", size = 40 }: Props) => {
 	return (
-		<div className="text-center w-full flex justify-center">
-			<ThreeDots
-				height="50"
-				width="50"
-				radius="9"
-				color="#AE76A6"
+		<div className="text-center w-full flex justify-center flex-1 items-center">
+			<Oval
+				height={size}
+				width={size}
+				color={color}
+				secondaryColor="#CCCCCC"
 				ariaLabel="three-dots-loading"
 				visible={visible}
 			/>

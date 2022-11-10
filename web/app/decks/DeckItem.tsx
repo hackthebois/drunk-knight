@@ -1,3 +1,6 @@
+"use client";
+
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaPause, FaPlay } from "react-icons/fa";
 import Loader from "../../components/Loader";
@@ -9,32 +12,30 @@ type Props = {
 };
 
 const DeckItem = ({ deck: { id, name, selected } }: Props) => {
-	const router = useRouter();
 	const updateDeckMutation = useUpdateDeck();
 
 	return (
 		<div className={`flex mt-2`} key={id}>
-			<div
+			<Link
 				key={id}
-				onClick={() => router.push(`/decks/${id}`)}
+				href={`/decks/${id}`}
 				className="flex-1 item rounded-r-none border-r-0"
 			>
 				<p className="flex items-center">{name}</p>
-			</div>
-			{selected ? (
+			</Link>
+			{updateDeckMutation.isLoading ? (
+				<div className="btn rounded-l-none items-center flex">
+					<Loader visible size={20} color={"#fff"} />
+				</div>
+			) : selected ? (
 				<div
 					className="btn rounded-l-none items-center flex"
 					onClick={() =>
-						updateDeckMutation.mutate(
-							{
-								name,
-								id,
-								selected: false,
-							},
-							{
-								onSuccess: () => router.refresh(),
-							},
-						)
+						updateDeckMutation.mutate({
+							name,
+							id,
+							selected: false,
+						})
 					}
 				>
 					<FaPause />
@@ -43,16 +44,11 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 				<div
 					className="btn rounded-l-none flex items-center"
 					onClick={() =>
-						updateDeckMutation.mutate(
-							{
-								name,
-								id,
-								selected: true,
-							},
-							{
-								onSuccess: () => router.refresh(),
-							},
-						)
+						updateDeckMutation.mutate({
+							name,
+							id,
+							selected: true,
+						})
 					}
 				>
 					<FaPlay />

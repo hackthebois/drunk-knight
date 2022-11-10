@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { env } from "../../env/client.mjs";
 import { UserSchema } from "../../types/User";
 import Account from "./AccountPage";
-import GuestPage from "./GuestPage";
+import { redirect } from "next/navigation";
 
 const getUser = async ({ token }: { token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
@@ -26,7 +26,7 @@ const Page = async () => {
 
 		return <Account user={user} />;
 	} else {
-		return <GuestPage />;
+		redirect("/guest");
 	}
 };
 
