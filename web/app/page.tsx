@@ -5,12 +5,15 @@ import { cookies } from "next/headers";
 
 const play = async ({ token }: { token?: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`, {
-		method: "GET",
+		method: "POST",
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
 			Authorization: `${token && token !== "" ? `Bearer ${token}` : ""}`,
 		},
+		body: JSON.stringify({
+			useStandard: true,
+		}),
 	});
 	const data: unknown = await res.json();
 	return await CardSchema.array().min(1).parse(data);
