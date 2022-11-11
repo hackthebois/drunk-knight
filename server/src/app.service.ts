@@ -13,7 +13,7 @@ export class AppService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async getGameplayCards(user: UserInfo, useStandard: boolean) {
-		let standardCards: Card[] = [];
+		let gamePlayCards: Card[] = [];
 
 		if (useStandard) {
 			const gameplayDecks = await this.prismaService.user.findFirst({
@@ -32,8 +32,7 @@ export class AppService {
 				},
 			});
 
-			standardCards = gameplayDecks?.decks[0].cards;
-			this.shuffle(standardCards);
+			gamePlayCards = gameplayDecks?.decks[0].cards;
 		}
 
 		if (user && user.name != ADMIN.NAME) {
@@ -47,18 +46,16 @@ export class AppService {
 				},
 			});
 			const userCards = deckCards.map((deck) => deck.cards).flat(3);
-			this.shuffle(userCards);
-
-			return [...standardCards, ...userCards].map(
-				(card) => new CardResponseDto(card),
-			);
+			gamePlayCards = [...gamePlayCards, ...userCards];
 		}
-		return standardCards.map((card) => new CardResponseDto(card));
+
+		gamePlayCards = this.shuffle(gamePlayCards);
+		return gamePlayCards.map((card) => new CardResponseDto(card));
 	}
 
 	/**
 	 * Shuffles array in place.
-	 * @param {Array} a items An array containing the items.
+	 * @param {Array} a An array containing the items.
 	 */
 	shuffle(a: any[]) {
 		var j: any, x: any, i: any;
