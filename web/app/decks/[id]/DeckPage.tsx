@@ -116,7 +116,6 @@ const CardEditor = ({
 						{ id: card.id, deckId },
 						{
 							onSuccess: () => {
-								console.log("success");
 								cancel();
 							},
 						},

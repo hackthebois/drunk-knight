@@ -23,11 +23,7 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 			>
 				<p className="flex items-center">{name}</p>
 			</Link>
-			{updateDeckMutation.isLoading ? (
-				<div className="btn rounded-l-none items-center flex">
-					<Loader visible size={20} color={"#fff"} />
-				</div>
-			) : selected ? (
+			{selected ? (
 				<div
 					className="btn rounded-l-none items-center flex"
 					onClick={() =>
