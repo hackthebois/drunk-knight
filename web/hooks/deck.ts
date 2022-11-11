@@ -94,9 +94,17 @@ const updateDeck = async ({ id, name, selected }: UpdateDeck) => {
 	return DeckSchema.parse(data);
 };
 export const useUpdateDeck = () => {
+	const queryClient = useQueryClient();
 	const router = useRouter();
 	return useMutation(updateDeck, {
-		onSuccess: () => {
+		onSuccess: (deck) => {
+			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
+				old
+					? old.map((oldDeck) =>
+							oldDeck.id === deck.id ? deck : oldDeck,
+					  )
+					: [],
+			);
 			router.refresh();
 		},
 	});

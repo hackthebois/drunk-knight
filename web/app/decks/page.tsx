@@ -1,10 +1,10 @@
 import { cookies } from "next/headers";
 import { env } from "../../env/client.mjs";
 import { DeckSchema } from "../../types/Deck";
-import DeckItem from "./DeckItem";
 import { redirect } from "next/navigation";
 import AddDeck from "./AddDeck";
 import GuestDeck from "./GuestDeck";
+import DeckList from "./DeckList";
 
 const getDecks = async ({ token }: { token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
@@ -35,9 +35,7 @@ const Page = async () => {
 						<GuestDeck
 							useStandard={useStandard === "false" ? false : true}
 						/>
-						{decks.map((deck) => (
-							<DeckItem key={deck.id} deck={deck} />
-						))}
+						<DeckList decks={decks} />
 						<AddDeck />
 					</div>
 				</div>
