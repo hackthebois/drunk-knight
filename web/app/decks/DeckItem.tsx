@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa";
-import Loader from "../../components/Loader";
 import { useUpdateDeck } from "../../hooks/deck";
 import { Deck } from "../../types/Deck";
 
@@ -13,6 +13,8 @@ type Props = {
 
 const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 	const updateDeckMutation = useUpdateDeck();
+	const [isSelected, setIsSelected] = useState(selected);
+	const router = useRouter();
 
 	return (
 		<div className={`flex mt-2`} key={id}>
@@ -23,29 +25,51 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 			>
 				<p className="flex items-center">{name}</p>
 			</Link>
-			{selected ? (
+			{isSelected ? (
 				<div
 					className="btn rounded-l-none items-center flex"
-					onClick={() =>
-						updateDeckMutation.mutate({
-							name,
-							id,
-							selected: false,
-						})
-					}
+					onClick={() => {
+						setIsSelected(false);
+						updateDeckMutation.mutate(
+							{
+								name,
+								id,
+								selected: false,
+							},
+							{
+								onSettled: () => {
+									router.refresh();
+								},
+								onError: () => {
+									setIsSelected(true);
+								},
+							},
+						);
+					}}
 				>
 					<FaPause />
 				</div>
 			) : (
 				<div
 					className="btn rounded-l-none flex items-center"
-					onClick={() =>
-						updateDeckMutation.mutate({
-							name,
-							id,
-							selected: true,
-						})
-					}
+					onClick={() => {
+						setIsSelected(true);
+						updateDeckMutation.mutate(
+							{
+								name,
+								id,
+								selected: true,
+							},
+							{
+								onSettled: () => {
+									router.refresh();
+								},
+								onError: () => {
+									setIsSelected(false);
+								},
+							},
+						);
+					}}
 				>
 					<FaPlay />
 				</div>

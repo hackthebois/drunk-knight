@@ -65,8 +65,7 @@ export const useCreateDeck = () => {
 		onSuccess: (deck) => {
 			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
 				old ? [...old, deck] : [],
-			),
-				queryClient.invalidateQueries(["decks"]);
+			);
 		},
 	});
 };
@@ -94,19 +93,17 @@ const updateDeck = async ({ id, name, selected }: UpdateDeck) => {
 	return DeckSchema.parse(data);
 };
 export const useUpdateDeck = () => {
-	const queryClient = useQueryClient();
-	const router = useRouter();
+	// const queryClient = useQueryClient();
 	return useMutation(updateDeck, {
-		onSuccess: (deck) => {
-			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
-				old
-					? old.map((oldDeck) =>
-							oldDeck.id === deck.id ? deck : oldDeck,
-					  )
-					: [],
-			);
-			router.refresh();
-		},
+		// onSuccess: (deck) => {
+		// 	queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
+		// 		old
+		// 			? old.map((oldDeck) =>
+		// 					oldDeck.id === deck.id ? deck : oldDeck,
+		// 			  )
+		// 			: [],
+		// 	);
+		// },
 	});
 };
 
@@ -135,7 +132,7 @@ export const useDeleteDeck = () => {
 			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
 				old ? old.filter((deck) => deck.id !== id) : [],
 			);
-			router.push("/account");
+			router.push("/decks");
 		},
 	});
 };

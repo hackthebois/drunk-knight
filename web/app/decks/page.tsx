@@ -4,7 +4,7 @@ import { DeckSchema } from "../../types/Deck";
 import { redirect } from "next/navigation";
 import AddDeck from "./AddDeck";
 import GuestDeck from "./GuestDeck";
-import DeckList from "./DeckList";
+import DeckItem from "./DeckItem";
 
 const getDecks = async ({ token }: { token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
@@ -35,7 +35,9 @@ const Page = async () => {
 						<GuestDeck
 							useStandard={useStandard === "false" ? false : true}
 						/>
-						<DeckList decks={decks} />
+						{decks.map((deck) => (
+							<DeckItem key={deck.id} deck={deck} />
+						))}
 						<AddDeck />
 					</div>
 				</div>
