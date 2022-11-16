@@ -12,7 +12,7 @@ export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
 	@Roles(UserType.DEFAULT, UserType.ADMIN)
-	@Put('/deck')
+	@Post('/deck')
 	searchDecks(@Body() body: SearchDto) {
 		return this.searchService.searchDecks(body);
 	}

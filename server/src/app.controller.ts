@@ -10,14 +10,14 @@ import { User, UserInfo } from './user/decorators/user.decorator';
 export class AppController {
 	constructor(private readonly appService: AppService) {}
 
+	@Get()
+	homePage() {
+		return 'Welcome to drunk knight';
+	}
+
 	@Roles()
 	@Post('play')
 	getGameplayCards(@User() user: UserInfo, @Body() body: PlayDto) {
 		return this.appService.getGameplayCards(user, body.useStandard);
-	}
-
-	@Post('home')
-	homePage() {
-		return 'Welcome to drunk knight';
 	}
 }
