@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+	// App
 	const app = await NestFactory.create(AppModule);
 	app.useGlobalPipes(
 		new ValidationPipe({
@@ -14,6 +15,8 @@ async function bootstrap() {
 			},
 		}),
 	);
+
+	// Swagger UI
 	const config = new DocumentBuilder()
 		.addBearerAuth()
 		.setTitle('Drunk Knight')
@@ -27,6 +30,7 @@ async function bootstrap() {
 		},
 	});
 
+	// App
 	app.enableCors();
 	await app.listen(8000);
 }
