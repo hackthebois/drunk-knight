@@ -224,7 +224,6 @@ const CardAdd = ({
 };
 
 const DeckPage = ({ deck }: { deck: Deck }) => {
-	const router = useRouter();
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 
@@ -279,20 +278,9 @@ const DeckPage = ({ deck }: { deck: Deck }) => {
 					</div>
 					<button
 						className="ebtn mt-8 w-full"
-						onClick={() =>
-							deleteDeckMutation.mutate(deck.id, {
-								onSuccess: () => {
-									router.push("/decks");
-									router.refresh();
-								},
-							})
-						}
+						onClick={() => deleteDeckMutation.mutate(deck.id)}
 					>
-						{deleteDeckMutation.isLoading ? (
-							<Loader visible size={18} />
-						) : (
-							"Delete Deck"
-						)}
+						Delete Deck
 					</button>
 				</div>
 			)}

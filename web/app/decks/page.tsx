@@ -6,8 +6,8 @@ import DeckList from "./DeckList";
 import { env } from "../../env/client.mjs";
 import { DeckSchema } from "../../types/Deck";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// export const dynamic = "force-dynamic";
+// export const revalidate = 0;
 
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {

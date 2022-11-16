@@ -62,10 +62,31 @@ const createDeck = async ({ name }: CreateDeck) => {
 export const useCreateDeck = () => {
 	const queryClient = useQueryClient();
 	return useMutation(createDeck, {
-		onSuccess: (deck) => {
+		onMutate: async (newDeck) => {
+			await queryClient.cancelQueries({
+				queryKey: ["decks"],
+			});
+			const previousDecks = queryClient.getQueryData<Deck[]>(["decks"]);
 			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
-				old ? [...old, deck] : [],
+				old
+					? [
+							...old,
+							{
+								id: "555",
+								cards: [],
+								selected: false,
+								...newDeck,
+							},
+					  ]
+					: [],
 			);
+			return { previousDecks };
+		},
+		onError: (err, newTodo, context) => {
+			queryClient.setQueryData(["decks"], context?.previousDecks);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["decks"] });
 		},
 	});
 };
@@ -114,7 +135,6 @@ export const useUpdateDeck = () => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
 		},
 		onSettled: () => {
-			queryClient.invalidateQueries({ queryKey: ["decks"] });
 			router.refresh();
 		},
 	});
@@ -141,11 +161,22 @@ export const useDeleteDeck = () => {
 	const router = useRouter();
 
 	return useMutation(deleteDeck, {
-		onSuccess: ({ id }) => {
+		onMutate: async (id) => {
+			await queryClient.cancelQueries({
+				queryKey: ["decks"],
+			});
+			const previousDecks = queryClient.getQueryData<Deck[]>(["decks"]);
 			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
 				old ? old.filter((deck) => deck.id !== id) : [],
 			);
 			router.push("/decks");
+			return { previousDecks };
+		},
+		onError: (err, newTodo, context) => {
+			queryClient.setQueryData(["decks"], context?.previousDecks);
+		},
+		onSettled: () => {
+			router.refresh();
 		},
 	});
 };

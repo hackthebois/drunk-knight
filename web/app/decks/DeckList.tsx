@@ -72,6 +72,7 @@ const DeckList = ({ decks, token }: { decks: Deck[]; token: string }) => {
 		queryKey: ["decks"],
 		queryFn: () => getDecks(token),
 		placeholderData: decks,
+		refetchOnMount: false,
 	});
 
 	return (

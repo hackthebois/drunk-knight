@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export default function Error({ error }: { error: Error }) {
+const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
 	useEffect(() => {
 		// Log the error to an error reporting service
 		// console.error(error.message);
@@ -10,7 +10,12 @@ export default function Error({ error }: { error: Error }) {
 
 	return (
 		<main>
-			<h2 className="text-xl mb-4 text-center">{error.message}</h2>
+			<p className="text-xl mb-4 text-center">Something went wrong!</p>
+			<button className="btn" onClick={() => reset()}>
+				Reset
+			</button>
 		</main>
 	);
-}
+};
+
+export default Error;

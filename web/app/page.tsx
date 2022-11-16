@@ -27,14 +27,22 @@ const play = async ({
 
 const Page = async () => {
 	const nextCookies = cookies();
+	const token = nextCookies.get("accessToken")?.value;
+	const useStandard =
+		nextCookies.get("useStandard")?.value === "false" ? false : true;
 	const cards = await play({
-		token: nextCookies.get("accessToken")?.value,
-		useStandard:
-			nextCookies.get("useStandard")?.value === "false" ? false : true,
+		token,
+		useStandard,
 	});
 
 	if (cards.length < 1) {
-		throw new Error("No cards found. Select a deck.");
+		return (
+			<main>
+				<h2 className="text-xl md:text-2xl mb-4 text-center">
+					No cards found. Select a deck!
+				</h2>
+			</main>
+		);
 	}
 
 	return <Home cards={cards} />;

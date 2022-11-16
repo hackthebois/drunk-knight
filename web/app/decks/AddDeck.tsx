@@ -1,23 +1,22 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { kMaxLength } from "buffer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaPlus, FaTimes } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
-import { Deck } from "../../types/Deck";
-import DeckItem from "./DeckItem";
 
 const AddDeck = () => {
-	const router = useRouter();
 	const createDeckMutation = useCreateDeck();
 
 	const {
 		register,
 		handleSubmit,
-		reset,
 		formState: { errors, isDirty },
+		setValue,
+		reset,
 	} = useForm<CreateDeck>({
 		resolver: zodResolver(CreateDeckSchema),
 		defaultValues: { name: "" },
@@ -25,12 +24,12 @@ const AddDeck = () => {
 	const [addDeck, setAddDeck] = useState(false);
 
 	const onCreateDeck = ({ name }: CreateDeck) => {
+		reset();
 		createDeckMutation.mutate(
 			{ name },
 			{
-				onSuccess: () => {
-					router.refresh();
-					reset();
+				onError: () => {
+					setValue("name", name, { shouldDirty: true });
 				},
 			},
 		);
@@ -49,7 +48,7 @@ const AddDeck = () => {
 						<input
 							type="text"
 							placeholder="Deck Name"
-							className="sm:mr-2 mb-2 sm:mb-0 flex-1"
+							className="sm:mr-2 mb-2 sm:mb-0 flex-1 ml-[1px]"
 							{...register("name")}
 							autoComplete="off"
 						/>
