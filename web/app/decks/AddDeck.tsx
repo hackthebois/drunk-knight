@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
 import { Deck } from "../../types/Deck";
-import DeckItem from "./DeckItem";
 
 const AddDeck = () => {
 	const router = useRouter();
