@@ -1,12 +1,15 @@
 import { cookies } from "next/headers";
-import { env } from "../../env/client.mjs";
-import { DeckSchema } from "../../types/Deck";
 import { redirect } from "next/navigation";
 import AddDeck from "./AddDeck";
 import GuestDeck from "./GuestDeck";
-import DeckItem from "./DeckItem";
+import DeckList from "./DeckList";
+import { env } from "../../env/client.mjs";
+import { DeckSchema } from "../../types/Deck";
 
-const getDecks = async ({ token }: { token: string }) => {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
 		method: "GET",
 		headers: {
@@ -25,8 +28,7 @@ const Page = async () => {
 	const useStandard = nextCookies.get("useStandard")?.value;
 
 	if (token) {
-		const decks = await getDecks({ token });
-
+		const decks = await getDecks(token);
 		return (
 			<main>
 				<div className="background flex-1 flex flex-col overflow-auto w-full">
@@ -35,9 +37,7 @@ const Page = async () => {
 						<GuestDeck
 							useStandard={useStandard === "false" ? false : true}
 						/>
-						{decks.map((deck) => (
-							<DeckItem key={deck.id} deck={deck} />
-						))}
+						<DeckList token={token} decks={decks} />
 						<AddDeck />
 					</div>
 				</div>

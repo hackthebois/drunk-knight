@@ -5,22 +5,22 @@ import { env } from "../env/client.mjs";
 import { Deck, DeckSchema } from "../types/Deck";
 
 // GET DECKS (GET /deck)
-
-const getDecks = async () => {
-	const accessToken = localStorage.getItem("accessToken");
-
+const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
 		method: "GET",
+		cache: "no-store",
+		next: { revalidate: 0 },
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 	});
 	const data: unknown = await res.json();
 	return DeckSchema.array().parse(data);
 };
-export const useDecks = () => useQuery(["decks"], getDecks);
+export const useDecks = (token: string) =>
+	useQuery(["decks"], () => getDecks(token));
 
 const getDeck = async (id: string) => {
 	const accessToken = localStorage.getItem("accessToken");
@@ -93,17 +93,30 @@ const updateDeck = async ({ id, name, selected }: UpdateDeck) => {
 	return DeckSchema.parse(data);
 };
 export const useUpdateDeck = () => {
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
+	const router = useRouter();
 	return useMutation(updateDeck, {
-		// onSuccess: (deck) => {
-		// 	queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
-		// 		old
-		// 			? old.map((oldDeck) =>
-		// 					oldDeck.id === deck.id ? deck : oldDeck,
-		// 			  )
-		// 			: [],
-		// 	);
-		// },
+		onMutate: async (newDeck) => {
+			await queryClient.cancelQueries({
+				queryKey: ["decks"],
+			});
+			const previousDecks = queryClient.getQueryData<Deck[]>(["decks"]);
+			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
+				old
+					? old.map((oldDeck) =>
+							oldDeck.id === newDeck.id ? newDeck : oldDeck,
+					  )
+					: [],
+			);
+			return { previousDecks };
+		},
+		onError: (err, newTodo, context) => {
+			queryClient.setQueryData(["decks"], context?.previousDecks);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["decks"] });
+			router.refresh();
+		},
 	});
 };
 
