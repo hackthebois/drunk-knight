@@ -1,14 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { kMaxLength } from "buffer";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
-import { Deck } from "../../types/Deck";
-import DeckItem from "./DeckItem";
 
 const AddDeck = () => {
 	const createDeckMutation = useCreateDeck();
