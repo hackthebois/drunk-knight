@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
 			context.getHandler(),
 			context.getClass(),
 		]);
-		console.log('MADE IT HERE: 1');
+
 		const request = context.switchToHttp().getRequest();
 
 		if (roles?.length || request.headers.authorization) {
