@@ -1,12 +1,4 @@
-import {
-	Body,
-	Controller,
-	Get,
-	Param,
-	Post,
-	Query,
-	Redirect,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import {
 	PasswordResetDto,
@@ -40,8 +32,8 @@ export class AuthController {
 	@Get('/confirm/:token')
 	@Redirect(
 		process.env.FRONTEND_URL === 'http://localhost:8000'
-			? `${process.env.FRONTEND_URL}/auth/confirm`
-			: `${process.env.FRONTEND_URL}/home`,
+			? `${process.env.FRONTEND_URL}`
+			: `${process.env.FRONTEND_URL}/auth/confirm`,
 		301,
 	)
 	emailVarification(@Param('token') token: string) {
