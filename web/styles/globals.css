@@ -5,13 +5,13 @@
 @layer base {
 	html,
 	body {
-		@apply w-[100vw];
+		@apply w-[100vw] overflow-hidden;
 	}
 	body {
 		@apply relative;
 	}
 	main {
-		@apply max-w-screen-lg w-[100vw] h-[100vh] overflow-auto p-6 md:p-10 pb-[73px] md:pb-[89px] font-default m-auto flex justify-center items-center flex-col;
+		@apply max-w-screen-lg w-[100vw] h-[calc(100vh-48px)] overflow-auto p-6 md:p-10 font-default m-auto flex justify-center items-center flex-col;
 	}
 }
 

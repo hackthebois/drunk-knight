@@ -27,7 +27,7 @@ const Page = async () => {
 	if (token) {
 		const decks = await getDecks(token);
 		return (
-			<main className="flex flex-col justify-start">
+			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full">
 					<h2 className="text-2xl font-bold mb-4">Decks</h2>
 					<GuestDeck

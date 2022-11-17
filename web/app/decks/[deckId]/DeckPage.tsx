@@ -68,7 +68,7 @@ const DeckPage = ({
 						cancel={() => setAddCard(false)}
 					/>
 				) : (
-					<main className="flex flex-col justify-start">
+					<main className="flex justify-start items-center flex-col w-full">
 						<div className="background flex flex-col w-full">
 							{deck && (
 								<>

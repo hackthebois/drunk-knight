@@ -59,7 +59,7 @@ const SignIn = () => {
 	};
 
 	return (
-		<main className="flex justify-center items-center flex-col w-full h-[90vh]">
+		<main className="flex justify-center items-center flex-col w-full">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className="form w-full max-w-md background"
