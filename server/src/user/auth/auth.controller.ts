@@ -32,13 +32,18 @@ export class AuthController {
 		return this.authService.signin(body);
 	}
 
-	@Post('resend-email')
+	@Post('/resend-email')
 	resendEmailVarification(@Body() body: ResendEmailDto) {
 		return this.authService.resendEmailVarification(body);
 	}
 
 	@Get('/confirm/:token')
-	@Redirect(`${process.env.FRONTEND_URL}/auth/confirm`, 301)
+	@Redirect(
+		process.env.FRONTEND_URL
+			? `${process.env.FRONTEND_URL}/auth/confirm`
+			: 'localhost:8000/home',
+		301,
+	)
 	emailVarification(@Param('token') token: string) {
 		return this.authService.verifyEmailConfirmation(token);
 	}

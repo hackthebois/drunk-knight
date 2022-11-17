@@ -22,12 +22,11 @@ export class AuthGuard implements CanActivate {
 			context.getHandler(),
 			context.getClass(),
 		]);
-
+		console.log('MADE IT HERE: 1');
 		const request = context.switchToHttp().getRequest();
 
-		if (request.headers && request.headers.authorization) {
+		if (roles?.length || request.headers.authorization) {
 			const token = request.headers?.authorization?.split('Bearer ')[1];
-
 			try {
 				const payload = (await jwt.verify(
 					token,
@@ -39,7 +38,6 @@ export class AuthGuard implements CanActivate {
 						id: payload.id,
 					},
 				});
-
 				if (
 					!user ||
 					(!roles.includes(user.userType) &&
