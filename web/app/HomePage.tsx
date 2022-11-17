@@ -25,7 +25,7 @@ const Home = ({ cards }: { cards: Card[] }) => {
 	return (
 		<main>
 			<div
-				className="w-full sm:w-[600px] h-[300px] sm:h-[450px] bg-transparent"
+				className="w-full sm:w-[600px] h-[300px] sm:h-[450px] mt-[20vh] bg-transparent"
 				style={{ perspective: 1000 }}
 			>
 				<div

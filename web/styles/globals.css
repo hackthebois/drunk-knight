@@ -3,15 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-	html,
 	body {
-		@apply w-[100vw];
-	}
-	body {
-		@apply relative;
+		@apply mb-12;
 	}
 	main {
-		@apply max-w-screen-lg w-[100vw] h-[calc(100vh-48px)] overflow-auto p-6 md:p-10 font-default m-auto flex justify-center items-center flex-col;
+		@apply max-w-screen-lg w-[100vw] h-full p-6 md:p-10 font-default m-auto flex justify-center items-center flex-col;
 	}
 }
 
