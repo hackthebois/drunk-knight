@@ -11,7 +11,7 @@ export class UserResponseDto {
 		this.id = partial.id;
 		this.username = partial.username;
 		this.email = partial.email;
-		this.emailConfirmation = partial.email_confirmation;
+		this.emailConfirmation = partial.emailConfirmation;
 	}
 }
 

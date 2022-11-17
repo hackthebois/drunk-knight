@@ -56,7 +56,7 @@ export class AuthService {
 				email: email,
 				username: username,
 				password: hashedPassword,
-				user_type: UserType.DEFAULT,
+				userType: UserType.DEFAULT,
 			},
 		});
 
@@ -74,7 +74,7 @@ export class AuthService {
 
 		if (!user) throw new HttpException('Invalid credentials', 400);
 
-		if (!user.email_confirmation)
+		if (!user.emailConfirmation)
 			throw new BadRequestException(
 				'Please Confirm Email Before Attemping to Log In',
 			);
@@ -120,7 +120,7 @@ export class AuthService {
 					email: payload.name,
 				},
 				data: {
-					email_confirmation: true,
+					emailConfirmation: true,
 				},
 			});
 

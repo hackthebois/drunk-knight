@@ -18,7 +18,7 @@ export class AppService {
 		if (useStandard) {
 			const gameplayDecks = await this.prismaService.user.findFirst({
 				where: {
-					user_type: UserType.ADMIN,
+					userType: UserType.ADMIN,
 				},
 				select: {
 					decks: {
@@ -38,7 +38,7 @@ export class AppService {
 		if (user && user.name != ADMIN.NAME) {
 			const deckCards = await this.prismaService.deck.findMany({
 				where: {
-					user_id: user.id,
+					userId: user.id,
 					selected: true,
 				},
 				select: {

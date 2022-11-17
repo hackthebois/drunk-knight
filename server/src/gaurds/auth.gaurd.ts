@@ -42,7 +42,9 @@ export class AuthGuard implements CanActivate {
 
 				if (
 					!user ||
-					(!roles.includes(user.user_type) && roles?.length !== 0 && user.email_confirmation)
+					(!roles.includes(user.userType) &&
+						roles?.length !== 0 &&
+						user.emailConfirmation)
 				)
 					return false;
 			} catch (error) {

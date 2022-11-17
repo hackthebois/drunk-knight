@@ -11,11 +11,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from 'src/user/dtos/user.dto';
 
 interface UserFilter {
-	user_type: UserType;
+	userType: UserType;
 }
 
 interface CardFilter {
-	card_type: CardType;
+	cardType: CardType;
 }
 
 @Injectable()
@@ -84,7 +84,7 @@ export class AdminService {
 	async getUserDecks(userId: string) {
 		const decks = await this.prismaService.deck.findMany({
 			where: {
-				user_id: userId,
+				userId: userId,
 			},
 		});
 
@@ -101,7 +101,7 @@ export class AdminService {
 		const deckExists = await this.prismaService.deck.findFirst({
 			where: {
 				id: deckId,
-				user_id: userId,
+				userId: userId,
 			},
 		});
 
@@ -121,7 +121,7 @@ export class AdminService {
 		const deckExists = await this.prismaService.deck.findFirst({
 			where: {
 				id: deckId,
-				user_id: userId,
+				userId: userId,
 			},
 		});
 
@@ -140,7 +140,7 @@ export class AdminService {
 		const deck = await this.prismaService.deck.findFirst({
 			where: {
 				id: deckId,
-				user_id: userId,
+				userId: userId,
 			},
 			select: {
 				cards: {
@@ -165,9 +165,9 @@ export class AdminService {
 		const cardExists = await this.prismaService.card.findFirst({
 			where: {
 				id: cardId,
-				deck_id: deckId,
+				deckId: deckId,
 				deck: {
-					user_id: userId,
+					userId: userId,
 				},
 			},
 		});
@@ -190,9 +190,9 @@ export class AdminService {
 		const cardExists = await this.prismaService.card.findFirst({
 			where: {
 				id: cardId,
-				deck_id: deckId,
+				deckId: deckId,
 				deck: {
-					user_id: userId,
+					userId: userId,
 				},
 			},
 		});
@@ -211,7 +211,7 @@ export class AdminService {
 	private async isAdmin(id: string) {
 		const user = await this.getUser(id);
 
-		if (user.user_type === UserType.ADMIN)
+		if (user.userType === UserType.ADMIN)
 			throw new HttpException('You Cannot Modify the Admin Account', 400);
 	}
 }

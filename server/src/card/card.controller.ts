@@ -1,5 +1,6 @@
 import {
 	Body,
+	ClassSerializerInterceptor,
 	Controller,
 	Delete,
 	Get,
@@ -8,6 +9,7 @@ import {
 	Put,
 	Query,
 	UnauthorizedException,
+	UseInterceptors,
 } from '@nestjs/common';
 import { CardType, UserType } from '@prisma/client';
 import { User, UserInfo } from 'src/user/decorators/user.decorator';
@@ -26,9 +28,9 @@ export class CardController {
 	getAllCards(
 		@User() user: UserInfo,
 		@Param('deckId') deckId: string,
-		@Query('cardtype') card_type?: CardType,
+		@Query('cardtype') cardType?: CardType,
 	) {
-		const filter = card_type in CardType ? { card_type } : undefined;
+		const filter = cardType in CardType ? { cardType } : undefined;
 		return this.cardService.getAllCards(user.id, deckId, filter);
 	}
 
@@ -64,7 +66,7 @@ export class CardController {
 		@Body() body: UpdateCardDto,
 	) {
 		const deck = await this.cardService.getDeckByCardId(cardId);
-		if (deck.user_id !== user.id || deck.id !== deckId)
+		if (deck.userId !== user.id || deck.id !== deckId)
 			throw new UnauthorizedException();
 
 		return this.cardService.updateCardById(cardId, body);
@@ -76,10 +78,9 @@ export class CardController {
 		@User() user: UserInfo,
 		@Param('deckId') deckId: string,
 		@Param('id') cardId: string,
-		@Body() body: UpdateCardDto,
 	) {
 		const deck = await this.cardService.getDeckByCardId(cardId);
-		if (deck.user_id !== user.id || deck.id !== deckId)
+		if (deck.userId !== user.id || deck.id !== deckId)
 			throw new UnauthorizedException();
 
 		return this.cardService.deleteCardById(cardId);

@@ -15,7 +15,7 @@ export class SearchService {
 					contains: body.searchParam,
 				},
 				user: {
-					user_type: UserType.DEFAULT,
+					userType: UserType.DEFAULT,
 				},
 			},
 			select: {
@@ -54,15 +54,15 @@ export class SearchService {
 			data: {
 				name: deck.name,
 				selected: false,
-				user_id: userId,
+				userId: userId,
 			},
 		});
 
 		const data = deck.cards.map((card) => ({
 			name: card.name,
 			description: card.description,
-			card_type: card.cardType,
-			deck_id: userDeck.id,
+			cardType: card.cardType,
+			deckId: userDeck.id,
 		}));
 
 		await this.prismaService.card.createMany({

@@ -1,6 +1,5 @@
 import {
 	BadRequestException,
-	ConflictException,
 	Injectable,
 	NotFoundException,
 } from '@nestjs/common';
@@ -12,11 +11,10 @@ export const cardSelect = {
 	id: true,
 	name: true,
 	description: true,
-	card_type: true,
+	cardType: true,
 };
-
 interface CardFilter {
-	card_type: CardType;
+	cardType: CardType;
 }
 
 @Injectable()
@@ -29,7 +27,7 @@ export class CardService {
 				id: deckId,
 			},
 			select: {
-				user_id: true,
+				userId: true,
 				cards: {
 					where: filter,
 				},
@@ -37,7 +35,7 @@ export class CardService {
 		});
 
 		if (!deck) throw new NotFoundException();
-		if (deck.user_id !== userId) throw new BadRequestException();
+		if (deck.userId !== userId) throw new BadRequestException();
 
 		return deck.cards.map((card) => new CardResponseDto(card));
 	}
@@ -48,7 +46,7 @@ export class CardService {
 				id: deckId,
 			},
 			select: {
-				user_id: true,
+				userId: true,
 				cards: {
 					where: {
 						id: cardId,
@@ -58,7 +56,7 @@ export class CardService {
 		});
 
 		if (!deck) throw new NotFoundException();
-		if (deck.user_id !== userId) throw new BadRequestException();
+		if (deck.userId !== userId) throw new BadRequestException();
 
 		return new CardResponseDto(deck.cards[0]);
 	}
@@ -71,8 +69,8 @@ export class CardService {
 			data: {
 				name: name,
 				description: description,
-				card_type: cardType,
-				deck_id: deckId,
+				cardType: cardType,
+				deckId: deckId,
 			},
 		});
 

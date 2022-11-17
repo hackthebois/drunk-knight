@@ -24,8 +24,8 @@ export class AdminController {
 
 	@Roles(UserType.ADMIN)
 	@Get('/users')
-	getAllUsers(@Query('usertype') user_type: UserType) {
-		const filter = user_type in UserType ? { user_type } : undefined;
+	getAllUsers(@Query('usertype') userType: UserType) {
+		const filter = userType in UserType ? { userType } : undefined;
 		return this.adminService.getAllUsers(filter);
 	}
 
@@ -37,8 +37,8 @@ export class AdminController {
 
 	@Roles(UserType.ADMIN)
 	@Get('/cards')
-	getAllCards(@Query('cardtype') card_type?: CardType) {
-		const filter = card_type in CardType ? { card_type } : undefined;
+	getAllCards(@Query('cardtype') cardType?: CardType) {
+		const filter = cardType in CardType ? { cardType } : undefined;
 		return this.adminService.getAllCards(filter);
 	}
 
@@ -95,9 +95,9 @@ export class AdminController {
 	getUserCards(
 		@Param('userId') userId: string,
 		@Param('deckId') deckId: string,
-		@Query('cardtype') card_type?: CardType,
+		@Query('cardtype') cardType?: CardType,
 	) {
-		const filter = card_type in CardType ? { card_type } : undefined;
+		const filter = cardType in CardType ? { cardType } : undefined;
 		return this.adminService.getDeckCards(userId, deckId, filter);
 	}
 

@@ -1,6 +1,7 @@
 import { Card, CardType } from '@prisma/client';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude, Expose, Transform } from 'class-transformer';
 
 export class CreateCardDto {
 	@IsString()
@@ -32,7 +33,7 @@ export class UpdateCardDto {
 
 	@IsEnum(CardType)
 	@IsOptional()
-	@ApiProperty({ enum: CardType })
+	@ApiProperty({ enum: CardType, name: 'cardType' })
 	cardType?: CardType;
 }
 
@@ -46,6 +47,6 @@ export class CardResponseDto {
 		this.id = partial.id;
 		this.name = partial.name;
 		this.description = partial.description;
-		this.cardType = partial.card_type;
+		this.cardType = partial.cardType;
 	}
 }

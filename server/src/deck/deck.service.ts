@@ -56,7 +56,7 @@ export class DeckService {
 			data: {
 				name: name,
 				selected: false,
-				user_id: userId,
+				userId: userId,
 			},
 		});
 
