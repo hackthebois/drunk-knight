@@ -23,9 +23,9 @@ const Home = ({ cards }: { cards: Card[] }) => {
 	};
 
 	return (
-		<main>
+		<main className="flex justify-center items-center flex-col w-full h-[90vh]">
 			<div
-				className="w-full sm:w-[600px] h-[300px] sm:h-[450px] mt-[20vh] bg-transparent"
+				className={`w-full sm:w-[600px] h-[300px] sm:h-[450px] bg-transparent`}
 				style={{ perspective: 1000 }}
 			>
 				<div

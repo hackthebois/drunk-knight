@@ -13,7 +13,7 @@ const Account = ({ user }: { user: User }) => {
 	const router = useRouter();
 
 	return (
-		<main className="flex justify-center items-center flex-col w-full">
+		<main className="flex justify-center items-center flex-col w-full h-[90vh]">
 			<div className="background w-full">
 				<h2 className="text-2xl font-bold mb-4">Profile</h2>
 				<p className="my-2">{user?.email}</p>
