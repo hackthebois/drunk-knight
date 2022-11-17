@@ -6,9 +6,6 @@ import DeckList from "./DeckList";
 import { env } from "../../env/client.mjs";
 import { DeckSchema } from "../../types/Deck";
 
-// export const dynamic = "force-dynamic";
-// export const revalidate = 0;
-
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
 		method: "GET",
@@ -38,7 +35,7 @@ const Page = async () => {
 							useStandard={useStandard === "false" ? false : true}
 						/>
 						<DeckList token={token} decks={decks} />
-						<AddDeck />
+						<AddDeck token={token} />
 					</div>
 				</div>
 			</main>

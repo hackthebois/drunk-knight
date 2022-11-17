@@ -44,15 +44,19 @@ export const CreateDeckSchema = z.object({
 	name: DeckSchema.shape.name,
 });
 export type CreateDeck = z.input<typeof CreateDeckSchema>;
-const createDeck = async ({ name }: CreateDeck) => {
-	const accessToken = localStorage.getItem("accessToken");
-
+const createDeck = async ({
+	deck: { name },
+	token,
+}: {
+	deck: CreateDeck;
+	token: string;
+}) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/create`, {
 		method: "POST",
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify({ name }),
 	});
@@ -75,7 +79,7 @@ export const useCreateDeck = () => {
 								id: "555",
 								cards: [],
 								selected: false,
-								...newDeck,
+								name: newDeck.deck.name,
 							},
 					  ]
 					: [],

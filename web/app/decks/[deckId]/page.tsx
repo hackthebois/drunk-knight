@@ -1,17 +1,24 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import DeckPage from "./DeckPage";
 import { env } from "../../../env/client.mjs";
 import { DeckSchema } from "../../../types/Deck";
-import DeckPage from "./DeckPage";
 
 type Props = {
 	params: {
-		id: string;
+		deckId: string;
+		page: string;
 	};
 };
 
-const getDeck = async ({ id, token }: { id: string; token: string }) => {
-	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
+const getDeck = async ({
+	deckId,
+	token,
+}: {
+	deckId: string;
+	token: string;
+}) => {
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}`, {
 		method: "GET",
 		headers: {
 			Accept: "application/json",
@@ -23,14 +30,16 @@ const getDeck = async ({ id, token }: { id: string; token: string }) => {
 	return DeckSchema.parse(data);
 };
 
-const Page = async ({ params: { id } }: Props) => {
+const Page = async ({ params: { deckId } }: Props) => {
 	const nextCookies = cookies();
 	const token = nextCookies.get("accessToken")?.value;
 
 	if (token) {
-		const deck = await getDeck({ id, token });
+		const deck = await getDeck({ deckId, token });
 
-		return <DeckPage deck={deck} />;
+		return (
+			<DeckPage placeholderDeck={deck} token={token} deckId={deckId} />
+		);
 	} else {
 		redirect("/auth/signin");
 	}

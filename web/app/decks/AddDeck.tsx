@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
 
-const AddDeck = () => {
+const AddDeck = ({ token }: { token: string }) => {
 	const createDeckMutation = useCreateDeck();
 
 	const {
@@ -24,7 +24,7 @@ const AddDeck = () => {
 	const onCreateDeck = ({ name }: CreateDeck) => {
 		reset();
 		createDeckMutation.mutate(
-			{ name },
+			{ deck: { name }, token },
 			{
 				onError: () => {
 					setValue("name", name, { shouldDirty: true });
