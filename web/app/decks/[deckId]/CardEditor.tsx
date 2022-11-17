@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { FaAngleLeft, FaSave, FaTrash } from "react-icons/fa";
 import { z } from "zod";
 import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
@@ -171,7 +172,34 @@ const CardEditor = ({
 	return (
 		<main className="flex justify-start items-center flex-col w-full">
 			<div className="background flex flex-col flex-1 w-full">
-				<h2 className="text-2xl mb-8 font-bold">Card Editor</h2>
+				<div className="flex justify-between items-center">
+					<button className="gbtn mr-3" onClick={() => cancel()}>
+						<FaAngleLeft />
+					</button>
+					<div className="flex flex-row">
+						<button
+							className="ebtn mr-3"
+							onClick={() => {
+								deleteCardMutation.mutate({
+									deleteCard: { id: card.id, deckId },
+									token,
+								});
+							}}
+						>
+							<FaTrash />
+						</button>
+						<button
+							className={`btn ${
+								isDirty
+									? ""
+									: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
+							}`}
+							onClick={() => handleSubmit(onUpdateCard)()}
+						>
+							<FaSave />
+						</button>
+					</div>
+				</div>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
 				) : errors.description ? (
@@ -181,6 +209,9 @@ const CardEditor = ({
 						<p className="emsg mb-4">{errors.cardType.message}</p>
 					)
 				)}
+				<div className="w-full sm:w-[600px] max-w-full bg-transparent m-auto my-8">
+					<CardItem card={cardState} />
+				</div>
 				<form className="form" onSubmit={handleSubmit(onUpdateCard)}>
 					<div className="flex flex-col md:flex-row">
 						<input
@@ -207,35 +238,6 @@ const CardEditor = ({
 						</select>
 					</div>
 				</form>
-				<div className="w-full sm:w-[600px] max-w-full bg-transparent m-auto my-10">
-					<CardItem card={cardState} />
-				</div>
-				<div className="mt-4 flex flex-row justify-between">
-					<button className="gbtn" onClick={() => cancel()}>
-						Cancel
-					</button>
-					<button
-						className="ebtn"
-						onClick={() => {
-							deleteCardMutation.mutate({
-								deleteCard: { id: card.id, deckId },
-								token,
-							});
-						}}
-					>
-						Delete Card
-					</button>
-					<button
-						className={`btn ${
-							isDirty
-								? ""
-								: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
-						}`}
-						onClick={() => handleSubmit(onUpdateCard)()}
-					>
-						Save
-					</button>
-				</div>
 			</div>
 		</main>
 	);

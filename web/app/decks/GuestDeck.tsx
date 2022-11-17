@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaPause, FaPlay } from "react-icons/fa";
+import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 
 type Props = {
 	useStandard: boolean;
@@ -30,7 +30,7 @@ const GuestDeck = ({ useStandard }: Props) => {
 			</div>
 			{isSelected ? (
 				<div
-					className="btn rounded-l-none items-center flex"
+					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						setIsSelected(false);
 						updateStandardMutation.mutate(false, {
@@ -41,11 +41,11 @@ const GuestDeck = ({ useStandard }: Props) => {
 						});
 					}}
 				>
-					<FaPause />
+					<FaToggleOn size={24} />
 				</div>
 			) : (
 				<div
-					className="btn rounded-l-none flex items-center"
+					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						setIsSelected(true);
 						updateStandardMutation.mutate(true, {
@@ -56,7 +56,7 @@ const GuestDeck = ({ useStandard }: Props) => {
 						});
 					}}
 				>
-					<FaPlay />
+					<FaToggleOff size={24} />
 				</div>
 			)}
 		</div>

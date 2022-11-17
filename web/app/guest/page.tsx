@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Page = () => {
 	return (
-		<main className="flex justify-center items-center flex-col w-full h-[90vh]">
+		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
 			<div className="background w-full">
 				<h2 className="text-2xl font-bold mb-3">Playing as guest.</h2>
 				<p className="my-3 mb-8">

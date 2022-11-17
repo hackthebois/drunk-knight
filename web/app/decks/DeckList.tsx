@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { FaPause, FaPlay } from "react-icons/fa";
+import { FaPause, FaPlay, FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { env } from "../../env/client.mjs";
 import { useUpdateDeck } from "../../hooks/deck";
 import { Deck, DeckSchema } from "../../types/Deck";
@@ -38,7 +38,7 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 			</Link>
 			{selected ? (
 				<div
-					className="btn rounded-l-none items-center flex"
+					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						updateDeckMutation.mutate({
 							name,
@@ -47,11 +47,11 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 						});
 					}}
 				>
-					<FaPause />
+					<FaToggleOn size={24} />
 				</div>
 			) : (
 				<div
-					className="btn rounded-l-none flex items-center"
+					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						updateDeckMutation.mutate({
 							name,
@@ -60,7 +60,7 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 						});
 					}}
 				>
-					<FaPlay />
+					<FaToggleOff size={24} />
 				</div>
 			)}
 		</div>

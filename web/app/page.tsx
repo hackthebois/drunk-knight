@@ -32,12 +32,12 @@ const Page = async () => {
 		nextCookies.get("useStandard")?.value === "false" ? false : true;
 	const cards = await play({
 		token,
-		useStandard,
+		useStandard: !token ? true : useStandard,
 	});
 
 	if (cards.length < 1) {
 		return (
-			<main className="flex justify-center items-center flex-col w-full h-[90vh]">
+			<main className="flex justify-center items-center flex-col w-full h-[85vh]">
 				<h2 className="text-xl md:text-2xl mb-4 text-center">
 					No cards found. Select a deck!
 				</h2>

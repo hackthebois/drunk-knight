@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { FaAngleLeft, FaPlus } from "react-icons/fa";
 import { z } from "zod";
 import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
@@ -111,7 +112,21 @@ const CardAdd = ({
 	return (
 		<main className="flex justify-start items-center flex-col w-full">
 			<div className="background flex flex-col flex-1 w-full">
-				<h2 className="text-2xl mb-8 font-bold">Card Creator</h2>
+				<div className="flex justify-between items-center">
+					<button className="gbtn mr-3" onClick={() => cancel()}>
+						<FaAngleLeft />
+					</button>
+					<button
+						className={`btn ${
+							isDirty
+								? ""
+								: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
+						}`}
+						onClick={() => handleSubmit(onCreateCard)()}
+					>
+						<FaPlus />
+					</button>
+				</div>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
 				) : errors.description ? (
@@ -121,6 +136,9 @@ const CardAdd = ({
 						<p className="emsg mb-4">{errors.cardType.message}</p>
 					)
 				)}
+				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
+					<CardItem card={{ id: "123", ...cardState }} />
+				</div>
 				<form className="form" onSubmit={handleSubmit(onCreateCard)}>
 					<div className="flex flex-col md:flex-row">
 						<input
@@ -147,24 +165,6 @@ const CardAdd = ({
 						</select>
 					</div>
 				</form>
-				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
-					<CardItem card={{ id: "123", ...cardState }} />
-				</div>
-				<div className="mt-4 flex flex-row justify-between">
-					<button className="gbtn" onClick={() => cancel()}>
-						Cancel
-					</button>
-					<button
-						className={`btn ${
-							isDirty
-								? ""
-								: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
-						}`}
-						onClick={() => handleSubmit(onCreateCard)()}
-					>
-						Create
-					</button>
-				</div>
 			</div>
 		</main>
 	);

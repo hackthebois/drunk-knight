@@ -1,8 +1,10 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { Router } from "next/router";
 import { useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaAngleLeft, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 
@@ -40,6 +42,7 @@ const DeckPage = ({
 	deckId: string;
 	placeholderDeck: Deck;
 }) => {
+	const router = useRouter();
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 	const { data: deck } = useQuery({
@@ -73,26 +76,34 @@ const DeckPage = ({
 							{deck && (
 								<>
 									<div className="flex justify-between items-center mb-8">
-										<h2 className="text-2xl font-bold">
-											{deck.name}
-										</h2>
+										<button
+											className="gbtn mr-3"
+											onClick={() => router.back()}
+										>
+											<FaAngleLeft />
+										</button>
 										<div className="flex flex-row">
-											<FaPlus
-												onClick={() => setAddCard(true)}
-												size={37}
-												className="p-2 cursor-pointer mr-2"
-											/>
-											<FaTrash
-												className="p-2 cursor-pointer"
-												size={35}
+											<button
+												className="ebtn mr-3"
 												onClick={() =>
 													deleteDeckMutation.mutate(
 														deck.id,
 													)
 												}
-											/>
+											>
+												<FaTrash />
+											</button>
+											<button
+												className="btn"
+												onClick={() => setAddCard(true)}
+											>
+												<FaPlus />
+											</button>
 										</div>
 									</div>
+									<h2 className="text-2xl font-bold mb-4">
+										{deck.name}
+									</h2>
 									<div className="flex-1">
 										{deck.cards &&
 											deck.cards.map((card, index) => (
