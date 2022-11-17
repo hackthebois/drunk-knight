@@ -69,7 +69,7 @@ const DeckPage = ({
 					/>
 				) : (
 					<main className="flex flex-col justify-between">
-						<div className="background flex flex-col flex-1 overflow-auto w-full">
+						<div className="background flex flex-col flex-1 w-full h-full">
 							{deck && (
 								<div className="flex justify-between items-center mb-8">
 									<h2 className="text-2xl font-bold">
@@ -82,7 +82,7 @@ const DeckPage = ({
 									/>
 								</div>
 							)}
-							<div className="flex-1 overflow-auto -mr-2 pr-2">
+							<div className="flex-1 overflow-auto max-h-full -mr-2 pr-2">
 								{deck &&
 									deck.cards &&
 									deck.cards.map((card, index) => (

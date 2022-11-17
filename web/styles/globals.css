@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+	html,
+	body {
+		@apply overflow-hidden w-[100vw];
+	}
+	body {
+		@apply relative;
+	}
 	main {
 		@apply max-w-screen-lg w-[100vw] h-[100vh] p-6 md:p-10 pb-[73px] md:pb-[89px] font-default m-auto overflow-hidden flex justify-center items-center flex-col;
 	}

@@ -28,7 +28,7 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 	const updateDeckMutation = useUpdateDeck();
 
 	return (
-		<div className={`flex mt-2`} key={id}>
+		<div className={"flex mt-2"} key={id}>
 			<Link
 				key={id}
 				href={`/decks/${id}`}

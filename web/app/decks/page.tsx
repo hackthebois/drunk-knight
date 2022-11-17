@@ -28,9 +28,9 @@ const Page = async () => {
 		const decks = await getDecks(token);
 		return (
 			<main>
-				<div className="background flex-1 flex flex-col overflow-auto w-full">
-					<div className="flex-1 overflow-y-auto -mr-2 pr-2">
-						<h2 className="text-2xl font-bold mb-4">Decks</h2>
+				<div className="background flex-1 -mr-2 pr-2 relative flex flex-col w-full h-full">
+					<h2 className="text-2xl font-bold mb-4">Decks</h2>
+					<div className="overflow-y-scroll max-h-full pr-2 -mr-2">
 						<GuestDeck
 							useStandard={useStandard === "false" ? false : true}
 						/>

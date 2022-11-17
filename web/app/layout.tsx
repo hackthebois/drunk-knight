@@ -16,25 +16,25 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 					rel="stylesheet"
 				/>
 			</head>
-			<body className="bg-background w-[100vw] h-[100vh] text-white">
+			<body className="bg-background text-white">
 				<ReactQueryWrapper>
 					{children}
-					<nav className="flex flex-row fixed bottom-0 left-0 w-full justify-center items-center border-t-[1px] h-12 bg-background">
+					<nav className="flex flex-row w-full fixed bottom-0 left-0 justify-center border-t-[1px] h-12 bg-background">
 						<Link
 							href="/decks"
-							className="flex-1 p-4 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
+							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaChessKnight size={20} />
 						</Link>
 						<Link
 							href="/"
-							className="flex-1 p-4 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
+							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaPlay size={19} />
 						</Link>
 						<Link
 							href="/account"
-							className="flex-1 p-4 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
+							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaUserCircle size={20} />
 						</Link>

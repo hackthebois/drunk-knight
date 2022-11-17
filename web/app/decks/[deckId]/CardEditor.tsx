@@ -168,7 +168,7 @@ const CardEditor = ({
 
 	return (
 		<main className="flex flex-col justify-between">
-			<div className="background flex flex-col flex-1 overflow-auto w-full">
+			<div className="background flex flex-col flex-1 w-full overflow-auto">
 				<h2 className="text-2xl mb-8 font-bold">Card Editor</h2>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
@@ -213,6 +213,17 @@ const CardEditor = ({
 						Cancel
 					</button>
 					<button
+						className="ebtn"
+						onClick={() => {
+							deleteCardMutation.mutate({
+								deleteCard: { id: card.id, deckId },
+								token,
+							});
+						}}
+					>
+						Delete Card
+					</button>
+					<button
 						className={`btn ${
 							isDirty
 								? ""
@@ -223,17 +234,6 @@ const CardEditor = ({
 						Save
 					</button>
 				</div>
-				<button
-					className="ebtn mt-8 w-full"
-					onClick={() => {
-						deleteCardMutation.mutate({
-							deleteCard: { id: card.id, deckId },
-							token,
-						});
-					}}
-				>
-					Delete Card
-				</button>
 			</div>
 		</main>
 	);
