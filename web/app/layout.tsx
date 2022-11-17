@@ -19,7 +19,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 			<body className="bg-background text-white">
 				<ReactQueryWrapper>
 					{children}
-					<nav className="flex flex-row w-full fixed bottom-0 left-0 justify-center border-t-[1px] h-12 bg-background">
+					<nav className="flex flex-row w-full justify-center border-t-[1px] h-12 bg-background">
 						<Link
 							href="/decks"
 							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"

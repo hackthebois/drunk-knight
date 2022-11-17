@@ -5,7 +5,7 @@
 @layer base {
 	html,
 	body {
-		@apply w-[100vw] overflow-hidden;
+		@apply w-[100vw];
 	}
 	body {
 		@apply relative;
