@@ -33,7 +33,7 @@ export class UpdateCardDto {
 	@IsEnum(CardType)
 	@IsOptional()
 	@ApiProperty({ enum: CardType })
-	CardType?: CardType;
+	cardType?: CardType;
 }
 
 export class CardResponseDto {
