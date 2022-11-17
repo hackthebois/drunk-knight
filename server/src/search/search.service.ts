@@ -4,25 +4,6 @@ import { CardResponseDto } from 'src/card/dto/card.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SearchDto } from './dtos/search.dto';
 
-// class DeckData {
-// 	name: string;
-// 	description: string;
-// 	card_type: CardType;
-// 	deck_id: string;
-
-// 	constructor(
-// 		name: string,
-// 		description: string,
-// 		card_type: CardType,
-// 		deck_id: string,
-// 	) {
-// 		this.name = name;
-// 		this.description = description;
-// 		this.card_type = card_type;
-// 		this.deck_id = deck_id;
-// 	}
-// }
-
 @Injectable()
 export class SearchService {
 	constructor(private readonly prismaService: PrismaService) {}

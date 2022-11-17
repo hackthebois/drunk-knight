@@ -5,7 +5,6 @@ import { Roles } from './decorators/roles.decorator';
 import { PlayDto } from './dto/app.dto';
 import { User, UserInfo } from './user/decorators/user.decorator';
 
-@ApiBearerAuth()
 @Controller()
 export class AppController {
 	constructor(private readonly appService: AppService) {}
@@ -15,6 +14,7 @@ export class AppController {
 		return 'Welcome to drunk knight';
 	}
 
+	@ApiBearerAuth()
 	@Roles()
 	@Post('play')
 	getGameplayCards(@User() user: UserInfo, @Body() body: PlayDto) {

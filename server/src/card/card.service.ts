@@ -67,14 +67,6 @@ export class CardService {
 		deckId: string,
 		{ name, description, cardType }: CreateCardDto,
 	) {
-		// const cardExists = await this.prismaService.card.findFirst({
-		// 	where: {
-		// 		name,
-		// 	},
-		// });
-
-		// if (cardExists) throw new ConflictException();
-
 		const card = await this.prismaService.card.create({
 			data: {
 				name: name,
