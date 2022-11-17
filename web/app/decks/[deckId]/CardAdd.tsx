@@ -110,7 +110,7 @@ const CardAdd = ({
 
 	return (
 		<main className="flex flex-col justify-between">
-			<div className="background flex flex-col flex-1 w-full overflow-auto">
+			<div className="background flex flex-col flex-1 w-full">
 				<h2 className="text-2xl mb-8 font-bold">Card Creator</h2>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>

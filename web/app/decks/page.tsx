@@ -27,16 +27,14 @@ const Page = async () => {
 	if (token) {
 		const decks = await getDecks(token);
 		return (
-			<main>
-				<div className="background flex-1 -mr-2 pr-2 relative flex flex-col w-full h-full">
+			<main className="flex flex-col justify-start">
+				<div className="background flex flex-col w-full">
 					<h2 className="text-2xl font-bold mb-4">Decks</h2>
-					<div className="overflow-y-scroll max-h-full pr-2 -mr-2">
-						<GuestDeck
-							useStandard={useStandard === "false" ? false : true}
-						/>
-						<DeckList token={token} decks={decks} />
-						<AddDeck token={token} />
-					</div>
+					<GuestDeck
+						useStandard={useStandard === "false" ? false : true}
+					/>
+					<DeckList token={token} decks={decks} />
+					<AddDeck token={token} />
 				</div>
 			</main>
 		);

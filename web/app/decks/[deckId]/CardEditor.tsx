@@ -52,6 +52,7 @@ export const updateCard = async ({
 	newCard: UpdateCard;
 	token: string;
 }) => {
+	console.log(cardType);
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,
 		{
@@ -65,6 +66,7 @@ export const updateCard = async ({
 		},
 	);
 	const data: unknown = await res.json();
+	console.log(data);
 	return CardSchema.parse(data);
 };
 
@@ -168,7 +170,7 @@ const CardEditor = ({
 
 	return (
 		<main className="flex flex-col justify-between">
-			<div className="background flex flex-col flex-1 w-full overflow-auto">
+			<div className="background flex flex-col flex-1 w-full">
 				<h2 className="text-2xl mb-8 font-bold">Card Editor</h2>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
@@ -205,7 +207,7 @@ const CardEditor = ({
 						</select>
 					</div>
 				</form>
-				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
+				<div className="w-full sm:w-[600px] max-w-full bg-transparent m-auto my-10">
 					<CardItem card={cardState} />
 				</div>
 				<div className="mt-4 flex flex-row justify-between">

@@ -1,9 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
+import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 
 import { useDeleteDeck } from "../../../hooks/deck";
@@ -68,53 +68,49 @@ const DeckPage = ({
 						cancel={() => setAddCard(false)}
 					/>
 				) : (
-					<main className="flex flex-col justify-between">
-						<div className="background flex flex-col flex-1 w-full h-full">
+					<main className="flex flex-col justify-start">
+						<div className="background flex flex-col w-full">
 							{deck && (
-								<div className="flex justify-between items-center mb-8">
-									<h2 className="text-2xl font-bold">
-										{deck.name}
-									</h2>
-									<FaPlus
-										onClick={() => setAddCard(true)}
-										size={34}
-										className="p-2 cursor-pointer"
-									/>
-								</div>
-							)}
-							<div className="flex-1 overflow-auto max-h-full -mr-2 pr-2">
-								{deck &&
-									deck.cards &&
-									deck.cards.map((card, index) => (
-										<div
-											key={card.id}
-											className={`item flex flex-row justify-between align-center ${
-												index !== 0 && "mt-4"
-											}`}
-											onClick={() => setEditCard(card)}
-										>
-											<div>
-												<p className="flex items-center text-lg mb-2">
-													{card.name}
-												</p>
-												<p className="flex items-center opacity-70">
-													{card.description}
-												</p>
-											</div>
-											<div className="flex justify-center items-center">
-												<p>{card.cardType}</p>
-											</div>
+								<>
+									<div className="flex justify-between items-center mb-8">
+										<h2 className="text-2xl font-bold">
+											{deck.name}
+										</h2>
+										<div className="flex flex-row">
+											<FaPlus
+												onClick={() => setAddCard(true)}
+												size={37}
+												className="p-2 cursor-pointer mr-2"
+											/>
+											<FaTrash
+												className="p-2 cursor-pointer"
+												size={35}
+												onClick={() =>
+													deleteDeckMutation.mutate(
+														deck.id,
+													)
+												}
+											/>
 										</div>
-									))}
-							</div>
-							<button
-								className="ebtn mt-8 w-full"
-								onClick={() =>
-									deleteDeckMutation.mutate(deck.id)
-								}
-							>
-								Delete Deck
-							</button>
+									</div>
+									<div className="flex-1">
+										{deck.cards &&
+											deck.cards.map((card, index) => (
+												<div
+													key={card.id}
+													className={`${
+														index !== 0 && "mt-4"
+													}`}
+													onClick={() =>
+														setEditCard(card)
+													}
+												>
+													<CardItem card={card} />
+												</div>
+											))}
+									</div>
+								</>
+							)}
 						</div>
 					</main>
 				)}
