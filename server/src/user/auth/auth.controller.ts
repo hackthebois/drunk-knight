@@ -41,7 +41,7 @@ export class AuthController {
 	@Redirect(
 		process.env.FRONTEND_URL
 			? `${process.env.FRONTEND_URL}/auth/confirm`
-			: 'localhost:8000/home',
+			: 'http://localhost:8000/home',
 		301,
 	)
 	emailVarification(@Param('token') token: string) {
