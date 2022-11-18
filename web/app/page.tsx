@@ -22,6 +22,7 @@ const play = async ({
 		}),
 	});
 	const data: unknown = await res.json();
+	console.log(data);
 	return await CardSchema.array().parse(data);
 };
 

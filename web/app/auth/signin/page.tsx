@@ -1,5 +1,5 @@
-import SignIn from "./SignInPage";
+import SignInPage from "./SignInPage";
 
-const Page = async () => <SignIn />;
+const Page = async () => <SignInPage />;
 
 export default Page;

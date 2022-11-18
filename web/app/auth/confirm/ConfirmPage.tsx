@@ -1,38 +1,31 @@
 "use client";
 
-import Link from "next/link";
-import { User } from "../../../types/User";
+import { env } from "../../../env/client.mjs";
 
-const resendEmail = () => {};
+const resendEmail = async (email: string) => {
+	await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/auth/resend-email`, {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ email }),
+	});
+};
 
-const Confirm = ({ user }: { user: User | null }) => {
+const Confirm = ({ email }: { email?: string }) => {
 	return (
-		<main className="text-center flex flex-col items-center justify-center">
-			{user && user.emailConfirmation ? (
-				<>
-					<h1 className="text-3xl font-bold">Email confirmed!</h1>
-					<p className="text-lg mt-4">
-						Thank you for verifying your email, you may now proceed
-						to the game.
-					</p>
-					<Link href="/" className="gbtn mt-4">
-						Home
-					</Link>
-				</>
-			) : (
-				<>
-					<h1 className="text-3xl font-bold">
-						Please confirm email!
-					</h1>
-					<p className="text-lg my-4">
-						To finalize account, please click the link in the email
-						sent to you.
-					</p>
-					<button className="gbtn" onClick={() => resendEmail()}>
-						Resend email
-					</button>
-				</>
-			)}
+		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
+			<h1 className="text-3xl font-bold">Please confirm email!</h1>
+			<p className="text-lg my-4 text-center">
+				To finalize account, please click the link in the email sent to
+				you.
+			</p>
+			{email ? (
+				<button className="gbtn" onClick={() => resendEmail(email)}>
+					Resend email
+				</button>
+			) : null}
 		</main>
 	);
 };

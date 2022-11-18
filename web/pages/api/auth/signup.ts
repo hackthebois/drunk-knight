@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
-import { SignInInputSchema } from "../../../app/auth/signin/SignInPage";
 import { serialize } from "cookie";
+import { SignUpInputSchema } from "../../../app/auth/signup/SignUpPage";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-	const input = SignInInputSchema.parse(req.body);
+	const input = SignUpInputSchema.parse(req.body);
 
 	const user = await fetch(
-		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`,
+		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`,
 		{
 			method: "POST",
 			headers: {

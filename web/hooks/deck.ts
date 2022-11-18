@@ -22,23 +22,6 @@ const getDecks = async (token: string) => {
 export const useDecks = (token: string) =>
 	useQuery(["decks"], () => getDecks(token));
 
-const getDeck = async (id: string) => {
-	const accessToken = localStorage.getItem("accessToken");
-
-	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
-		method: "GET",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
-	const data: unknown = await res.json();
-	return DeckSchema.parse(data);
-};
-export const useDeck = (id: string) =>
-	useQuery(["deck", id], () => getDeck(id));
-
 // CREATE DECK (POST /deck/create)
 export const CreateDeckSchema = z.object({
 	name: DeckSchema.shape.name,
@@ -102,15 +85,19 @@ export const UpdateDeckSchema = z.object({
 	selected: DeckSchema.shape.selected,
 });
 export type UpdateDeck = z.input<typeof UpdateDeckSchema>;
-const updateDeck = async ({ id, name, selected }: UpdateDeck) => {
-	const accessToken = localStorage.getItem("accessToken");
-
+const updateDeck = async ({
+	updateDeck: { id, name, selected },
+	token,
+}: {
+	updateDeck: UpdateDeck;
+	token: string;
+}) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
 		method: "PUT",
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify({ name, selected }),
 	});
@@ -121,7 +108,7 @@ export const useUpdateDeck = () => {
 	const queryClient = useQueryClient();
 	const router = useRouter();
 	return useMutation(updateDeck, {
-		onMutate: async (newDeck) => {
+		onMutate: async ({ updateDeck: newDeck }) => {
 			await queryClient.cancelQueries({
 				queryKey: ["decks"],
 			});
@@ -145,16 +132,14 @@ export const useUpdateDeck = () => {
 };
 
 // DELETE DECK (DELETE /deck/:id)
-const deleteDeck = async (id: string) => {
-	const accessToken = localStorage.getItem("accessToken");
-
+const deleteDeck = async ({ token, id }: { id: string; token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck/${id}`, {
 		method: "DELETE",
 		body: JSON.stringify({ id }),
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${accessToken}`,
+			Authorization: `Bearer ${token}`,
 		},
 	});
 	const data: unknown = await res.json();
@@ -165,7 +150,7 @@ export const useDeleteDeck = () => {
 	const router = useRouter();
 
 	return useMutation(deleteDeck, {
-		onMutate: async (id) => {
+		onMutate: async ({ id }) => {
 			await queryClient.cancelQueries({
 				queryKey: ["decks"],
 			});

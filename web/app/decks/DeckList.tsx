@@ -22,9 +22,10 @@ const getDecks = async (token: string) => {
 
 type Props = {
 	deck: Deck;
+	token: string;
 };
 
-const DeckItem = ({ deck: { id, name, selected } }: Props) => {
+const DeckItem = ({ deck: { id, name, selected }, token }: Props) => {
 	const updateDeckMutation = useUpdateDeck();
 
 	return (
@@ -41,9 +42,12 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						updateDeckMutation.mutate({
-							name,
-							id,
-							selected: false,
+							updateDeck: {
+								name,
+								id,
+								selected: false,
+							},
+							token,
 						});
 					}}
 				>
@@ -54,9 +58,12 @@ const DeckItem = ({ deck: { id, name, selected } }: Props) => {
 					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						updateDeckMutation.mutate({
-							name,
-							id,
-							selected: true,
+							updateDeck: {
+								name,
+								id,
+								selected: true,
+							},
+							token,
 						});
 					}}
 				>
@@ -77,7 +84,10 @@ const DeckList = ({ decks, token }: { decks: Deck[]; token: string }) => {
 
 	return (
 		<>
-			{data && data.map((deck) => <DeckItem key={deck.id} deck={deck} />)}
+			{data &&
+				data.map((deck) => (
+					<DeckItem key={deck.id} deck={deck} token={token} />
+				))}
 		</>
 	);
 };

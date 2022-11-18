@@ -22,12 +22,10 @@ const signInReq = async (input: SignInInput) => {
 		body: JSON.stringify(input),
 	});
 	const data = await res.json();
-	if (!res.ok) throw new Error((data && data.message) || res.status);
-	const { token } = z.object({ token: z.string() }).parse(data);
-	localStorage.setItem("accessToken", token);
+	if (!res.ok) throw new Error(data.message);
 };
 
-const SignIn = () => {
+const SignInPage = () => {
 	const router = useRouter();
 	const {
 		register,
@@ -48,7 +46,7 @@ const SignIn = () => {
 				error.message ===
 					"Please Confirm Email Before Attemping to Log In"
 			)
-				router.push("/auth/confirm");
+				router.push(`/auth/confirm`);
 			else if (error && error.message)
 				setError("username", { message: error.message });
 		},
@@ -103,4 +101,4 @@ const SignIn = () => {
 	);
 };
 
-export default SignIn;
+export default SignInPage;
