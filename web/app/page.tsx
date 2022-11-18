@@ -39,7 +39,7 @@ const Page = async () => {
 	if (cards.length < 1) {
 		return (
 			<main className="flex justify-center items-center flex-col w-full h-[85vh]">
-				<h2 className="text-xl md:text-2xl mb-4 text-center">
+				<h2 className="text-xl md:text-2xl mb-4 text-center background">
 					No cards found. Select a deck!
 				</h2>
 			</main>

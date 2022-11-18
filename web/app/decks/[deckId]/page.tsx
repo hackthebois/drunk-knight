@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import DeckPage from "./DeckPage";
 import { env } from "../../../env/client.mjs";
@@ -27,7 +27,11 @@ const getDeck = async ({
 		},
 	});
 	const data: unknown = await res.json();
-	return DeckSchema.parse(data);
+	if (res.status === 404) {
+		return undefined;
+	} else {
+		return DeckSchema.parse(data);
+	}
 };
 
 const Page = async ({ params: { deckId } }: Props) => {
@@ -36,6 +40,10 @@ const Page = async ({ params: { deckId } }: Props) => {
 
 	if (token) {
 		const deck = await getDeck({ deckId, token });
+
+		if (!deck) {
+			notFound();
+		}
 
 		return (
 			<DeckPage placeholderDeck={deck} token={token} deckId={deckId} />
