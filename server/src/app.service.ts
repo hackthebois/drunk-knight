@@ -33,6 +33,7 @@ export class AppService {
 			});
 
 			gamePlayCards = gameplayDecks?.decks[0]?.cards;
+			gamePlayCards = gamePlayCards ? gamePlayCards : [];
 		}
 
 		if (user && user.name != ADMIN.NAME) {
