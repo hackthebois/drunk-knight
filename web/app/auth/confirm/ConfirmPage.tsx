@@ -13,7 +13,7 @@ const resendEmail = async (email: string) => {
 	});
 };
 
-const Confirm = ({ email }: { email: string }) => {
+const Confirm = ({ email }: { email?: string }) => {
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
 			<h1 className="text-3xl font-bold">Please confirm email!</h1>
