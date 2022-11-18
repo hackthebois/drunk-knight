@@ -4,9 +4,7 @@ import { useRouter } from "next/navigation";
 import { User } from "../../types/User";
 
 const signOut = async () => {
-	await fetch("/api/auth/signout").then(() => {
-		localStorage.removeItem("accessToken");
-	});
+	await fetch("/api/auth/signout");
 };
 
 const Account = ({ user }: { user: User }) => {

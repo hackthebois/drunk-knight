@@ -86,9 +86,10 @@ const DeckPage = ({
 											<button
 												className="ebtn mr-3"
 												onClick={() =>
-													deleteDeckMutation.mutate(
-														deck.id,
-													)
+													deleteDeckMutation.mutate({
+														id: deck.id,
+														token,
+													})
 												}
 											>
 												<FaTrash />

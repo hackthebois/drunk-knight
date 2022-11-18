@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 
 export const SignUpInputSchema = z.object({
@@ -18,25 +18,18 @@ export const SignUpInputSchema = z.object({
 });
 export type SignUpInput = z.input<typeof SignUpInputSchema>;
 const signUpReq = async (input: SignUpInput) => {
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`,
-		{
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(input),
+	await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`, {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
 		},
-	);
-	const data: any = await res.json();
-	if (!res.ok) throw new Error((data && data.message) || res.status);
-	const { token } = z.object({ token: z.string() }).parse(data);
-	localStorage.setItem("accessToken", token);
+		body: JSON.stringify(input),
+	});
+	return input;
 };
 
 const SignUp = () => {
-	const queryClient = useQueryClient();
 	const {
 		register,
 		handleSubmit,
@@ -48,8 +41,8 @@ const SignUp = () => {
 	const router = useRouter();
 
 	const signup = useMutation(signUpReq, {
-		onSuccess: () => {
-			router.push("/auth/confirm");
+		onSuccess: (data) => {
+			router.push(`/auth/confirm?email=${data.email}`);
 		},
 		onError: (error: any) => {
 			if (error && error.message)

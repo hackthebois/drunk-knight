@@ -9,7 +9,7 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
 	}, [error]);
 
 	return (
-		<main>
+		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
 			<p className="text-xl mb-4 text-center">Something went wrong!</p>
 			<button className="btn" onClick={() => reset()}>
 				Reset

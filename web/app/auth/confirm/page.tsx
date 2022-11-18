@@ -16,12 +16,12 @@ const getUser = async ({ token }: { token: string }) => {
 	return UserSchema.parse(data);
 };
 
-const Page = async () => {
+const Page = async ({ searchParams }: { searchParams: { email: string } }) => {
 	const nextCookies = cookies();
 	const token = nextCookies.get("accessToken")?.value;
 	const user = token ? await getUser({ token }) : null;
 
-	return <Confirm user={user} />;
+	return <Confirm email={searchParams.email} />;
 };
 
 export default Page;
