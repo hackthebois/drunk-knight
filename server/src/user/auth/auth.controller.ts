@@ -30,12 +30,7 @@ export class AuthController {
 	}
 
 	@Get('/confirm/:token')
-	@Redirect(
-		process.env.FRONTEND_URL === 'http://localhost:8000'
-			? `${process.env.FRONTEND_URL}`
-			: `${process.env.FRONTEND_URL}/auth/confirm`,
-		301,
-	)
+	@Redirect(`${process.env.FRONTEND_URL}/auth/confirm`, 301)
 	emailVarification(@Param('token') token: string) {
 		return this.authService.verifyEmailConfirmation(token);
 	}
