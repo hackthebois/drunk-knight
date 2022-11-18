@@ -16,7 +16,7 @@ model User {
   id                 String   @id @default(cuid())
   username           String   @unique
   email              String   @unique
-  emailConfirmation Boolean  @default(false)
+  emailConfirmation  Boolean  @default(false)
   password           String
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

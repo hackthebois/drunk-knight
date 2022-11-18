@@ -32,7 +32,7 @@ export class AppService {
 				},
 			});
 
-			gamePlayCards = gameplayDecks?.decks[0].cards;
+			gamePlayCards = gameplayDecks?.decks[0]?.cards;
 		}
 
 		if (user && user.name != ADMIN.NAME) {
