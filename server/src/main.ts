@@ -16,7 +16,6 @@ async function bootstrap() {
 			},
 		}),
 	);
-	app.enableCors();
 
 	// Auth for Swagger
 	// app.use(
@@ -46,7 +45,8 @@ async function bootstrap() {
 		},
 	});
 
-	// Starts Server
+	// Starts Server and enable cors
+	app.enableCors();
 	await app.listen(process.env.PORT || 8000);
 }
 bootstrap();
