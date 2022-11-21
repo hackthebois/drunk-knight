@@ -19,18 +19,18 @@ async function bootstrap() {
 	app.enableCors();
 
 	// Auth for Swagger
-	app.use(
-		['/docs', '/docs-json'],
-		basicAuth({
-			challenge: true,
-			users: {
-				[process.env.SWAGGER_USER ? process.env.SWAGGER_USER : '']:
-					process.env.SWAGGER_PASSWORD
-						? process.env.SWAGGER_PASSWORD
-						: '',
-			},
-		}),
-	);
+	// app.use(
+	// 	['/docs', '/docs-json'],
+	// 	basicAuth({
+	// 		challenge: true,
+	// 		users: {
+	// 			[process.env.SWAGGER_USER ? process.env.SWAGGER_USER : '']:
+	// 				process.env.SWAGGER_PASSWORD
+	// 					? process.env.SWAGGER_PASSWORD
+	// 					: '',
+	// 		},
+	// 	}),
+	// );
 
 	// Swagger UI Configuration
 	const config = new DocumentBuilder()
