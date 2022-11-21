@@ -1,49 +1,46 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
-  id                 String   @id @default(cuid())
-  username           String   @unique
-  email              String   @unique
-  emailConfirmation  Boolean  @default(false)
-  password           String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-  userType           UserType
-  decks              Deck[]
+  id                String   @id @default(cuid())
+  username          String   @unique
+  email             String   @unique
+  emailConfirmation Boolean  @default(false)
+  password          String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  userType          UserType
+  decks             Deck[]
 }
 
 model Deck {
-  id         String   @id @default(cuid())
-  name       String
-  selected   Boolean
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  cards      Card[]
+  id        String   @id @default(cuid())
+  name      String
+  selected  Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cards     Card[]
 }
 
 model Card {
   id          String   @id @default(cuid())
   name        String
   description String
-  cardType    CardType  
+  cardType    CardType
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   deckId      String
-  deck        Deck     @relation(fields: [deckId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  deck        Deck     @relation(fields: [deckId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum CardType {

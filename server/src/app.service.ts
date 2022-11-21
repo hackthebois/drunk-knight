@@ -32,8 +32,8 @@ export class AppService {
 				},
 			});
 
-			gamePlayCards = gameplayDecks?.decks[0]?.cards;
-			gamePlayCards = gamePlayCards ? gamePlayCards : [];
+			if (gameplayDecks.decks[0])
+				gamePlayCards = gameplayDecks?.decks[0]?.cards;
 		}
 
 		if (user && user.name != ADMIN.NAME) {

@@ -2,9 +2,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as basicAuth from 'express-basic-auth';
 
 async function bootstrap() {
-	// App
+	// Server Configuration
 	const app = await NestFactory.create(AppModule);
 	app.useGlobalPipes(
 		new ValidationPipe({
@@ -15,8 +16,20 @@ async function bootstrap() {
 			},
 		}),
 	);
+	app.enableCors();
 
-	// Swagger UI
+	// Auth for Swagger
+	app.use(
+		['/docs', '/docs-json'],
+		basicAuth({
+			challenge: true,
+			users: {
+				[process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD,
+			},
+		}),
+	);
+
+	// Swagger UI Configuration
 	const config = new DocumentBuilder()
 		.addBearerAuth()
 		.setTitle('Drunk Knight')
@@ -24,14 +37,13 @@ async function bootstrap() {
 		.setVersion('1.0')
 		.build();
 	const document = SwaggerModule.createDocument(app, config);
-	SwaggerModule.setup('api', app, document, {
+	SwaggerModule.setup('docs', app, document, {
 		swaggerOptions: {
 			displayRequestDuration: true,
 		},
 	});
 
-	// App
-	app.enableCors();
+	// Starts Server
 	await app.listen(process.env.PORT || 8000);
 }
 bootstrap();
