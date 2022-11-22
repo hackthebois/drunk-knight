@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { FaChessKnight, FaPlay, FaUserCircle } from "react-icons/fa";
+import { FaPlay, FaUserCircle } from "react-icons/fa";
+import {
+	CgCardClubs,
+	CgCardDiamonds,
+	CgCardHearts,
+	CgCardSpades,
+} from "react-icons/cg";
 import "../styles/globals.css";
 import ReactQueryWrapper from "./ReactQueryWrapper";
 
@@ -24,7 +30,18 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 							href="/decks"
 							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
-							<FaChessKnight size={20} />
+							<CgCardDiamonds
+								size={24}
+								className="-rotate-[20deg] -mr-[10px] mt-1"
+							/>
+							<CgCardHearts
+								size={24}
+								className="bg-background z-10"
+							/>
+							<CgCardClubs
+								size={24}
+								className="rotate-[20deg] -ml-[10px] mt-1"
+							/>
 						</Link>
 						<Link
 							href="/"
