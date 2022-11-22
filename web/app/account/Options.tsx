@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ConfirmDelete from "../../components/ConfirmDelete";
 
 const signOut = async () => {
 	await fetch("/api/auth/signout");
@@ -12,6 +14,7 @@ const deleteAccount = async () => {
 
 const Options = () => {
 	const router = useRouter();
+	const [confirmDelete, setConfirmDelete] = useState(false);
 	return (
 		<>
 			<button
@@ -25,17 +28,21 @@ const Options = () => {
 			>
 				Sign Out
 			</button>
-			<button
-				className="ebtn"
-				onClick={() =>
-					deleteAccount().then(() => {
-						router.refresh();
-						router.push("/");
-					})
-				}
-			>
+			<button className="ebtn" onClick={() => setConfirmDelete(true)}>
 				Delete Account
 			</button>
+			{confirmDelete ? (
+				<ConfirmDelete
+					onDelete={() =>
+						deleteAccount().then(() => {
+							router.refresh();
+							router.push("/");
+						})
+					}
+					onCancel={() => setConfirmDelete(false)}
+					deletedItem="this account"
+				/>
+			) : null}
 		</>
 	);
 };

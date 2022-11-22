@@ -6,6 +6,7 @@ import { Router } from "next/router";
 import { useState } from "react";
 import { FaAngleLeft, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../components/CardItem";
+import ConfirmDelete from "../../../components/ConfirmDelete";
 import { env } from "../../../env/client.mjs";
 
 import { useDeleteDeck } from "../../../hooks/deck";
@@ -45,6 +46,7 @@ const DeckPage = ({
 	const router = useRouter();
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
+	const [confirmDelete, setConfirmDelete] = useState(false);
 	const { data: deck } = useQuery({
 		queryKey: ["deck", deckId],
 		queryFn: () => getDeck({ token, deckId }),
@@ -86,14 +88,27 @@ const DeckPage = ({
 											<button
 												className="ebtn mr-3"
 												onClick={() =>
-													deleteDeckMutation.mutate({
-														id: deck.id,
-														token,
-													})
+													setConfirmDelete(true)
 												}
 											>
 												<FaTrash />
 											</button>
+											{confirmDelete ? (
+												<ConfirmDelete
+													onDelete={() =>
+														deleteDeckMutation.mutate(
+															{
+																id: deck.id,
+																token,
+															},
+														)
+													}
+													onCancel={() =>
+														setConfirmDelete(false)
+													}
+													deletedItem={`deck "${deck.name}"`}
+												/>
+											) : null}
 											<button
 												className="btn"
 												onClick={() => setAddCard(true)}
