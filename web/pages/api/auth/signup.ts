@@ -27,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const serialized = serialize("accessToken", token, {
 		httpOnly: true,
 		sameSite: "strict",
-		maxAge: 60 * 60 * 24 * 30,
+		maxAge: 60 * 60 * 24,
 		path: "/",
 	});
 
