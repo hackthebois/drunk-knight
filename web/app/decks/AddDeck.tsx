@@ -50,16 +50,15 @@ const AddDeck = ({ token }: { token: string }) => {
 							{...register("name")}
 							autoComplete="off"
 						/>
-						<button
+						<input
 							className={`btn sm:mr-2 mb-2 sm:mb-0 ${
 								isDirty
 									? ""
 									: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
 							}`}
 							type="submit"
-						>
-							Create
-						</button>
+							value="Create"
+						/>
 						<button
 							className="gbtn"
 							onClick={() => setAddDeck(false)}

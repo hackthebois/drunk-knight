@@ -35,9 +35,6 @@
 	.form select {
 		@apply rounded border-[1px] border-border py-2 px-3 bg-background;
 	}
-	.form input[type="submit"] {
-		@apply rounded py-2 px-3 bg-primary font-bold cursor-pointer hover:opacity-90;
-	}
 	.form label {
 		@apply text-white text-lg opacity-70;
 	}

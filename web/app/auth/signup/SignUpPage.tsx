@@ -93,7 +93,7 @@ const SignUp = () => {
 					className="mb-4 mt-2"
 					{...register("password")}
 				/>
-				<input type="submit" value="Submit" className="mt-4" />
+				<input type="submit" value="Submit" className="btn mt-4" />
 				<div className="flex justify-center items-center mt-8">
 					<p className="text-white">{`Already have an account?`}</p>
 					<Link
