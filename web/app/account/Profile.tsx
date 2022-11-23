@@ -7,6 +7,8 @@ import { z } from "zod";
 import { User, UserSchema } from "../../types/User";
 import { env } from "../../env/client.mjs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
+import { AuthContext } from "../ClientWrapper";
 
 export const UpdateUserSchema = z.object({
 	username: z.string().min(1, "Username cannot be empty."),
@@ -34,14 +36,9 @@ const updateUserReq = async ({
 	return UserSchema.parse(data);
 };
 
-const Profile = ({
-	user: { email, username },
-	token,
-}: {
-	user: User;
-	token: string;
-}) => {
+const Profile = ({ user: { email, username } }: { user: User }) => {
 	const router = useRouter();
+	const token = useContext(AuthContext);
 
 	const {
 		register,

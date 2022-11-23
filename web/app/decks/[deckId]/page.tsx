@@ -45,9 +45,7 @@ const Page = async ({ params: { deckId } }: Props) => {
 			notFound();
 		}
 
-		return (
-			<DeckPage placeholderDeck={deck} token={token} deckId={deckId} />
-		);
+		return <DeckPage placeholderDeck={deck} deckId={deckId} />;
 	} else {
 		redirect("/auth/signin");
 	}

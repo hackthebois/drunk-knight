@@ -1,13 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
+import { AuthContext } from "../ClientWrapper";
 
-const AddDeck = ({ token }: { token: string }) => {
+const AddDeck = () => {
 	const createDeckMutation = useCreateDeck();
+	const token = useContext(AuthContext);
 
 	const {
 		register,

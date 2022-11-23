@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaSave, FaTrash } from "react-icons/fa";
 import { z } from "zod";
@@ -10,6 +11,7 @@ import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 import { Card, CardSchema, cardTypes } from "../../../types/Card";
 import { Deck, DeckSchema } from "../../../types/Deck";
+import { AuthContext } from "../../ClientWrapper";
 
 export const DeleteCardSchema = z.object({
 	id: CardSchema.shape.id,
@@ -53,7 +55,6 @@ export const updateCard = async ({
 	newCard: UpdateCard;
 	token: string;
 }) => {
-	console.log(cardType);
 	const res = await fetch(
 		`${env.NEXT_PUBLIC_SERVER_URL}/deck/${deckId}/card/${id}`,
 		{
@@ -67,21 +68,19 @@ export const updateCard = async ({
 		},
 	);
 	const data: unknown = await res.json();
-	console.log(data);
 	return CardSchema.parse(data);
 };
 
 const CardEditor = ({
 	card,
 	deckId,
-	token,
 	cancel,
 }: {
 	card: Card;
 	deckId: string;
-	token: string;
 	cancel: () => void;
 }) => {
+	const token = useContext(AuthContext);
 	const queryClient = useQueryClient();
 	const router = useRouter();
 

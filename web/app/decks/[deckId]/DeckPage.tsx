@@ -2,8 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { Router } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaAngleLeft, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../components/CardItem";
 import ConfirmDelete from "../../../components/ConfirmDelete";
@@ -12,6 +11,7 @@ import { env } from "../../../env/client.mjs";
 import { useDeleteDeck } from "../../../hooks/deck";
 import { Card } from "../../../types/Card";
 import { Deck, DeckSchema } from "../../../types/Deck";
+import { AuthContext } from "../../ClientWrapper";
 import CardAdd from "./CardAdd";
 import CardEditor from "./CardEditor";
 
@@ -35,15 +35,14 @@ const getDeck = async ({
 };
 
 const DeckPage = ({
-	token,
 	deckId,
 	placeholderDeck,
 }: {
-	token: string;
 	deckId: string;
 	placeholderDeck: Deck;
 }) => {
 	const router = useRouter();
+	const token = useContext(AuthContext);
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 	const [confirmDelete, setConfirmDelete] = useState(false);
@@ -63,12 +62,10 @@ const DeckPage = ({
 					<CardEditor
 						card={editCard}
 						deckId={deck.id}
-						token={token}
 						cancel={() => setEditCard(undefined)}
 					/>
 				) : addCard ? (
 					<CardAdd
-						token={token}
 						deckId={deck.id}
 						cancel={() => setAddCard(false)}
 					/>

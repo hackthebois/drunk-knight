@@ -27,23 +27,23 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 				/>
 			</head>
 			<body className="bg-background text-white">
-				<ClientWrapper>
+				<ClientWrapper token={token}>
 					{children}
 					<nav className="flex flex-row w-full fixed bottom-0 justify-center border-t-[1px] h-12 bg-background">
 						<Link
 							href="/decks"
-							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
+							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5 mb-1"
 						>
 							<CgCardDiamonds
-								size={24}
+								size={20}
 								className="-rotate-[20deg] -mr-[10px] mt-1"
 							/>
 							<CgCardHearts
-								size={24}
+								size={20}
 								className="bg-background z-10"
 							/>
 							<CgCardClubs
-								size={24}
+								size={20}
 								className="rotate-[20deg] -ml-[10px] mt-1"
 							/>
 						</Link>

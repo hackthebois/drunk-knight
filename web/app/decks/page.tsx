@@ -33,8 +33,8 @@ const Page = async () => {
 					<GuestDeck
 						useStandard={useStandard === "false" ? false : true}
 					/>
-					<DeckList token={token} decks={decks} />
-					<AddDeck token={token} />
+					<DeckList decks={decks} />
+					<AddDeck />
 				</div>
 			</main>
 		);

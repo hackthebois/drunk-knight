@@ -2,10 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { FaPause, FaPlay, FaToggleOff, FaToggleOn } from "react-icons/fa";
+import { useContext } from "react";
+import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { env } from "../../env/client.mjs";
 import { useUpdateDeck } from "../../hooks/deck";
 import { Deck, DeckSchema } from "../../types/Deck";
+import { AuthContext } from "../ClientWrapper";
 
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
@@ -20,13 +22,9 @@ const getDecks = async (token: string) => {
 	return DeckSchema.array().parse(data);
 };
 
-type Props = {
-	deck: Deck;
-	token: string;
-};
-
-const DeckItem = ({ deck: { id, name, selected }, token }: Props) => {
+const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 	const updateDeckMutation = useUpdateDeck();
+	const token = useContext(AuthContext);
 
 	return (
 		<div className={"flex mt-2"} key={id}>
@@ -74,7 +72,8 @@ const DeckItem = ({ deck: { id, name, selected }, token }: Props) => {
 	);
 };
 
-const DeckList = ({ decks, token }: { decks: Deck[]; token: string }) => {
+const DeckList = ({ decks }: { decks: Deck[] }) => {
+	const token = useContext(AuthContext);
 	const { data } = useQuery({
 		queryKey: ["decks"],
 		queryFn: () => getDecks(token),
@@ -84,10 +83,7 @@ const DeckList = ({ decks, token }: { decks: Deck[]; token: string }) => {
 
 	return (
 		<>
-			{data &&
-				data.map((deck) => (
-					<DeckItem key={deck.id} deck={deck} token={token} />
-				))}
+			{data && data.map((deck) => <DeckItem key={deck.id} deck={deck} />)}
 		</>
 	);
 };
