@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CardType, UserType } from '@prisma/client';
 import { CardResponseDto } from 'src/card/dto/card.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -41,6 +41,9 @@ export class SearchService {
 				cards: true,
 			},
 		});
+
+		if (!deck) throw new NotFoundException();
+
 		return {
 			name: deck.name,
 			cards: deck.cards.map((card) => new CardResponseDto(card)),
@@ -48,7 +51,20 @@ export class SearchService {
 	}
 
 	async copyDeck(deckId: string, userId: string) {
-		const deck = await this.getDeckAndCards(deckId);
+		const deck = await this.prismaService.deck.update({
+			where: {
+				id: deckId,
+			},
+			data: {
+				copiedNumber: { increment: 1 },
+			},
+			select: {
+				name: true,
+				cards: true,
+			},
+		});
+
+		if (!deck) throw new NotFoundException();
 
 		const userDeck = await this.prismaService.deck.create({
 			data: {

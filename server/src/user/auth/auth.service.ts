@@ -56,7 +56,6 @@ export class AuthService {
 				email: email,
 				username: username,
 				password: hashedPassword,
-				userType: UserType.DEFAULT,
 			},
 		});
 
