@@ -166,21 +166,32 @@ export class AuthService {
 	}
 
 	async passwordReset({ email }: PasswordResetDto) {
-		const url = `${
-			process.env.BACKEND_URL
-		}/auth/password-reset/${this.generateEmailJWT(
-			email,
-			process.env.JSON_PASSWORD_RESET_SECRET_KEY,
-		)}`;
-
-		const htmlToSend = this.emailHtml('passwordreset.html', { email, url });
-
-		await transport.sendMail({
-			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
-			to: email,
-			subject: 'Password Reset',
-			html: htmlToSend,
+		const user = await this.prismaService.user.findFirst({
+			where: {
+				email: email,
+			},
 		});
+
+		if (user) {
+			const url = `${
+				process.env.BACKEND_URL
+			}/auth/password-reset/${this.generateEmailJWT(
+				email,
+				process.env.JSON_PASSWORD_RESET_SECRET_KEY,
+			)}`;
+
+			const htmlToSend = this.emailHtml('passwordreset.html', {
+				email,
+				url,
+			});
+
+			await transport.sendMail({
+				from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
+				to: email,
+				subject: 'Password Reset',
+				html: htmlToSend,
+			});
+		}
 	}
 
 	async sendEmailConfirmation(email: string) {

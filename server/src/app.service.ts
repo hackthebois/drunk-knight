@@ -58,7 +58,7 @@ export class AppService {
 	 * Shuffles array in place.
 	 * @param {Array} a An array containing the items.
 	 */
-	shuffle(a: any[]) {
+	private shuffle(a: any[]) {
 		var j: any, x: any, i: any;
 		for (i = a.length - 1; i > 0; i--) {
 			j = Math.floor(Math.random() * (i + 1));
