@@ -8,6 +8,18 @@ import { SearchDto } from './dtos/search.dto';
 export class SearchService {
 	constructor(private readonly prismaService: PrismaService) {}
 
+	async getTopdecks() {
+		return await this.prismaService.deck.findMany({
+			orderBy: {
+				copiedNumber: 'asc',
+			},
+			select: {
+				name: true,
+			},
+			take: 10,
+		});
+	}
+
 	async searchDecks(body: SearchDto) {
 		return await this.prismaService.deck.findMany({
 			where: {

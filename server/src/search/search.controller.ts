@@ -12,6 +12,12 @@ export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
 	@Roles(UserType.DEFAULT, UserType.ADMIN)
+	@Get('')
+	getTopDecks() {
+		return this.searchService.getTopdecks();
+	}
+
+	@Roles(UserType.DEFAULT, UserType.ADMIN)
 	@Post('/deck')
 	searchDecks(@Body() body: SearchDto) {
 		return this.searchService.searchDecks(body);
