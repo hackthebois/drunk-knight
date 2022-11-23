@@ -8,8 +8,12 @@ import {
 } from "react-icons/cg";
 import "../styles/globals.css";
 import ClientWrapper from "./ClientWrapper";
+import { cookies } from "next/headers";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+	const nextCookies = cookies();
+	const token = nextCookies.get("accessToken")?.value;
+
 	return (
 		<html lang="en">
 			<head>
