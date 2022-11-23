@@ -165,24 +165,6 @@ export class AuthService {
 		}
 	}
 
-	private async sendEmailConfirmation(email: string) {
-		const url = `${
-			process.env.BACKEND_URL
-		}/auth/confirm/${this.generateEmailJWT(
-			email,
-			process.env.JSON_EMAIL_SECRET_KEY,
-		)}`;
-
-		const htmlToSend = this.emailHtml('email.html', { email, url });
-
-		await transport.sendMail({
-			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
-			to: email,
-			subject: 'Email Confirmation',
-			html: htmlToSend,
-		});
-	}
-
 	async passwordReset({ email }: PasswordResetDto) {
 		const url = `${
 			process.env.BACKEND_URL
@@ -197,6 +179,24 @@ export class AuthService {
 			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
 			to: email,
 			subject: 'Password Reset',
+			html: htmlToSend,
+		});
+	}
+
+	async sendEmailConfirmation(email: string) {
+		const url = `${
+			process.env.BACKEND_URL
+		}/auth/confirm/${this.generateEmailJWT(
+			email,
+			process.env.JSON_EMAIL_SECRET_KEY,
+		)}`;
+
+		const htmlToSend = this.emailHtml('email.html', { email, url });
+
+		await transport.sendMail({
+			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
+			to: email,
+			subject: 'Email Confirmation',
 			html: htmlToSend,
 		});
 	}

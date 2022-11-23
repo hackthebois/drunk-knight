@@ -19,10 +19,13 @@ export class UpdateUserDto {
 	@IsString()
 	@IsOptional()
 	@ApiProperty()
-	username: string;
+	username?: string;
 
 	@IsEmail()
 	@IsOptional()
 	@ApiProperty()
-	email: string;
+	email?: string;
+
+	@IsOptional()
+	emailConfirmation?: boolean;
 }
