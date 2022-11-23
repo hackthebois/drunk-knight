@@ -7,7 +7,7 @@ import {
 	CgCardSpades,
 } from "react-icons/cg";
 import "../styles/globals.css";
-import ReactQueryWrapper from "./ReactQueryWrapper";
+import ClientWrapper from "./ClientWrapper";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -23,7 +23,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 				/>
 			</head>
 			<body className="bg-background text-white">
-				<ReactQueryWrapper>
+				<ClientWrapper>
 					{children}
 					<nav className="flex flex-row w-full fixed bottom-0 justify-center border-t-[1px] h-12 bg-background">
 						<Link
@@ -56,7 +56,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 							<FaUserCircle size={20} />
 						</Link>
 					</nav>
-				</ReactQueryWrapper>
+				</ClientWrapper>
 			</body>
 		</html>
 	);

@@ -28,7 +28,6 @@ const Page = async () => {
 
 	if (token) {
 		const user = await getUser({ token });
-		console.log(user);
 
 		return (
 			<main className="flex justify-center items-center flex-col w-full h-[85vh]">
