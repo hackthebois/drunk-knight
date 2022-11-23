@@ -38,6 +38,7 @@ const SignInPage = () => {
 
 	const signin = useMutation(signInReq, {
 		onSuccess: () => {
+			router.refresh();
 			router.push("/");
 		},
 		onError: (error: any) => {

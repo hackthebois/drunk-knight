@@ -106,7 +106,6 @@ const updateDeck = async ({
 };
 export const useUpdateDeck = () => {
 	const queryClient = useQueryClient();
-	const router = useRouter();
 	return useMutation(updateDeck, {
 		onMutate: async ({ updateDeck: newDeck }) => {
 			await queryClient.cancelQueries({
@@ -122,11 +121,14 @@ export const useUpdateDeck = () => {
 			);
 			return { previousDecks };
 		},
+		onSuccess: () => {
+			queryClient.refetchQueries(["play"]);
+		},
 		onError: (err, newTodo, context) => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
 		},
 		onSettled: () => {
-			router.refresh();
+			queryClient.invalidateQueries(["decks"]);
 		},
 	});
 };
@@ -161,11 +163,14 @@ export const useDeleteDeck = () => {
 			router.push("/decks");
 			return { previousDecks };
 		},
+		onSuccess: ({ selected }) => {
+			if (selected) queryClient.refetchQueries(["play"]);
+		},
 		onError: (err, newTodo, context) => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
 		},
 		onSettled: () => {
-			router.refresh();
+			queryClient.invalidateQueries(["decks"]);
 		},
 	});
 };

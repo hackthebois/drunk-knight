@@ -81,11 +81,14 @@ const CardAdd = ({
 			cancel();
 			return { previousDeck };
 		},
+		onSuccess: () => {
+			queryClient.refetchQueries(["play"]);
+		},
 		onError: (err, { newCard: { deckId } }, context) => {
 			queryClient.setQueryData(["deck", deckId], context?.previousDeck);
 		},
 		onSettled: () => {
-			router.refresh();
+			queryClient.invalidateQueries(["deck"]);
 		},
 	});
 

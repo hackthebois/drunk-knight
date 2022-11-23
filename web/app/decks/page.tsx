@@ -22,7 +22,6 @@ const getDecks = async (token: string) => {
 const Page = async () => {
 	const nextCookies = cookies();
 	const token = nextCookies.get("accessToken")?.value;
-	const useStandard = nextCookies.get("useStandard")?.value;
 
 	if (token) {
 		const decks = await getDecks(token);
@@ -30,9 +29,7 @@ const Page = async () => {
 			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full">
 					<h2 className="text-2xl font-bold mb-4">Decks</h2>
-					<GuestDeck
-						useStandard={useStandard === "false" ? false : true}
-					/>
+					<GuestDeck />
 					<DeckList decks={decks} />
 					<AddDeck />
 				</div>
