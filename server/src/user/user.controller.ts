@@ -33,12 +33,9 @@ export class UserController {
 		return this.userService.updateUserProfile(body, user.id);
 	}
 
-	@Roles(UserType.DEFAULT, UserType.ADMIN)
+	@Roles(UserType.DEFAULT)
 	@Delete()
 	deleteUser(@User() user: UserInfo) {
-		if (user.name === 'Admin')
-			throw new HttpException('You Cannot Delete the Admin Account', 400);
-
 		return this.userService.deleteUser(user.id);
 	}
 }

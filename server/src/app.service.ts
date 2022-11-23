@@ -32,7 +32,7 @@ export class AppService {
 				},
 			});
 
-			if (gameplayDecks.decks[0])
+			if (gameplayDecks && gameplayDecks.decks[0])
 				gamePlayCards = gameplayDecks?.decks[0]?.cards;
 		}
 
