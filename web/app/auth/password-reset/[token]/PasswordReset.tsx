@@ -7,7 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export const ResetPasswordSchema = z.object({
-	password: z.string(),
+	password: z
+		.string()
+		.min(8, "Password must contain at least 8 character(s)"),
 	repeatPassword: z.string(),
 });
 export type ResetPassword = z.input<typeof ResetPasswordSchema>;

@@ -39,7 +39,7 @@ const SignInPage = () => {
 	const signin = useMutation(signInReq, {
 		onSuccess: () => {
 			router.refresh();
-			router.push("/");
+			router.push("/play");
 		},
 		onError: (error: any) => {
 			if (

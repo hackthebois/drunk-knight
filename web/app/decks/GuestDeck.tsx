@@ -2,7 +2,7 @@
 
 import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { useAtom } from "jotai";
-import { useStandardAtom } from "../Play";
+import { useStandardAtom } from "../play/Play";
 import { useQueryClient } from "@tanstack/react-query";
 
 const GuestDeck = () => {

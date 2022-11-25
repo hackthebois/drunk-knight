@@ -90,7 +90,7 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 							signOut().then(() => {
 								setToken("");
 								router.refresh();
-								router.push("/");
+								router.push("/play");
 							})
 						}
 					>
@@ -109,7 +109,7 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 							deleteAccount().then(() => {
 								setToken("");
 								router.refresh();
-								router.push("/");
+								router.push("/play");
 							})
 						}
 						onCancel={() => setConfirmDelete(false)}

@@ -48,7 +48,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 							/>
 						</Link>
 						<Link
-							href="/"
+							href="/play"
 							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 						>
 							<FaPlay size={19} />
