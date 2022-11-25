@@ -2,11 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtom } from "jotai";
-import { useContext, useState } from "react";
 import CardItem from "../components/CardItem";
 import { env } from "../env/client.mjs";
 import { CardSchema } from "../types/Card";
-import { AuthContext } from "./ClientWrapper";
+import { tokenAtom } from "./ClientWrapper";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Loader from "../components/Loader";
 
@@ -44,13 +43,11 @@ const play = async ({
 };
 
 const Play = () => {
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 	const [useStandard] = useAtom(useStandardAtom);
 	const resetPlay = useResetAtom(playAtom);
 	const [{ firstCard, secondCard, degrees, flipped }, setPlay] =
 		useAtom(playAtom);
-
-	console.log(firstCard, secondCard);
 
 	const { data: cards } = useQuery(
 		["play", token, useStandard],

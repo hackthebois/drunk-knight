@@ -6,9 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { User, UserSchema } from "../../types/User";
 import { env } from "../../env/client.mjs";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
-import { AuthContext } from "../ClientWrapper";
+import { useMutation } from "@tanstack/react-query";
+import { tokenAtom } from "../ClientWrapper";
+import { useAtom } from "jotai";
 
 export const UpdateUserSchema = z.object({
 	username: z.string().min(1, "Username cannot be empty."),
@@ -38,7 +38,7 @@ const updateUserReq = async ({
 
 const Profile = ({ user: { email, username } }: { user: User }) => {
 	const router = useRouter();
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 
 	const {
 		register,

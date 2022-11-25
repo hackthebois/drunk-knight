@@ -1,8 +1,9 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaAngleLeft, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../components/CardItem";
 import ConfirmDelete from "../../../components/ConfirmDelete";
@@ -11,7 +12,7 @@ import { env } from "../../../env/client.mjs";
 import { useDeleteDeck } from "../../../hooks/deck";
 import { Card } from "../../../types/Card";
 import { Deck, DeckSchema } from "../../../types/Deck";
-import { AuthContext } from "../../ClientWrapper";
+import { tokenAtom } from "../../ClientWrapper";
 import CardAdd from "./CardAdd";
 import CardEditor from "./CardEditor";
 
@@ -42,7 +43,7 @@ const DeckPage = ({
 	placeholderDeck: Deck;
 }) => {
 	const router = useRouter();
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 	const [editCard, setEditCard] = useState<Card | undefined>();
 	const [addCard, setAddCard] = useState(false);
 	const [confirmDelete, setConfirmDelete] = useState(false);

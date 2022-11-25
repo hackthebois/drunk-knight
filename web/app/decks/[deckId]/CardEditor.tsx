@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaSave, FaTrash } from "react-icons/fa";
 import { z } from "zod";
@@ -11,7 +11,7 @@ import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 import { Card, CardSchema, cardTypes } from "../../../types/Card";
 import { Deck, DeckSchema } from "../../../types/Deck";
-import { AuthContext } from "../../ClientWrapper";
+import { tokenAtom } from "../../ClientWrapper";
 
 export const DeleteCardSchema = z.object({
 	id: CardSchema.shape.id,
@@ -80,9 +80,8 @@ const CardEditor = ({
 	deckId: string;
 	cancel: () => void;
 }) => {
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 	const queryClient = useQueryClient();
-	const router = useRouter();
 
 	const deleteCardMutation = useMutation(deleteCard, {
 		onMutate: async ({ deleteCard: { id, deckId } }) => {

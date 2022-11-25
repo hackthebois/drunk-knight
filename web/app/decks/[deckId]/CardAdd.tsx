@@ -2,8 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaPlus } from "react-icons/fa";
 import { z } from "zod";
@@ -11,7 +10,7 @@ import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 import { CardSchema, cardTypes } from "../../../types/Card";
 import { Deck, DeckSchema } from "../../../types/Deck";
-import { AuthContext } from "../../ClientWrapper";
+import { tokenAtom } from "../../ClientWrapper";
 
 // CREATE CARD (POST /deck/:deckId/card/create)
 export const CreateCardSchema = z.object({
@@ -51,8 +50,7 @@ const CardAdd = ({
 	deckId: string;
 	cancel: () => void;
 }) => {
-	const router = useRouter();
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 	const queryClient = useQueryClient();
 	const createCardMutation = useMutation(createCard, {
 		onMutate: async ({

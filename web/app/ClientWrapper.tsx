@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createContext } from "react";
+import { atom, useAtom } from "jotai";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -12,7 +12,7 @@ const queryClient = new QueryClient({
 	},
 });
 
-export const AuthContext = createContext<string>("");
+export const tokenAtom = atom("");
 
 const ClientWrapper = ({
 	children,
@@ -21,12 +21,13 @@ const ClientWrapper = ({
 	children: React.ReactNode;
 	token?: string;
 }) => {
+	const [_, setToken] = useAtom(tokenAtom);
+	setToken(token ?? "");
+
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AuthContext.Provider value={token ?? ""}>
-				{children}
-				<ReactQueryDevtools initialIsOpen={false} />
-			</AuthContext.Provider>
+			{children}
+			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 };

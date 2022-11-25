@@ -1,13 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useAtom } from "jotai";
 import Link from "next/link";
-import { useContext } from "react";
 import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { env } from "../../env/client.mjs";
 import { useUpdateDeck } from "../../hooks/deck";
 import { Deck, DeckSchema } from "../../types/Deck";
-import { AuthContext } from "../ClientWrapper";
+import { tokenAtom } from "../ClientWrapper";
 
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
@@ -24,7 +24,7 @@ const getDecks = async (token: string) => {
 
 const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 	const updateDeckMutation = useUpdateDeck();
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 
 	return (
 		<div className={"flex mt-2"} key={id}>
@@ -73,7 +73,7 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 };
 
 const DeckList = ({ decks }: { decks: Deck[] }) => {
-	const token = useContext(AuthContext);
+	const [token] = useAtom(tokenAtom);
 	const { data } = useQuery({
 		queryKey: ["decks"],
 		queryFn: () => getDecks(token),
