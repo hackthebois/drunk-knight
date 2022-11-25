@@ -9,6 +9,9 @@ import { env } from "../../env/client.mjs";
 import { useMutation } from "@tanstack/react-query";
 import { tokenAtom } from "../ClientWrapper";
 import { useAtom } from "jotai";
+import { FaSignOutAlt, FaTrash } from "react-icons/fa";
+import ConfirmDelete from "../../components/ConfirmDelete";
+import { useState } from "react";
 
 export const UpdateUserSchema = z.object({
 	username: z.string().min(1, "Username cannot be empty."),
@@ -34,6 +37,14 @@ const updateUserReq = async ({
 	const data = await res.json();
 	if (!res.ok) throw new Error(data.message);
 	return UserSchema.parse(data);
+};
+
+const signOut = async () => {
+	await fetch("/api/auth/signout");
+};
+
+const deleteAccount = async () => {
+	await fetch("/api/auth/delete");
 };
 
 const Profile = ({ user: { email, username } }: { user: User }) => {
@@ -65,8 +76,47 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 		update.mutate({ input: data, token });
 	};
 
+	const [confirmDelete, setConfirmDelete] = useState(false);
+	const [_, setToken] = useAtom(tokenAtom);
+
 	return (
 		<>
+			<div className="flex justify-between items-center mb-4">
+				<h2 className="text-2xl font-bold">Profile</h2>
+				<div>
+					<button
+						className="gbtn mr-3"
+						onClick={() =>
+							signOut().then(() => {
+								setToken("");
+								router.refresh();
+								router.push("/");
+							})
+						}
+					>
+						<FaSignOutAlt />
+					</button>
+					<button
+						className="ebtn"
+						onClick={() => setConfirmDelete(true)}
+					>
+						<FaTrash />
+					</button>
+				</div>
+				{confirmDelete ? (
+					<ConfirmDelete
+						onDelete={() =>
+							deleteAccount().then(() => {
+								setToken("");
+								router.refresh();
+								router.push("/");
+							})
+						}
+						onCancel={() => setConfirmDelete(false)}
+						deletedItem="this account"
+					/>
+				) : null}
+			</div>
 			<form className="form" onSubmit={handleSubmit(updateUser)}>
 				<label htmlFor="username">Username</label>
 				<input
@@ -82,15 +132,17 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 					className="mb-4 mt-2"
 					{...register("email")}
 				/>
-				<input
-					type="submit"
-					value="Update"
-					className={`btn mt-2 ${
-						isDirty
-							? ""
-							: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
-					}`}
-				/>
+				<div className="flex">
+					<input
+						type="submit"
+						value="Update"
+						className={`btn mt-2 ${
+							isDirty
+								? ""
+								: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
+						}`}
+					/>
+				</div>
 			</form>
 		</>
 	);

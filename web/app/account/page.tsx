@@ -3,7 +3,6 @@ import { env } from "../../env/client.mjs";
 import { UserSchema } from "../../types/User";
 import { redirect } from "next/navigation";
 import Profile from "./Profile";
-import Options from "./Options";
 
 const getUser = async ({ token }: { token: string }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/account`, {
@@ -32,10 +31,7 @@ const Page = async () => {
 		return (
 			<main className="flex justify-center items-center flex-col w-full h-[85vh]">
 				<div className="background w-full">
-					<h2 className="text-2xl font-bold mb-4">Profile</h2>
 					<Profile user={user} />
-					<h2 className="text-2xl font-bold mt-6 mb-4">Options</h2>
-					<Options />
 				</div>
 			</main>
 		);
