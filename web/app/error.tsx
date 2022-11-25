@@ -10,10 +10,14 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
 
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
-			<p className="text-xl mb-4 text-center">Something went wrong!</p>
-			<button className="btn" onClick={() => reset()}>
-				Reset
-			</button>
+			<div className="background flex justify-center items-center flex-col">
+				<p className="text-xl mb-4 text-center">
+					Something went wrong!
+				</p>
+				<button className="btn" onClick={() => reset()}>
+					Reset
+				</button>
+			</div>
 		</main>
 	);
 };

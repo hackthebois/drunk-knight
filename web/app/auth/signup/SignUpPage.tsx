@@ -18,14 +18,19 @@ export const SignUpInputSchema = z.object({
 });
 export type SignUpInput = z.input<typeof SignUpInputSchema>;
 const signUpReq = async (input: SignUpInput) => {
-	await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`,
+		{
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(input),
 		},
-		body: JSON.stringify(input),
-	});
+	);
+	const data = await res.json();
+	if (!res.ok) throw new Error(data.message);
 	return input;
 };
 
@@ -94,16 +99,16 @@ const SignUp = () => {
 					{...register("password")}
 				/>
 				<input type="submit" value="Submit" className="btn mt-4" />
-				<div className="flex justify-center items-center mt-8">
-					<p className="text-white">{`Already have an account?`}</p>
-					<Link
-						href="/auth/signin"
-						className="text-blue-400 underline ml-2"
-					>
-						Sign in
-					</Link>
-				</div>
 			</form>
+			<div className="flex justify-center items-center mt-4 bg-lightbackground p-4 rounded max-w-md w-full shadow">
+				<p className="text-white">{`Already have an account?`}</p>
+				<Link
+					href="/auth/signin"
+					className="text-blue-400 underline ml-2"
+				>
+					Sign in
+				</Link>
+			</div>
 		</main>
 	);
 };

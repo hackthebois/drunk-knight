@@ -16,16 +16,18 @@ const resendEmail = async (email: string) => {
 const Confirm = ({ email }: { email?: string }) => {
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
-			<h1 className="text-3xl font-bold">Please confirm email!</h1>
-			<p className="text-lg my-4 text-center">
-				To finalize account, please click the link in the email sent to
-				you.
-			</p>
-			{email ? (
-				<button className="gbtn" onClick={() => resendEmail(email)}>
-					Resend email
-				</button>
-			) : null}
+			<div className="background flex justify-center items-center flex-col">
+				<h1 className="text-3xl font-bold">Please confirm email!</h1>
+				<p className="text-lg my-4 text-center">
+					To finalize account, please click the link in the email sent
+					to you.
+				</p>
+				{email ? (
+					<button className="gbtn" onClick={() => resendEmail(email)}>
+						Resend email
+					</button>
+				) : null}
+			</div>
 		</main>
 	);
 };

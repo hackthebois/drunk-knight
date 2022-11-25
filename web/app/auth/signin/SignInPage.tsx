@@ -88,16 +88,22 @@ const SignInPage = () => {
 					{...register("password")}
 				/>
 				<input type="submit" value="Submit" className="btn mt-4" />
-				<div className="flex justify-center items-center mt-8">
-					<p className="text-white">{`Don't have an account?`}</p>
-					<Link
-						href="/auth/signup"
-						className="text-blue-400 underline ml-2"
-					>
-						Sign up
-					</Link>
-				</div>
+				<Link
+					href="/auth/password-reset"
+					className="text-blue-400 underline text-center mt-6"
+				>
+					Forgot password?
+				</Link>
 			</form>
+			<div className="flex justify-center items-center mt-4 bg-lightbackground p-4 rounded max-w-md w-full shadow">
+				<p className="text-white">{`Don't have an account?`}</p>
+				<Link
+					href="/auth/signup"
+					className="text-blue-400 underline ml-2"
+				>
+					Sign up
+				</Link>
+			</div>
 		</main>
 	);
 };
