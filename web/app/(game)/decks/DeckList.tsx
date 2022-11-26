@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { FaToggleOff, FaToggleOn } from "react-icons/fa";
-import { env } from "../../env/client.mjs";
-import { useUpdateDeck } from "../../hooks/deck";
-import { Deck, DeckSchema } from "../../types/Deck";
-import { tokenAtom } from "../ClientWrapper";
+import { env } from "../../../env/client.mjs";
+import { useUpdateDeck } from "../../../hooks/deck";
+import { Deck, DeckSchema } from "../../../types/Deck";
+import { tokenAtom } from "../../ClientWrapper";
 
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {

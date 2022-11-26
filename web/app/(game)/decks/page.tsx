@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 import AddDeck from "./AddDeck";
 import GuestDeck from "./GuestDeck";
 import DeckList from "./DeckList";
-import { env } from "../../env/client.mjs";
-import { DeckSchema } from "../../types/Deck";
+import { env } from "../../../env/client.mjs";
+import { DeckSchema } from "../../../types/Deck";
 
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {

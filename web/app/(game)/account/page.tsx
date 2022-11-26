@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { env } from "../../env/client.mjs";
-import { UserSchema } from "../../types/User";
+import { env } from "../../../env/client.mjs";
+import { UserSchema } from "../../../types/User";
 import { redirect } from "next/navigation";
 import Profile from "./Profile";
 

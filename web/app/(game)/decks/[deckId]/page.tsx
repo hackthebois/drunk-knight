@@ -1,8 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import DeckPage from "./DeckPage";
-import { env } from "../../../env/client.mjs";
-import { DeckSchema } from "../../../types/Deck";
+import { env } from "../../../../env/client.mjs";
+import { DeckSchema } from "../../../../types/Deck";
 
 type Props = {
 	params: {

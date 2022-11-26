@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const NotFound = () => {
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-[85vh]">

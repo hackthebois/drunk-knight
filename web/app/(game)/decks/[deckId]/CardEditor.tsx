@@ -3,15 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { FaAngleLeft, FaSave, FaTrash } from "react-icons/fa";
 import { z } from "zod";
-import CardItem from "../../../components/CardItem";
-import { env } from "../../../env/client.mjs";
-import { Card, CardSchema, cardTypes } from "../../../types/Card";
-import { Deck, DeckSchema } from "../../../types/Deck";
-import { tokenAtom } from "../../ClientWrapper";
+import CardItem from "../../../../components/CardItem";
+import { env } from "../../../../env/client.mjs";
+import { Card, CardSchema, cardTypes } from "../../../../types/Card";
+import { Deck, DeckSchema } from "../../../../types/Deck";
+import { tokenAtom } from "../../../ClientWrapper";
 
 export const DeleteCardSchema = z.object({
 	id: CardSchema.shape.id,

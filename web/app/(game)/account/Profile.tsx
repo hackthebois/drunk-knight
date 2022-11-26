@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { User, UserSchema } from "../../types/User";
-import { env } from "../../env/client.mjs";
+import { User, UserSchema } from "../../../types/User";
+import { env } from "../../../env/client.mjs";
 import { useMutation } from "@tanstack/react-query";
-import { tokenAtom } from "../ClientWrapper";
 import { useAtom } from "jotai";
 import { FaSignOutAlt, FaTrash } from "react-icons/fa";
-import ConfirmDelete from "../../components/ConfirmDelete";
+import ConfirmDelete from "../../../components/ConfirmDelete";
 import { useState } from "react";
+import { tokenAtom } from "../../ClientWrapper";
 
 export const UpdateUserSchema = z.object({
 	username: z.string().min(1, "Username cannot be empty."),

@@ -2,12 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { atom, useAtom } from "jotai";
-import CardItem from "../../components/CardItem";
-import { env } from "../../env/client.mjs";
-import { CardSchema } from "../../types/Card";
-import { tokenAtom } from ".././ClientWrapper";
+import CardItem from "../../../components/CardItem";
+import { env } from "../../../env/client.mjs";
+import { CardSchema } from "../../../types/Card";
+import { tokenAtom } from "../../ClientWrapper";
 import { atomWithReset, useResetAtom } from "jotai/utils";
-import Loader from "../../components/Loader";
+import Loader from "../../../components/Loader";
 
 export const useStandardAtom = atom(true);
 const playAtom = atomWithReset({

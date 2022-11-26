@@ -5,14 +5,14 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaAngleLeft, FaPlus, FaTrash } from "react-icons/fa";
-import CardItem from "../../../components/CardItem";
-import ConfirmDelete from "../../../components/ConfirmDelete";
-import { env } from "../../../env/client.mjs";
+import CardItem from "../../../../components/CardItem";
+import ConfirmDelete from "../../../../components/ConfirmDelete";
+import { env } from "../../../../env/client.mjs";
 
-import { useDeleteDeck } from "../../../hooks/deck";
-import { Card } from "../../../types/Card";
-import { Deck, DeckSchema } from "../../../types/Deck";
-import { tokenAtom } from "../../ClientWrapper";
+import { useDeleteDeck } from "../../../../hooks/deck";
+import { Card } from "../../../../types/Card";
+import { Deck, DeckSchema } from "../../../../types/Deck";
+import { tokenAtom } from "../../../ClientWrapper";
 import CardAdd from "./CardAdd";
 import CardEditor from "./CardEditor";
 

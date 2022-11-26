@@ -1,6 +1,6 @@
 "use client";
 
-import { env } from "../../../env/client.mjs";
+import { env } from "../../../../env/client.mjs";
 
 const resendEmail = async (email: string) => {
 	await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/auth/resend-email`, {

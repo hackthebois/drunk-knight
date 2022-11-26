@@ -5,8 +5,12 @@ import { useAtom } from "jotai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
-import { CreateDeck, CreateDeckSchema, useCreateDeck } from "../../hooks/deck";
-import { tokenAtom } from "../ClientWrapper";
+import {
+	CreateDeck,
+	CreateDeckSchema,
+	useCreateDeck,
+} from "../../../hooks/deck";
+import { tokenAtom } from "../../ClientWrapper";
 
 const AddDeck = () => {
 	const createDeckMutation = useCreateDeck();
