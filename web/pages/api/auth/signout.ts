@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			path: "/",
 		});
 		res.setHeader("Set-Cookie", serialized);
-		res.status(200).json({ message: "Success." });
+		return res.status(200).json({ message: "Success." });
 	}
 };
 

@@ -40,11 +40,15 @@ const updateUserReq = async ({
 };
 
 const signOut = async () => {
-	await fetch("/api/auth/signout");
+	await fetch("/api/auth/signout", {
+		cache: "no-store",
+	});
 };
 
 const deleteAccount = async () => {
-	await fetch("/api/auth/delete");
+	await fetch("/api/auth/delete", {
+		cache: "no-store",
+	});
 };
 
 const Profile = ({ user: { email, username } }: { user: User }) => {
