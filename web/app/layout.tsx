@@ -1,11 +1,3 @@
-import Link from "next/link";
-import { FaPlay, FaUserCircle } from "react-icons/fa";
-import {
-	CgCardClubs,
-	CgCardDiamonds,
-	CgCardHearts,
-	CgCardSpades,
-} from "react-icons/cg";
 import "../styles/globals.css";
 import ClientWrapper from "./ClientWrapper";
 import { cookies } from "next/headers";
@@ -27,40 +19,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 				/>
 			</head>
 			<body className="bg-background text-white">
-				<ClientWrapper token={token}>
-					{children}
-					<nav className="flex flex-row w-full fixed bottom-0 justify-center border-t-[1px] h-12 bg-background">
-						<Link
-							href="/decks"
-							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5 mb-1"
-						>
-							<CgCardDiamonds
-								size={20}
-								className="-rotate-[20deg] -mr-[10px] mt-1"
-							/>
-							<CgCardHearts
-								size={20}
-								className="bg-background z-10"
-							/>
-							<CgCardClubs
-								size={20}
-								className="rotate-[20deg] -ml-[10px] mt-1"
-							/>
-						</Link>
-						<Link
-							href="/"
-							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
-						>
-							<FaPlay size={19} />
-						</Link>
-						<Link
-							href="/account"
-							className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
-						>
-							<FaUserCircle size={20} />
-						</Link>
-					</nav>
-				</ClientWrapper>
+				<ClientWrapper token={token}>{children}</ClientWrapper>
 			</body>
 		</html>
 	);

@@ -1,0 +1,76 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+
+export const ResetPasswordEmailSchema = z.object({
+	email: z.string().email(),
+});
+export type ResetPasswordEmail = z.input<typeof ResetPasswordEmailSchema>;
+const resetPasswordEmail = async (input: ResetPasswordEmail) => {
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/password-reset`,
+		{
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(input),
+		},
+	);
+	const data = await res.json();
+	console.log(res);
+	if (!res.ok) throw new Error(data.message);
+	return input;
+};
+
+const PasswordResetEmail = () => {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		setError,
+	} = useForm<ResetPasswordEmail>({
+		resolver: zodResolver(ResetPasswordEmailSchema),
+	});
+
+	const resetByEmail = useMutation(resetPasswordEmail, {
+		onError: (error: any) => {
+			if (error && error.message)
+				setError("email", { message: error.message });
+		},
+	});
+
+	const onSubmit = (data: ResetPasswordEmail) => {
+		resetByEmail.mutate(data);
+	};
+
+	return (
+		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="form w-full max-w-md background"
+			>
+				<h2 className="text-white font-bold text-3xl mb-8 text-center">
+					Password Reset
+				</h2>
+				{errors.email ? (
+					<p className="ebtn mb-4">{errors.email.message}</p>
+				) : null}
+				<label htmlFor="email">Email</label>
+				<input
+					id="email"
+					type="text"
+					className="mb-4 mt-2"
+					{...register("email")}
+				/>
+				<input type="submit" value="Submit" className="btn mt-4" />
+			</form>
+		</main>
+	);
+};
+
+export default PasswordResetEmail;

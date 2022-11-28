@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
-import { SignInInputSchema } from "../../../app/auth/signin/SignInPage";
 import { serialize } from "cookie";
+import { SignInInputSchema } from "../../../app/(game)/auth/signin/SignInPage";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	const input = SignInInputSchema.parse(req.body);
