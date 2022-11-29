@@ -41,7 +41,6 @@ export class AuthController {
 	}
 
 	@Post('/password-reset/:token')
-	@Redirect(`${process.env.FRONTEND_URL}/home`, 301)
 	passwordUpdate(
 		@Param('token') token: string,
 		@Body() body: PasswordUpdateDto,
