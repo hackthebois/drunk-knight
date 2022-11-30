@@ -38,7 +38,6 @@ const getDeck = async ({
 		},
 	);
 	const data: unknown = await res.json();
-	console.log(data);
 	if (res.status === 404) {
 		return undefined;
 	} else {
