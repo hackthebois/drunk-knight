@@ -14,7 +14,9 @@ export class SearchService {
 				copiedNumber: 'asc',
 			},
 			select: {
+				id: true,
 				name: true,
+				copiedNumber: true,
 			},
 			take: 10,
 		});
