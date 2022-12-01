@@ -59,7 +59,7 @@ const AddDeck = () => {
 						<p className="emsg mb-4">{errors.name.message}</p>
 					)}
 					<form
-						className="form sm:flex-row w-full mb-3"
+						className="form sm:flex-row w-full mb-2"
 						onSubmit={handleSubmit(onCreateDeck)}
 					>
 						<input
@@ -70,7 +70,7 @@ const AddDeck = () => {
 							autoComplete="off"
 						/>
 						<input
-							className={`btn mb-2 sm:mb-0 ${
+							className={`btn ${
 								isDirty
 									? ""
 									: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"

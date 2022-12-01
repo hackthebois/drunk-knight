@@ -50,7 +50,7 @@ const SearchForm = () => {
 						<p className="emsg mb-4">{errors.id.message}</p>
 					)}
 					<form
-						className="form sm:flex-row w-full mb-3"
+						className="form sm:flex-row w-full mb-2"
 						onSubmit={handleSubmit(onSearchDeck)}
 					>
 						<input
@@ -61,7 +61,7 @@ const SearchForm = () => {
 							autoComplete="off"
 						/>
 						<input
-							className={`btn mb-2 sm:mb-0 ${
+							className={`btn ${
 								isDirty && isValid
 									? ""
 									: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
