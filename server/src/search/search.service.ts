@@ -23,6 +23,7 @@ export class SearchService {
 			select: {
 				id: true,
 				name: true,
+				copiedNumber: true,
 				user: {
 					select: {
 						username: true,
