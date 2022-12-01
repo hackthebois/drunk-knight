@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
 
 export const ResetPasswordEmailSchema = z.object({
 	email: z.string().email(),
@@ -22,7 +23,6 @@ const resetPasswordEmail = async (input: ResetPasswordEmail) => {
 		},
 	);
 	const data = await res.json();
-	console.log(res);
 	if (!res.ok) throw new Error(data.message);
 	return input;
 };
@@ -50,25 +50,34 @@ const PasswordResetEmail = () => {
 
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
-			<form
-				onSubmit={handleSubmit(onSubmit)}
-				className="form w-full max-w-md background"
-			>
-				<h2 className="text-white font-bold text-3xl mb-8 text-center">
-					Password Reset
-				</h2>
-				{errors.email ? (
-					<p className="ebtn mb-4">{errors.email.message}</p>
-				) : null}
-				<label htmlFor="email">Email</label>
-				<input
-					id="email"
-					type="text"
-					className="mb-4 mt-2"
-					{...register("email")}
-				/>
-				<input type="submit" value="Submit" className="btn mt-4" />
-			</form>
+			{resetByEmail.isSuccess ? (
+				<div className="background flex justify-center items-center flex-col">
+					<h1 className="text-3xl font-bold">Check your email!</h1>
+					<p className="text-lg mt-4 text-center">
+						Please check your email for a reset link.
+					</p>
+				</div>
+			) : (
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="form w-full max-w-md background"
+				>
+					<h2 className="text-white font-bold text-3xl mb-8 text-center">
+						Password Reset
+					</h2>
+					{errors.email ? (
+						<p className="ebtn mb-4">{errors.email.message}</p>
+					) : null}
+					<label htmlFor="email">Email</label>
+					<input
+						id="email"
+						type="text"
+						className="mb-4 mt-2"
+						{...register("email")}
+					/>
+					<input type="submit" value="Submit" className="btn mt-4" />
+				</form>
+			)}
 		</main>
 	);
 };

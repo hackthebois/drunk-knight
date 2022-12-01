@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaAngleLeft, FaPlus, FaTrash } from "react-icons/fa";
+import { FaAngleLeft, FaCopy, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../../components/CardItem";
 import ConfirmDelete from "../../../../components/ConfirmDelete";
 import { env } from "../../../../env/client.mjs";
@@ -83,6 +83,16 @@ const DeckPage = ({
 											<FaAngleLeft />
 										</button>
 										<div className="flex flex-row">
+											<button
+												className="item mr-3"
+												onClick={() =>
+													navigator.clipboard.writeText(
+														deckId,
+													)
+												}
+											>
+												<FaCopy />
+											</button>
 											<button
 												className="ebtn mr-3"
 												onClick={() =>

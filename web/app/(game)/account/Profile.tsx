@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { User, UserSchema } from "../../../types/User";
@@ -14,8 +14,8 @@ import { useState } from "react";
 import { tokenAtom } from "../../ClientWrapper";
 
 export const UpdateUserSchema = z.object({
-	username: z.string().min(1, "Username cannot be empty."),
-	email: z.string().min(1, "Email cannot be empty."),
+	username: z.string().min(1, "Username cannot be empty.").optional(),
+	email: z.string().min(1, "Email cannot be empty.").optional(),
 });
 export type UpdateUser = z.input<typeof UpdateUserSchema>;
 const updateUserReq = async ({
@@ -61,6 +61,7 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 		setError,
 		formState: { isDirty },
 		reset,
+		control,
 	} = useForm<UpdateUser>({
 		resolver: zodResolver(UpdateUserSchema),
 		defaultValues: { email, username },
@@ -76,8 +77,17 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 		},
 	});
 
+	const { dirtyFields } = useFormState({
+		control,
+	});
+
 	const updateUser = (data: UpdateUser) => {
-		update.mutate({ input: data, token });
+		const dirtyData = {
+			email: dirtyFields.email ? data.email : undefined,
+			username: dirtyFields.username ? data.username : undefined,
+		};
+
+		update.mutate({ input: dirtyData, token });
 	};
 
 	const [confirmDelete, setConfirmDelete] = useState(false);

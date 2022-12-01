@@ -5,6 +5,8 @@ import GuestDeck from "./GuestDeck";
 import DeckList from "./DeckList";
 import { env } from "../../../env/client.mjs";
 import { DeckSchema } from "../../../types/Deck";
+import { FaSearch, FaTrash } from "react-icons/fa";
+import Link from "next/link";
 
 const getDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/deck`, {
@@ -28,7 +30,12 @@ const Page = async () => {
 		return (
 			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full">
-					<h2 className="text-2xl font-bold mb-4">Decks</h2>
+					<div className="flex justify-between items-center mb-4">
+						<h2 className="text-2xl font-bold">Decks</h2>
+						<Link className="btn" href="/decks/search">
+							<FaSearch />
+						</Link>
+					</div>
 					<GuestDeck />
 					<DeckList decks={decks} />
 					<AddDeck />
