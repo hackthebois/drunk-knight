@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaSearch, FaTimes } from "react-icons/fa";
 import {
 	CreateDeck,
 	CreateDeckSchema,
@@ -40,14 +40,26 @@ const AddDeck = () => {
 		);
 	};
 	return (
-		<div className="mt-4">
+		<>
+			<div className="flex justify-between items-center mb-4">
+				<h2 className="text-2xl font-bold">Decks</h2>
+				{addDeck ? (
+					<button className="gbtn" onClick={() => setAddDeck(false)}>
+						<FaTimes />
+					</button>
+				) : (
+					<button className="btn" onClick={() => setAddDeck(true)}>
+						<FaPlus />
+					</button>
+				)}
+			</div>
 			{addDeck ? (
 				<>
 					{errors.name && (
 						<p className="emsg mb-4">{errors.name.message}</p>
 					)}
 					<form
-						className="form sm:flex-row w-full"
+						className="form sm:flex-row w-full mb-3"
 						onSubmit={handleSubmit(onCreateDeck)}
 					>
 						<input
@@ -58,7 +70,7 @@ const AddDeck = () => {
 							autoComplete="off"
 						/>
 						<input
-							className={`btn sm:mr-2 mb-2 sm:mb-0 ${
+							className={`btn mb-2 sm:mb-0 ${
 								isDirty
 									? ""
 									: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
@@ -66,23 +78,10 @@ const AddDeck = () => {
 							type="submit"
 							value="Create"
 						/>
-						<button
-							className="gbtn"
-							onClick={() => setAddDeck(false)}
-						>
-							Cancel
-						</button>
 					</form>
 				</>
-			) : (
-				<div
-					className="gbtn flex justify-center"
-					onClick={() => setAddDeck(true)}
-				>
-					<FaPlus />
-				</div>
-			)}
-		</div>
+			) : null}
+		</>
 	);
 };
 

@@ -60,7 +60,7 @@ const Page = async ({ params: { deckId } }: Props) => {
 			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full mt-6">
 					<div className="flex justify-between mb-8">
-						<Link className="gbtn mr-3" href={"/decks/search"}>
+						<Link className="gbtn mr-3" href={"/decks"}>
 							<FaAngleLeft />
 						</Link>
 						<CopyDeck deckId={deckId} />
