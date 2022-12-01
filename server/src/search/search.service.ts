@@ -21,8 +21,8 @@ export class SearchService {
 				copiedNumber: 'asc',
 			},
 			select: {
+				id: true,
 				name: true,
-				copiedNumber: true,
 				user: {
 					select: {
 						username: true,

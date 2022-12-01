@@ -174,7 +174,7 @@ export class AuthService {
 		if (user) {
 			const url = `${
 				process.env.FRONTEND_URL
-			}/password-reset/${this.generateEmailJWT(
+			}/auth/password-reset/${this.generateEmailJWT(
 				email,
 				process.env.JSON_PASSWORD_RESET_SECRET_KEY,
 			)}`;
@@ -190,6 +190,10 @@ export class AuthService {
 				subject: 'Password Reset',
 				html: htmlToSend,
 			});
+
+			return {
+				message: 'Success!',
+			};
 		}
 	}
 
