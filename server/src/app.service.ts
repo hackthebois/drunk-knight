@@ -4,10 +4,6 @@ import { UserInfo } from './user/decorators/user.decorator';
 import { Card, UserType } from '@prisma/client';
 import { CardResponseDto } from './card/dto/card.dto';
 
-enum ADMIN {
-	NAME = '__admin',
-	DECK = '__standard',
-}
 @Injectable()
 export class AppService {
 	constructor(private readonly prismaService: PrismaService) {}
@@ -16,31 +12,29 @@ export class AppService {
 		let gamePlayCards: Card[] = [];
 
 		if (useStandard) {
-			const gameplayDecks = await this.prismaService.user.findFirst({
+			const gamePlayDecks = await this.prismaService.deck.findMany({
 				where: {
-					userType: UserType.ADMIN,
+					user: {
+						userType: UserType.ADMIN,
+					},
+					standard: true,
+					private: false,
 				},
 				select: {
-					decks: {
-						where: {
-							name: ADMIN.DECK,
-						},
-						select: {
-							cards: true,
-						},
-					},
+					cards: true,
 				},
 			});
 
-			if (gameplayDecks && gameplayDecks.decks[0])
-				gamePlayCards = gameplayDecks?.decks[0]?.cards;
+			if (gamePlayDecks)
+				gamePlayCards = gamePlayDecks.map((deck) => deck.cards).flat(3);
 		}
 
-		if (user && user.name != ADMIN.NAME) {
+		if (user) {
 			const deckCards = await this.prismaService.deck.findMany({
 				where: {
 					userId: user.id,
 					selected: true,
+					standard: false,
 				},
 				select: {
 					cards: true,

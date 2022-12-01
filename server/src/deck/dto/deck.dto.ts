@@ -20,6 +20,11 @@ export class UpdateDeckDto {
 	@IsBoolean()
 	@ApiProperty()
 	selected: boolean;
+
+	@IsOptional()
+	@IsBoolean()
+	@ApiProperty()
+	private: boolean;
 }
 
 export class DeckResponseDto {

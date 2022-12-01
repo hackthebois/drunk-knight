@@ -10,11 +10,24 @@ export class SearchService {
 
 	async getTopdecks() {
 		return await this.prismaService.deck.findMany({
+			where: {
+				user: {
+					userType: UserType.DEFAULT,
+				},
+				standard: false,
+				private: false,
+			},
 			orderBy: {
 				copiedNumber: 'asc',
 			},
 			select: {
 				name: true,
+				copiedNumber: true,
+				user: {
+					select: {
+						username: true,
+					},
+				},
 			},
 			take: 10,
 		});
@@ -29,6 +42,8 @@ export class SearchService {
 				user: {
 					userType: UserType.DEFAULT,
 				},
+				standard: false,
+				private: false,
 			},
 			select: {
 				id: true,
