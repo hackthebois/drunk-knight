@@ -1,6 +1,5 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
@@ -22,15 +21,19 @@ model User {
 }
 
 model Deck {
-  id        String   	@id @default(cuid())
-  name      String
-  selected  Boolean
-  copiedNumber Int 	 	@default(0)
-  createdAt DateTime	@default(now())
-  updatedAt DateTime 	@updatedAt
-  userId    String
-  user      User     	@relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  cards     Card[]
+  id        	String   	@id @default(cuid())
+  name      	String
+  selected  	Boolean
+  copiedNumber 	Int 	 	@default(0)
+  private 		Boolean		@default(false)
+  standard		Boolean		@default(false)
+  createdAt 	DateTime	@default(now())
+  updatedAt 	DateTime 	@updatedAt
+  userId    	String
+  user      	User     	@relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cards     	Card[]
+
+  @@index([userId])
 }
 
 model Card {
@@ -42,6 +45,8 @@ model Card {
   updatedAt   DateTime 	@updatedAt
   deckId      String
   deck        Deck     	@relation(fields: [deckId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([deckId])
 }
 
 enum CardType {
