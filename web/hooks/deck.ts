@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { Router } from "next/router";
 import { z } from "zod";
+import { SearchDeck } from "../app/(game)/decks/search/[deckId]/page";
 import { env } from "../env/client.mjs";
 import { Deck, DeckSchema } from "../types/Deck";
 
@@ -67,6 +69,57 @@ export const useCreateDeck = () => {
 					  ]
 					: [],
 			);
+			return { previousDecks };
+		},
+		onError: (err, newTodo, context) => {
+			queryClient.setQueryData(["decks"], context?.previousDecks);
+		},
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["decks"] });
+		},
+	});
+};
+
+const copyDeck = async ({
+	token,
+	deckId,
+}: {
+	token: string;
+	deck: SearchDeck;
+	deckId: string;
+}) => {
+	await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/search/deck/${deckId}`, {
+		method: "POST",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+export const useCopyDeck = () => {
+	const queryClient = useQueryClient();
+	const router = useRouter();
+	return useMutation(copyDeck, {
+		onMutate: async ({ deck, deckId }) => {
+			await queryClient.cancelQueries({
+				queryKey: ["decks"],
+			});
+			const previousDecks = queryClient.getQueryData<Deck[]>(["decks"]);
+			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
+				old
+					? [
+							...old,
+							{
+								id: deckId,
+								cards: [],
+								selected: false,
+								name: deck.name,
+							},
+					  ]
+					: [],
+			);
+			router.push("/decks");
 			return { previousDecks };
 		},
 		onError: (err, newTodo, context) => {

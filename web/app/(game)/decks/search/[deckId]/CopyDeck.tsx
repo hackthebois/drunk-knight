@@ -2,35 +2,24 @@
 
 import { useAtom } from "jotai";
 import { FaCopy } from "react-icons/fa";
-import { env } from "../../../../../env/client.mjs";
+import { useCopyDeck } from "../../../../../hooks/deck";
 import { tokenAtom } from "../../../../ClientWrapper";
+import { SearchDeck } from "./page";
 
 type Props = {
+	searchDeck: SearchDeck;
 	deckId: string;
 };
 
-const copyDeck = async ({
-	token,
-	deckId,
-}: {
-	token: string;
-	deckId: string;
-}) => {
-	await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/search/deck/${deckId}`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
-		},
-	});
-};
-
-const CopyDeck = ({ deckId }: Props) => {
+const CopyDeck = ({ searchDeck, deckId }: Props) => {
 	const [token] = useAtom(tokenAtom);
+	const copyDeck = useCopyDeck();
 
 	return (
-		<button className="btn" onClick={() => copyDeck({ token, deckId })}>
+		<button
+			className="btn"
+			onClick={() => copyDeck.mutate({ token, deck: searchDeck, deckId })}
+		>
 			<FaCopy />
 		</button>
 	);

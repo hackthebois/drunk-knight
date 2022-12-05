@@ -32,6 +32,7 @@ const UserDeckSchema = z.object({
 const getCommunityDecks = async (token: string) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/search`, {
 		method: "GET",
+		next: { revalidate: 10 },
 		headers: {
 			Accept: "application/json",
 			"Content-Type": "application/json",
