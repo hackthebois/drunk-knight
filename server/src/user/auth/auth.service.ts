@@ -173,7 +173,7 @@ export class AuthService {
 
 		if (user) {
 			const url = `${
-				process.env.FRONTEND_URL
+				process.env.BACKEND_URL
 			}/auth/password-reset/${this.generateEmailJWT(
 				email,
 				process.env.JSON_PASSWORD_RESET_SECRET_KEY,
