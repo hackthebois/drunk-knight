@@ -87,7 +87,13 @@ export class SearchService {
 			},
 			select: {
 				name: true,
-				cards: true,
+				cards: {
+					select: {
+						name: true,
+						description: true,
+						cardType: true,
+					},
+				},
 			},
 		});
 
@@ -102,9 +108,7 @@ export class SearchService {
 		});
 
 		const data = deck.cards.map((card) => ({
-			name: card.name,
-			description: card.description,
-			cardType: card.cardType,
+			...card,
 			deckId: userDeck.id,
 		}));
 

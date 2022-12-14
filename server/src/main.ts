@@ -2,7 +2,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as basicAuth from 'express-basic-auth';
 
 async function bootstrap() {
 	// Server Configuration
@@ -16,20 +15,6 @@ async function bootstrap() {
 			},
 		}),
 	);
-
-	// Auth for Swagger
-	// app.use(
-	// 	['/docs', '/docs-json'],
-	// 	basicAuth({
-	// 		challenge: true,
-	// 		users: {
-	// 			[process.env.SWAGGER_USER ? process.env.SWAGGER_USER : '']:
-	// 				process.env.SWAGGER_PASSWORD
-	// 					? process.env.SWAGGER_PASSWORD
-	// 					: '',
-	// 		},
-	// 	}),
-	// );
 
 	// Swagger UI Configuration
 	const config = new DocumentBuilder()
