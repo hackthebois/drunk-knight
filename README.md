@@ -12,7 +12,7 @@
 
 * A group of at least 2 players
 * A device with internet access and a web browser
-* The Drunk-Knight website: https://drunk-knight.vercel.app/
+* The Drunk-Knight website: https://drunkknight.live/
 * Beverages of your choice
 
 ## Tips
