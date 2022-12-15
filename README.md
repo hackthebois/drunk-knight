@@ -6,7 +6,7 @@
 * Go to the Drunk-Knight website and create a card with a challenge in one of the following categories: MAJORITY, MEMORY, ACTION, or CATEGORY.
 * The website will shuffle the cards and present them to the players.
 * Players take turns drawing a card and attempting to complete the challenge on the card.
-* If a player succeeds at the challenge, they may give the card to any other player of their choosing. If a player fails at the challenge, they must take a drink.
+* If a player fails at the challenge, they must take a drink.
 
 ## Prerequisites
 
