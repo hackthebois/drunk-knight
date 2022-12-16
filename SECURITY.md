@@ -11,4 +11,4 @@ Currently supported versions are indicated in the table below.
 
 ## Reporting a Vulnerability
 
-If you have a security issue to report, please contact us at Drunk.Knight.Official@gmail.com
+If you have a security issue to report, please contact us at support@drunkknight.live
