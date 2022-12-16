@@ -20,13 +20,23 @@ import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// const transport = nodemailer.createTransport({
+// 	host: 'smtp.gmail.com',
+// 	port: 465,
+// 	secure: true,
+// 	auth: {
+// 		user: process.env.EMAIL_USERNAME,
+// 		pass: process.env.EMAIL_PASSWORD,
+// 	},
+// });
+
 const transport = nodemailer.createTransport({
-	host: 'smtp.gmail.com',
+	host: 'smtp.zoho.com',
 	port: 465,
 	secure: true,
 	auth: {
-		user: process.env.EMAIL_USERNAME,
-		pass: process.env.EMAIL_PASSWORD,
+		user: process.env.Z_EMAIL_USERNAME,
+		pass: process.env.Z_EMAIL_PASSWORD,
 	},
 });
 
@@ -132,6 +142,25 @@ export class AuthService {
 		}
 	}
 
+	async verifyPasswordToken(token: string) {
+		try {
+			jwt.verify(
+				token,
+				process.env.JSON_PASSWORD_RESET_SECRET_KEY,
+			) as JWTPayload;
+
+			return {
+				url: `${process.env.FRONTEND_URL}/auth/password-reset/${token}`,
+				statusbar: 200,
+			};
+		} catch (error) {
+			return {
+				url: `${process.env.FRONTEND_URL}/auth/confirm?error=jwt`,
+				statusbar: 400,
+			};
+		}
+	}
+
 	async passwordUpdate(token: string, { password }: PasswordUpdateDto) {
 		try {
 			const payload = jwt.verify(
@@ -144,11 +173,13 @@ export class AuthService {
 				},
 			});
 
+			if (!user) throw new BadRequestException();
+
 			const hashedPassword = await bcrypt.hash(password, 10);
 
 			await this.prismaService.user.update({
 				where: {
-					email: payload.name,
+					email: user.email,
 				},
 				data: {
 					password: hashedPassword,
@@ -185,7 +216,7 @@ export class AuthService {
 			});
 
 			await transport.sendMail({
-				from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
+				from: '"Drunk Knight" <no-reply@drunkknight.live>',
 				to: email,
 				subject: 'Password Reset',
 				html: htmlToSend,
@@ -208,7 +239,7 @@ export class AuthService {
 		const htmlToSend = this.emailHtml('email.html', { email, url });
 
 		await transport.sendMail({
-			from: '"Drunk Knight" <drunk.knight.official@gmail.com>',
+			from: '"Drunk Knight" <no-reply@drunkknight.live>',
 			to: email,
 			subject: 'Email Confirmation',
 			html: htmlToSend,

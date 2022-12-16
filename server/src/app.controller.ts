@@ -11,7 +11,7 @@ export class AppController {
 
 	@Get()
 	homePage() {
-		return 'Welcome to drunk knight';
+		return 'Server is Live';
 	}
 
 	@ApiBearerAuth()
