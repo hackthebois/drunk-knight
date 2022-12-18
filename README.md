@@ -23,7 +23,7 @@
 * Have fun and drink responsibly!
 
 ## Note
-All gameplay takes place on one device, with no physical cards being dealt out. This allows for a convenient and easy-to-setup game experience.
+All gameplay takes place on one device, with no physical cards being dealt out. This allows for a convenient and easy-to-setup game experience. Players must first sign up on our website to create their own personal decks of cards.
 
 ## License
 
