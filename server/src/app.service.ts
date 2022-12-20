@@ -12,7 +12,7 @@ export class AppService {
 		let gamePlayCards: Card[] = [];
 
 		if (useStandard) {
-			const gamePlayDecks = await this.prismaService.deck.findMany({
+			const standardDecks = await this.prismaService.deck.findMany({
 				where: {
 					user: {
 						userType: UserType.ADMIN,
@@ -24,13 +24,12 @@ export class AppService {
 					cards: true,
 				},
 			});
-
-			if (gamePlayDecks)
-				gamePlayCards = gamePlayDecks.map((deck) => deck.cards).flat(3);
+			if (standardDecks)
+				gamePlayCards = standardDecks.map((deck) => deck.cards).flat(3);
 		}
 
 		if (user) {
-			const deckCards = await this.prismaService.deck.findMany({
+			const userDecks = await this.prismaService.deck.findMany({
 				where: {
 					userId: user.id,
 					selected: true,
@@ -40,10 +39,9 @@ export class AppService {
 					cards: true,
 				},
 			});
-			const userCards = deckCards.map((deck) => deck.cards).flat(3);
-			gamePlayCards = [...gamePlayCards, ...userCards];
+			const userCards = userDecks.map((deck) => deck.cards).flat(3);
+			gamePlayCards = gamePlayCards.concat(userCards);
 		}
-
 		gamePlayCards = this.shuffle(gamePlayCards);
 		return gamePlayCards.map((card) => new CardResponseDto(card));
 	}
@@ -53,7 +51,7 @@ export class AppService {
 	 * @param {Array} a An array containing the items.
 	 */
 	private shuffle(a: any[]) {
-		var j: any, x: any, i: any;
+		let j: any, x: any, i: any;
 		for (i = a.length - 1; i > 0; i--) {
 			j = Math.floor(Math.random() * (i + 1));
 			x = a[i];
