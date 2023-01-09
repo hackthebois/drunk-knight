@@ -6,7 +6,8 @@ import Link from "next/link";
 import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { env } from "../../../env/client.mjs";
 import { useUpdateDeck } from "../../../hooks/deck";
-import { Deck, DeckSchema } from "../../../types/Deck";
+import type { Deck } from "../../../types/Deck";
+import { DeckSchema } from "../../../types/Deck";
 import { tokenAtom } from "../../ClientWrapper";
 
 const getDecks = async (token: string) => {
@@ -37,7 +38,7 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 			</Link>
 			{selected ? (
 				<div
-					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
+					className="rounded-l-none items-center w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						updateDeckMutation.mutate({
 							updateDeck: {
@@ -53,7 +54,7 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 				</div>
 			) : (
 				<div
-					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
+					className="rounded-l-none items-center w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						updateDeckMutation.mutate({
 							updateDeck: {
