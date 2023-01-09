@@ -10,8 +10,9 @@ import ConfirmDelete from "../../../../components/ConfirmDelete";
 import { env } from "../../../../env/client.mjs";
 
 import { useDeleteDeck } from "../../../../hooks/deck";
-import { Card } from "../../../../types/Card";
-import { Deck, DeckSchema } from "../../../../types/Deck";
+import type { Card } from "../../../../types/Card";
+import type { Deck } from "../../../../types/Deck";
+import { DeckSchema } from "../../../../types/Deck";
 import { tokenAtom } from "../../../ClientWrapper";
 import CardAdd from "./CardAdd";
 import CardEditor from "./CardEditor";

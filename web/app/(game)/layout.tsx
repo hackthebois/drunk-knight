@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { FaPlay, FaUserCircle } from "react-icons/fa";
 import { CgCardClubs, CgCardDiamonds, CgCardHearts } from "react-icons/cg";
+import { cookies } from "next/headers";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
+	const nextCookies = cookies();
+	const token = nextCookies.get("accessToken")?.value;
+
 	return (
 		<>
 			{children}
 			<nav className="flex flex-row w-full fixed bottom-0 justify-center border-t-[1px] h-12 bg-background">
 				<Link
-					href="/decks"
+					href={token ? "/decks" : "/decks/guest"}
 					className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5 mb-1"
 				>
 					<CgCardDiamonds
@@ -28,7 +32,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 					<FaPlay size={19} />
 				</Link>
 				<Link
-					href="/account"
+					href={token ? "/account" : "/account/guest"}
 					className="flex-1 flex justify-center items-center hover:bg-white hover:bg-opacity-5"
 				>
 					<FaUserCircle size={20} />

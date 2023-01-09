@@ -9,7 +9,8 @@ import { z } from "zod";
 import CardItem from "../../../../components/CardItem";
 import { env } from "../../../../env/client.mjs";
 import { CardSchema, cardTypes } from "../../../../types/Card";
-import { Deck, DeckSchema } from "../../../../types/Deck";
+import type { Deck } from "../../../../types/Deck";
+import { DeckSchema } from "../../../../types/Deck";
 import { tokenAtom } from "../../../ClientWrapper";
 
 // CREATE CARD (POST /deck/:deckId/card/create)

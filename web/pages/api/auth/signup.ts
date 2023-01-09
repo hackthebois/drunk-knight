@@ -17,7 +17,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			body: JSON.stringify(input),
 		},
 	);
-	const data: any = await user.json();
+	const data = await user.json();
 	if (!user.ok) {
 		return res.status(user.status).json({ message: data.message });
 	}

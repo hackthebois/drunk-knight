@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import { FaCopy } from "react-icons/fa";
 import { useCopyDeck } from "../../../../../hooks/deck";
 import { tokenAtom } from "../../../../ClientWrapper";
-import { SearchDeck } from "./page";
+import type { SearchDeck } from "./page";
 
 type Props = {
 	searchDeck: SearchDeck;

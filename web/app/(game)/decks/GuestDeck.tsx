@@ -16,7 +16,7 @@ const GuestDeck = () => {
 			</div>
 			{useStandard ? (
 				<div
-					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
+					className="rounded-l-none items-center w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						setUseStandard(false);
 						queryClient.refetchQueries(["play"]);
@@ -26,7 +26,7 @@ const GuestDeck = () => {
 				</div>
 			) : (
 				<div
-					className="rounded-l-none items-center flex w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
+					className="rounded-l-none items-center w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
 						setUseStandard(true);
 						queryClient.refetchQueries(["play"]);
