@@ -5,11 +5,10 @@ import { atom, useAtom } from "jotai";
 import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 import { CardSchema } from "../../../types/Card";
-import { tokenAtom } from "../../ClientWrapper";
+import { tokenAtom, useStandardAtom } from "../../ClientWrapper";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Loader from "../../../components/Loader";
 
-export const useStandardAtom = atom(true);
 const playAtom = atomWithReset({
 	firstCard: 0,
 	secondCard: 0,
@@ -17,7 +16,7 @@ const playAtom = atomWithReset({
 	flipped: false,
 });
 
-const play = async ({
+export const play = async ({
 	token,
 	useStandard,
 	reset,
@@ -37,6 +36,7 @@ const play = async ({
 			useStandard,
 		}),
 	});
+	console.log("1");
 	const data: unknown = await res.json();
 	reset();
 	return await CardSchema.array().parse(data);

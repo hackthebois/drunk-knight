@@ -2,8 +2,8 @@
 
 import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { useAtom } from "jotai";
-import { useStandardAtom } from "../play/Play";
 import { useQueryClient } from "@tanstack/react-query";
+import { useStandardAtom } from "../../ClientWrapper";
 
 const GuestDeck = () => {
 	const [useStandard, setUseStandard] = useAtom(useStandardAtom);

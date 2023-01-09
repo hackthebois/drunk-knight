@@ -12,6 +12,7 @@ const queryClient = new QueryClient({
 	},
 });
 
+export const useStandardAtom = atom(true);
 export const tokenAtom = atom("");
 
 const ClientWrapper = ({
