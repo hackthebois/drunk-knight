@@ -1,10 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FaChessKnight } from "react-icons/fa";
+import PrefetchCards from "./prefetchCards";
 
 const Page = () => {
 	return (
 		<main className="flex justify-center items-center flex-col w-full h-[85vh]">
+			<PrefetchCards />
 			<div className="background flex flex-col justify-center items-center">
 				<div className="flex">
 					<FaChessKnight
