@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	ConflictException,
 	HttpException,
+	HttpStatus,
 	Injectable,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -188,10 +189,7 @@ export class AuthService {
 
 			return user;
 		} catch (error) {
-			return {
-				url: `${process.env.FRONTEND_URL}/auth/confirm?error=jwt`,
-				statusbar: 400,
-			};
+			return HttpStatus.UNAUTHORIZED;
 		}
 	}
 
@@ -230,7 +228,7 @@ export class AuthService {
 
 	async sendEmailConfirmation(email: string) {
 		const url = `${
-			process.env.FRONTEND_URL
+			process.env.BACKEND_URL
 		}/auth/confirm/${this.generateEmailJWT(
 			email,
 			process.env.JSON_EMAIL_SECRET_KEY,
