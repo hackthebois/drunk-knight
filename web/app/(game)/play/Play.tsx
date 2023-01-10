@@ -8,6 +8,7 @@ import { CardSchema } from "../../../types/Card";
 import { tokenAtom, useStandardAtom } from "../../ClientWrapper";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Loader from "../../../components/Loader";
+import { useState } from "react";
 
 const playAtom = atomWithReset({
 	firstCard: 0,
@@ -36,7 +37,6 @@ export const play = async ({
 			useStandard,
 		}),
 	});
-	console.log("1");
 	const data: unknown = await res.json();
 	reset();
 	return await CardSchema.array().parse(data);
@@ -48,6 +48,7 @@ const Play = () => {
 	const resetPlay = useResetAtom(playAtom);
 	const [{ firstCard, secondCard, degrees, flipped }, setPlay] =
 		useAtom(playAtom);
+	const [canFlip, setCanFlip] = useState(true);
 
 	const { data: cards } = useQuery(
 		["play", token, useStandard],
@@ -71,12 +72,18 @@ const Play = () => {
 	};
 
 	const flipCard = () => {
-		setPlay({
-			flipped: !flipped,
-			degrees: degrees - 180,
-			firstCard: flipped ? nextCard(secondCard) : firstCard,
-			secondCard: flipped ? secondCard : nextCard(firstCard),
-		});
+		if (canFlip) {
+			setPlay({
+				flipped: !flipped,
+				degrees: degrees - 180,
+				firstCard: flipped ? nextCard(secondCard) : firstCard,
+				secondCard: flipped ? secondCard : nextCard(firstCard),
+			});
+			setCanFlip(false);
+			setTimeout(() => {
+				setCanFlip(true);
+			}, 400);
+		}
 	};
 
 	if (cards && cards.length < 1) {
