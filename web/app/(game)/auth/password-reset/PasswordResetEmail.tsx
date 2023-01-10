@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { FaAngleLeft } from "react-icons/fa";
-import { useRouter } from "next/router";
 import Link from "next/link";
 
 export const ResetPasswordEmailSchema = z.object({
@@ -30,7 +28,6 @@ const resetPasswordEmail = async (input: ResetPasswordEmail) => {
 };
 
 const PasswordResetEmail = () => {
-	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
