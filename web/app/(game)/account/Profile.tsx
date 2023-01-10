@@ -98,39 +98,18 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 		<>
 			<div className="flex justify-between items-center mb-4">
 				<h2 className="text-2xl font-bold">Profile</h2>
-				<div>
-					<button
-						className="gbtn mr-3"
-						onClick={() =>
-							signOut().then(() => {
-								setToken("");
-								router.refresh();
-								router.push("/play");
-							})
-						}
-					>
-						<FaSignOutAlt />
-					</button>
-					<button
-						className="ebtn"
-						onClick={() => setConfirmDelete(true)}
-					>
-						<FaTrash />
-					</button>
-				</div>
-				{confirmDelete ? (
-					<ConfirmDelete
-						onDelete={() =>
-							deleteAccount().then(() => {
-								setToken("");
-								router.refresh();
-								router.push("/play");
-							})
-						}
-						onCancel={() => setConfirmDelete(false)}
-						deletedItem="this account"
-					/>
-				) : null}
+				<button
+					className="gbtn"
+					onClick={() =>
+						signOut().then(() => {
+							setToken("");
+							router.refresh();
+							router.push("/play");
+						})
+					}
+				>
+					Sign out
+				</button>
 			</div>
 			<form className="form" onSubmit={handleSubmit(updateUser)}>
 				<label htmlFor="username">Username</label>
@@ -159,6 +138,31 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 					/>
 				</div>
 			</form>
+
+			<h2 className="text-2xl font-bold mt-6 mb-2">Delete Account</h2>
+			<p className="mb-4 opacity-80">
+				Deleting your account will remove all content associated with
+				it.
+			</p>
+			<button
+				className="ebtn flex justify-center items-center"
+				onClick={() => setConfirmDelete(true)}
+			>
+				I want to delete my account
+			</button>
+			{confirmDelete ? (
+				<ConfirmDelete
+					onDelete={() =>
+						deleteAccount().then(() => {
+							setToken("");
+							router.refresh();
+							router.push("/play");
+						})
+					}
+					onCancel={() => setConfirmDelete(false)}
+					deletedItem="this account"
+				/>
+			) : null}
 		</>
 	);
 };
