@@ -190,7 +190,7 @@ export class AuthService {
 
 			return user;
 		} catch (error) {
-			throw new UnauthorizedException('invalid token');
+			throw new UnauthorizedException('Invalid token');
 		}
 	}
 
