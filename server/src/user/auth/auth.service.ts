@@ -2,7 +2,9 @@ import {
 	BadRequestException,
 	ConflictException,
 	HttpException,
+	HttpStatus,
 	Injectable,
+	UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -188,10 +190,7 @@ export class AuthService {
 
 			return user;
 		} catch (error) {
-			return {
-				url: `${process.env.FRONTEND_URL}/auth/confirm?error=jwt`,
-				statusbar: 400,
-			};
+			throw new UnauthorizedException('Invalid token');
 		}
 	}
 
@@ -204,7 +203,7 @@ export class AuthService {
 
 		if (user) {
 			const url = `${
-				process.env.BACKEND_URL
+				process.env.FRONTEND_URL
 			}/auth/password-reset/${this.generateEmailJWT(
 				email,
 				process.env.JSON_PASSWORD_RESET_SECRET_KEY,
