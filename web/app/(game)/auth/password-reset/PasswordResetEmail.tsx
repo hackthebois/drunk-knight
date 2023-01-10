@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { FaAngleLeft } from "react-icons/fa";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export const ResetPasswordEmailSchema = z.object({
 	email: z.string().email(),
@@ -27,6 +30,7 @@ const resetPasswordEmail = async (input: ResetPasswordEmail) => {
 };
 
 const PasswordResetEmail = () => {
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -71,10 +75,22 @@ const PasswordResetEmail = () => {
 					<input
 						id="email"
 						type="text"
-						className="mb-4 mt-2"
+						className="mb-8 mt-2"
 						{...register("email")}
 					/>
-					<input type="submit" value="Submit" className="btn mt-4" />
+					<div className="flex">
+						<input
+							type="submit"
+							value="Submit"
+							className="btn mr-2 flex-1"
+						/>
+						<Link
+							className="gbtn text-center flex-1"
+							href="/auth/signin"
+						>
+							Cancel
+						</Link>
+					</div>
 				</form>
 			)}
 		</main>
