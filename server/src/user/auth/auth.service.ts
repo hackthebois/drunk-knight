@@ -4,6 +4,7 @@ import {
 	HttpException,
 	HttpStatus,
 	Injectable,
+	UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -189,7 +190,7 @@ export class AuthService {
 
 			return user;
 		} catch (error) {
-			return HttpStatus.UNAUTHORIZED;
+			throw new UnauthorizedException();
 		}
 	}
 
