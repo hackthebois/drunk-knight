@@ -54,8 +54,11 @@ const Page = async () => {
 		return (
 			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full">
-					<AddDeck />
+					<h2 className="text-2xl font-bold mb-4">Standard Decks</h2>
 					<GuestDeck />
+				</div>
+				<div className="background flex flex-col w-full mt-6">
+					<AddDeck />
 					<DeckList decks={decks} />
 				</div>
 				<div className="background flex flex-col w-full mt-6 mb-8">

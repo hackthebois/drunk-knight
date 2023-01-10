@@ -39,7 +39,7 @@ const AddDeck = () => {
 	return (
 		<>
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-2xl font-bold">Decks</h2>
+				<h2 className="text-2xl font-bold">My Decks</h2>
 				{addDeck ? (
 					<button className="gbtn" onClick={() => setAddDeck(false)}>
 						<FaTimes />
