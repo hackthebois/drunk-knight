@@ -230,7 +230,7 @@ export class AuthService {
 
 	async sendEmailConfirmation(email: string) {
 		const url = `${
-			process.env.FRONTEND_URL
+			process.env.BACKEND_URL
 		}/auth/confirm/${this.generateEmailJWT(
 			email,
 			process.env.JSON_EMAIL_SECRET_KEY,
