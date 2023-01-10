@@ -82,7 +82,7 @@ const Play = () => {
 			setCanFlip(false);
 			setTimeout(() => {
 				setCanFlip(true);
-			}, 500);
+			}, 400);
 		}
 	};
 
