@@ -9,7 +9,7 @@ import { DeckResponseDto } from './deck/dto/deck.dto';
 export class AppService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async getGameplayCards(user: UserInfo, useStandard: boolean) {
+	async getGameplayCards(user: UserInfo, useStandard: string[]) {
 		let gamePlayCards: Card[] = [];
 
 		if (useStandard) {
@@ -22,11 +22,17 @@ export class AppService {
 					private: false,
 				},
 				select: {
+					id: true,
 					cards: true,
 				},
 			});
 			if (standardDecks)
-				gamePlayCards = standardDecks.map((deck) => deck.cards).flat(3);
+				gamePlayCards = standardDecks
+					.map((deck) => {
+						if (!useStandard.includes(deck.id)) return deck.cards;
+						return [];
+					})
+					.flat(3);
 		}
 
 		if (user) {
@@ -44,6 +50,7 @@ export class AppService {
 			gamePlayCards = gamePlayCards.concat(userCards);
 		}
 		gamePlayCards = this.shuffle(gamePlayCards);
+		console.log(gamePlayCards);
 		return gamePlayCards.map((card) => new CardResponseDto(card));
 	}
 
