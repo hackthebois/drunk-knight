@@ -3,6 +3,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { UserInfo } from './user/decorators/user.decorator';
 import { Card, UserType } from '@prisma/client';
 import { CardResponseDto } from './card/dto/card.dto';
+import { DeckResponseDto } from './deck/dto/deck.dto';
 
 @Injectable()
 export class AppService {
@@ -44,6 +45,36 @@ export class AppService {
 		}
 		gamePlayCards = this.shuffle(gamePlayCards);
 		return gamePlayCards.map((card) => new CardResponseDto(card));
+	}
+
+	async getStandardDeck() {
+		const decks = await this.prismaService.deck.findMany({
+			where: {
+				standard: true,
+				private: false,
+			},
+			select: {
+				id: true,
+				name: true,
+				selected: true,
+				cards: true,
+			},
+		});
+
+		return decks.map((deck) => new DeckResponseDto(deck));
+	}
+	async getStandardCards(id: string) {
+		const deck = await this.prismaService.deck.findMany({
+			where: {
+				id: id,
+			},
+			select: {
+				cards: true,
+			},
+		});
+
+		const cards = deck.map((deck) => deck.cards).flat(3);
+		return cards.map((card) => new CardResponseDto(card));
 	}
 
 	/**

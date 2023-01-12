@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AppService } from './app.service';
 import { Roles } from './decorators/roles.decorator';
@@ -12,6 +12,16 @@ export class AppController {
 	@Get()
 	homePage() {
 		return 'Server is Live';
+	}
+
+	@Get('standard')
+	getStandardDeck() {
+		return this.appService.getStandardDeck();
+	}
+
+	@Get('standard/:id')
+	getStandardCards(@Param('id') id: string) {
+		return this.appService.getStandardCards(id);
 	}
 
 	@ApiBearerAuth()
