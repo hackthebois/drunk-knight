@@ -7,7 +7,7 @@ import { z } from "zod";
 import type { User } from "../../../types/User";
 import { UserSchema } from "../../../types/User";
 import { env } from "../../../env/client.mjs";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import ConfirmDelete from "../../../components/ConfirmDelete";
 import { useState } from "react";
@@ -55,6 +55,7 @@ const deleteAccount = async () => {
 const Profile = ({ user: { email, username } }: { user: User }) => {
 	const router = useRouter();
 	const [token] = useAtom(tokenAtom);
+	const queryClient = useQueryClient();
 
 	const {
 		register,
@@ -105,6 +106,7 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 						signOut().then(() => {
 							setToken("");
 							router.refresh();
+							queryClient.resetQueries();
 							router.push("/play");
 						})
 					}
