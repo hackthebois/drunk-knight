@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Router } from "next/router";
+import { toast } from "react-hot-toast";
 import { z } from "zod";
 import { SearchDeck } from "../app/(game)/decks/search/[deckId]/page";
 import { env } from "../env/client.mjs";
@@ -71,8 +72,12 @@ export const useCreateDeck = () => {
 			);
 			return { previousDecks };
 		},
-		onError: (err, newTodo, context) => {
+		onSuccess: ({ name }) => {
+			toast.success(`Created deck "${name}"`);
+		},
+		onError: (err, newDeck, context) => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
+			toast.error(`Error creating deck "${newDeck.deck.name}"`);
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: ["decks"] });
@@ -88,14 +93,18 @@ const copyDeck = async ({
 	deck: SearchDeck;
 	deckId: string;
 }) => {
-	await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/search/deck/${deckId}`, {
-		method: "POST",
-		headers: {
-			Accept: "application/json",
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
+	const res = await fetch(
+		`${env.NEXT_PUBLIC_SERVER_URL}/search/deck/${deckId}`,
+		{
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
 		},
-	});
+	);
+	if (!res.ok) throw new Error();
 };
 export const useCopyDeck = () => {
 	const queryClient = useQueryClient();
@@ -122,8 +131,12 @@ export const useCopyDeck = () => {
 			router.push("/decks");
 			return { previousDecks };
 		},
-		onError: (err, newTodo, context) => {
+		onSuccess: (_, variables) => {
+			toast.success(`Copied deck "${variables.deck.name}"`);
+		},
+		onError: (err, newDeck, context) => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
+			toast.error(`Error copying deck "${newDeck.deck.name}"`);
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: ["decks"] });
@@ -216,11 +229,13 @@ export const useDeleteDeck = () => {
 			router.push("/decks");
 			return { previousDecks };
 		},
-		onSuccess: ({ selected }) => {
+		onSuccess: ({ selected, name }) => {
 			if (selected) queryClient.refetchQueries(["play"]);
+			toast.success(`Deleted deck "${name}"`);
 		},
-		onError: (err, newTodo, context) => {
+		onError: (err, newDeck, context) => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
+			toast.error(`Error deleting deck`);
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries(["decks"]);

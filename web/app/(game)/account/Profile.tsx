@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import ConfirmDelete from "../../../components/ConfirmDelete";
 import { useState } from "react";
 import { tokenAtom } from "../../ClientWrapper";
+import toast from "react-hot-toast";
 
 export const UpdateUserSchema = z.object({
 	username: z.string().min(1, "Username cannot be empty.").optional(),
@@ -59,7 +60,7 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 		register,
 		handleSubmit,
 		setError,
-		formState: { isDirty },
+		formState: { isDirty, errors },
 		reset,
 		control,
 	} = useForm<UpdateUser>({
@@ -73,6 +74,7 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 		},
 		onSuccess: ({ email, username }) => {
 			reset({ email, username });
+			toast.success("Updated account");
 			router.refresh();
 		},
 	});
@@ -111,6 +113,11 @@ const Profile = ({ user: { email, username } }: { user: User }) => {
 				</button>
 			</div>
 			<form className="form" onSubmit={handleSubmit(updateUser)}>
+				{errors.username ? (
+					<p className="ebtn mb-4">{errors.username.message}</p>
+				) : errors.email ? (
+					<p className="ebtn mb-4">{errors.email.message}</p>
+				) : null}
 				<label htmlFor="username">Username</label>
 				<input
 					id="username"

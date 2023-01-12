@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { atom, useAtom } from "jotai";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -29,6 +30,7 @@ const ClientWrapper = ({
 		<QueryClientProvider client={queryClient}>
 			{children}
 			<ReactQueryDevtools initialIsOpen={false} />
+			<Toaster />
 		</QueryClientProvider>
 	);
 };

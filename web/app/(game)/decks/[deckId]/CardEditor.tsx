@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { FaAngleLeft, FaSave, FaTrash } from "react-icons/fa";
 import { z } from "zod";
 import CardItem from "../../../../components/CardItem";
@@ -108,11 +109,13 @@ const CardEditor = ({
 			cancel();
 			return { previousDeck };
 		},
-		onSuccess: () => {
+		onSuccess: ({ name }) => {
 			queryClient.refetchQueries(["play"]);
+			toast.success(`Deleted card "${name}"`);
 		},
 		onError: (err, { deleteCard: { deckId } }, context) => {
 			queryClient.setQueryData(["deck", deckId], context?.previousDeck);
+			toast.error("Error deleting card");
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries(["deck"]);
@@ -147,11 +150,13 @@ const CardEditor = ({
 			cancel();
 			return { previousDeck };
 		},
-		onSuccess: () => {
+		onSuccess: ({ name }) => {
+			toast.success(`Updated card "${name}"`);
 			queryClient.refetchQueries(["play"]);
 		},
 		onError: (err, { newCard: { deckId } }, context) => {
 			queryClient.setQueryData(["deck", deckId], context?.previousDeck);
+			toast.error(`Error updating card`);
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries(["deck"]);

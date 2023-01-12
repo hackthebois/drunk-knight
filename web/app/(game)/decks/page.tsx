@@ -63,19 +63,23 @@ const Page = async () => {
 				</div>
 				<div className="background flex flex-col w-full mt-6 mb-8">
 					<SearchForm />
-					{communityDecks.map((deck) => (
-						<Link
-							href={`/decks/search/${deck.id}`}
-							key={deck.id}
-							className="item mt-2 flex justify-between items-center"
-						>
-							<p>{deck.name}</p>
-							<div className="flex items-center">
-								<p className="mr-2 mt-1">{deck.copiedNumber}</p>
-								<FaDownload />
-							</div>
-						</Link>
-					))}
+					{communityDecks
+						.sort((a, b) => b.copiedNumber - a.copiedNumber)
+						.map((deck) => (
+							<Link
+								href={`/decks/search/${deck.id}`}
+								key={deck.id}
+								className="item mt-2 flex justify-between items-center"
+							>
+								<p>{deck.name}</p>
+								<div className="flex items-center">
+									<p className="mr-2 mt-1">
+										{deck.copiedNumber}
+									</p>
+									<FaDownload />
+								</div>
+							</Link>
+						))}
 				</div>
 			</main>
 		);
