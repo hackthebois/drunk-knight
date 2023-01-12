@@ -9,31 +9,29 @@ import { DeckResponseDto } from './deck/dto/deck.dto';
 export class AppService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async getGameplayCards(user: UserInfo, useStandard: string[]) {
+	async getGameplayCards(user: UserInfo, excludeDeckIds: string[]) {
 		let gamePlayCards: Card[] = [];
 
-		if (useStandard) {
-			const standardDecks = await this.prismaService.deck.findMany({
-				where: {
-					user: {
-						userType: UserType.ADMIN,
-					},
-					standard: true,
-					private: false,
+		const standardDecks = await this.prismaService.deck.findMany({
+			where: {
+				user: {
+					userType: UserType.ADMIN,
 				},
-				select: {
-					id: true,
-					cards: true,
-				},
-			});
-			if (standardDecks)
-				gamePlayCards = standardDecks
-					.map((deck) => {
-						if (!useStandard.includes(deck.id)) return deck.cards;
-						return [];
-					})
-					.flat(3);
-		}
+				standard: true,
+				private: false,
+			},
+			select: {
+				id: true,
+				cards: true,
+			},
+		});
+		if (standardDecks)
+			gamePlayCards = standardDecks
+				.map((deck) => {
+					if (!excludeDeckIds.includes(deck.id)) return deck.cards;
+					return [];
+				})
+				.flat(3);
 
 		if (user) {
 			const userDecks = await this.prismaService.deck.findMany({
@@ -50,7 +48,6 @@ export class AppService {
 			gamePlayCards = gamePlayCards.concat(userCards);
 		}
 		gamePlayCards = this.shuffle(gamePlayCards);
-		console.log(gamePlayCards);
 		return gamePlayCards.map((card) => new CardResponseDto(card));
 	}
 

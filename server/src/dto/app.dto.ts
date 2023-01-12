@@ -4,5 +4,5 @@ import { IsOptional } from 'class-validator';
 export class PlayDto {
 	@IsOptional()
 	@ApiProperty()
-	useStandard: string[];
+	excludeDeckIds: string[];
 }

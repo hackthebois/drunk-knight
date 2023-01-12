@@ -28,6 +28,6 @@ export class AppController {
 	@Roles()
 	@Post('play')
 	getGameplayCards(@User() user: UserInfo, @Body() body: PlayDto) {
-		return this.appService.getGameplayCards(user, body.useStandard);
+		return this.appService.getGameplayCards(user, body.excludeDeckIds);
 	}
 }
