@@ -10,12 +10,12 @@ const Page = () => {
 				<div className="flex flex-col justify-center items-center">
 					<Image
 						src="/logo.png"
-						height={110}
-						width={110}
+						height={100}
+						width={100}
 						alt="Drunk knight logo of knight helmet with beer flowing out"
 						className="mb-8"
 					/>
-					<h2 className="text-4xl sm:text-5xl text-center font-bold">
+					<h2 className="text-3xl sm:text-5xl text-center font-bold">
 						Drunk Knight
 					</h2>
 				</div>
