@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { FaAngleLeft, FaPlus } from "react-icons/fa";
 import { z } from "zod";
 import CardItem from "../../../../components/CardItem";
@@ -80,11 +81,13 @@ const CardAdd = ({
 			cancel();
 			return { previousDeck };
 		},
-		onSuccess: () => {
+		onSuccess: ({ name }) => {
 			queryClient.refetchQueries(["play"]);
+			toast.success(`Added card "${name}"`);
 		},
-		onError: (err, { newCard: { deckId } }, context) => {
+		onError: (err, { newCard: { deckId, name } }, context) => {
 			queryClient.setQueryData(["deck", deckId], context?.previousDeck);
+			toast.error(`Error adding card "${name}"`);
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries(["deck"]);

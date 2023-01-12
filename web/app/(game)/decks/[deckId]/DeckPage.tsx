@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaAngleLeft, FaCopy, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../../components/CardItem";
 import ConfirmDelete from "../../../../components/ConfirmDelete";
@@ -86,11 +87,15 @@ const DeckPage = ({
 										<div className="flex flex-row">
 											<button
 												className="item mr-3"
-												onClick={() =>
-													navigator.clipboard.writeText(
-														deckId,
-													)
-												}
+												onClick={() => {
+													navigator.clipboard
+														.writeText(deckId)
+														.then(() => {
+															toast.success(
+																"Copied deck id",
+															);
+														});
+												}}
 											>
 												<FaCopy />
 											</button>
