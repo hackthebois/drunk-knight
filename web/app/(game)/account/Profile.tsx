@@ -9,7 +9,6 @@ import { UserSchema } from "../../../types/User";
 import { env } from "../../../env/client.mjs";
 import { useMutation } from "@tanstack/react-query";
 import { useAtom } from "jotai";
-import { FaSignOutAlt, FaTrash } from "react-icons/fa";
 import ConfirmDelete from "../../../components/ConfirmDelete";
 import { useState } from "react";
 import { tokenAtom } from "../../ClientWrapper";
