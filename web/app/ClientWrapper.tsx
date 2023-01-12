@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
 	},
 });
 
-export const useStandardAtom = atom(true);
+export const excludeDeckIdsAtom = atom<string[]>([]);
 export const tokenAtom = atom("");
 
 const ClientWrapper = ({
@@ -23,7 +23,7 @@ const ClientWrapper = ({
 	children: React.ReactNode;
 	token?: string;
 }) => {
-	const [_, setToken] = useAtom(tokenAtom);
+	const [t, setToken] = useAtom(tokenAtom);
 	setToken(token ?? "");
 
 	return (

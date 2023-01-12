@@ -23,6 +23,18 @@ const getDecks = async (token: string) => {
 	return DeckSchema.array().parse(data);
 };
 
+const getStandardDecks = async () => {
+	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/standard`, {
+		method: "GET",
+		headers: {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+		},
+	});
+	const data: unknown = await res.json();
+	return DeckSchema.array().parse(data);
+};
+
 const UserDeckSchema = z.object({
 	id: z.string().cuid(),
 	name: z.string(),
@@ -49,13 +61,16 @@ const Page = async () => {
 
 	if (token) {
 		const decks = await getDecks(token);
+		const standardDecks = await getStandardDecks();
 		const communityDecks = await getCommunityDecks(token);
 
 		return (
 			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full">
 					<h2 className="text-2xl font-bold mb-4">Standard Decks</h2>
-					<GuestDeck />
+					{standardDecks.map((deck) => (
+						<GuestDeck deck={deck} key={deck.id} />
+					))}
 				</div>
 				<div className="background flex flex-col w-full mt-6">
 					<AddDeck />
