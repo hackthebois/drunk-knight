@@ -68,17 +68,15 @@ export class AppService {
 		return decks.map((deck) => new DeckResponseDto(deck));
 	}
 	async getStandardCards(id: string) {
-		const deck = await this.prismaService.deck.findMany({
+		return await this.prismaService.deck.findFirst({
 			where: {
 				id: id,
 			},
 			select: {
+				name: true,
 				cards: true,
 			},
 		});
-
-		const cards = deck.map((deck) => deck.cards).flat(3);
-		return cards.map((card) => new CardResponseDto(card));
 	}
 
 	/**
