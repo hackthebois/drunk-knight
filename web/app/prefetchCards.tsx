@@ -3,19 +3,19 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { play } from "./(game)/play/Play";
-import { tokenAtom, useStandardAtom } from "./ClientWrapper";
+import { tokenAtom, excludeDeckIdsAtom } from "./ClientWrapper";
 
 const PrefetchCards = () => {
 	const queryClient = useQueryClient();
 	const [token] = useAtom(tokenAtom);
-	const [useStandard] = useAtom(useStandardAtom);
+	const [excludeDeckIds] = useAtom(excludeDeckIdsAtom);
 
 	queryClient.prefetchQuery({
-		queryKey: ["play", token, useStandard],
+		queryKey: ["play", token, excludeDeckIds],
 		queryFn: () =>
 			play({
 				token,
-				useStandard: token === "" ? true : useStandard,
+				excludeDeckIds,
 				reset: () => console.log("no reset"),
 			}),
 	});

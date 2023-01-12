@@ -1,11 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import CardItem from "../../../components/CardItem";
 import { env } from "../../../env/client.mjs";
 import { CardSchema } from "../../../types/Card";
-import { tokenAtom, useStandardAtom } from "../../ClientWrapper";
+import { tokenAtom, excludeDeckIdsAtom } from "../../ClientWrapper";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Loader from "../../../components/Loader";
 import { useState } from "react";
@@ -19,11 +19,11 @@ const playAtom = atomWithReset({
 
 export const play = async ({
 	token,
-	useStandard,
+	excludeDeckIds,
 	reset,
 }: {
 	token?: string;
-	useStandard: boolean;
+	excludeDeckIds: string[];
 	reset: () => void;
 }) => {
 	const res = await fetch(`${env.NEXT_PUBLIC_SERVER_URL}/play`, {
@@ -34,7 +34,7 @@ export const play = async ({
 			Authorization: `${token && token !== "" ? `Bearer ${token}` : ""}`,
 		},
 		body: JSON.stringify({
-			useStandard,
+			excludeDeckIds,
 		}),
 	});
 	const data: unknown = await res.json();
@@ -44,18 +44,18 @@ export const play = async ({
 
 const Play = () => {
 	const [token] = useAtom(tokenAtom);
-	const [useStandard] = useAtom(useStandardAtom);
+	const [excludeDeckIds] = useAtom(excludeDeckIdsAtom);
 	const resetPlay = useResetAtom(playAtom);
 	const [{ firstCard, secondCard, degrees, flipped }, setPlay] =
 		useAtom(playAtom);
 	const [canFlip, setCanFlip] = useState(true);
 
 	const { data: cards } = useQuery(
-		["play", token, useStandard],
+		["play", token, excludeDeckIds],
 		() =>
 			play({
 				token,
-				useStandard: token === "" ? true : useStandard,
+				excludeDeckIds,
 				reset: () => resetPlay(),
 			}),
 		{
