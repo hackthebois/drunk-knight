@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
-import { FaToggleOff, FaToggleOn } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { env } from "../../../env/client.mjs";
 import { useUpdateDeck } from "../../../hooks/deck";
 import type { Deck } from "../../../types/Deck";
@@ -24,7 +24,11 @@ const getDecks = async (token: string) => {
 	return DeckSchema.array().parse(data);
 };
 
-const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
+const DeckItem = ({
+	deck: { id, name, selected, private: isPrivate },
+}: {
+	deck: Deck;
+}) => {
 	const updateDeckMutation = useUpdateDeck();
 	const [token] = useAtom(tokenAtom);
 
@@ -33,9 +37,14 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 			<Link
 				key={id}
 				href={`/decks/${id}`}
-				className="flex-1 item rounded-r-none border-r-0"
+				className="flex-1 item rounded-r-none border-r-0 flex justify-between"
 			>
 				<p className="flex items-center">{name}</p>
+				{isPrivate ? (
+					<FaEyeSlash size={18} className="opacity-70" />
+				) : (
+					<FaEye size={18} className="opacity-70" />
+				)}
 			</Link>
 			{selected ? (
 				<div
@@ -46,6 +55,7 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 								updateDeck: {
 									name,
 									id,
+									private: isPrivate,
 									selected: false,
 								},
 								token,
@@ -72,6 +82,7 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 									name,
 									id,
 									selected: true,
+									private: isPrivate,
 								},
 								token,
 							},

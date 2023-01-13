@@ -5,7 +5,7 @@ import GuestDeck from "./GuestDeck";
 import DeckList from "./DeckList";
 import { env } from "../../../env/client.mjs";
 import { DeckSchema } from "../../../types/Deck";
-import { FaDownload, FaUserCircle } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
 import Link from "next/link";
 import { z } from "zod";
 import SearchForm from "./SearchForm";
