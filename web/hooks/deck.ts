@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { Router } from "next/router";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
-import { SearchDeck } from "../app/(game)/decks/search/[deckId]/page";
+import type { SearchDeck } from "../app/(game)/decks/search/[deckId]/page";
 import { env } from "../env/client.mjs";
-import { Deck, DeckSchema } from "../types/Deck";
+import type { Deck } from "../types/Deck";
+import { DeckSchema } from "../types/Deck";
 
 // GET DECKS (GET /deck)
 const getDecks = async (token: string) => {
