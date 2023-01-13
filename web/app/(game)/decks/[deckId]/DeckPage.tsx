@@ -1,16 +1,23 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { FaAngleLeft, FaCopy, FaPlus, FaTrash } from "react-icons/fa";
+import { FaAngleLeft, FaCopy, FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import CardItem from "../../../../components/CardItem";
 import ConfirmDelete from "../../../../components/ConfirmDelete";
 import { env } from "../../../../env/client.mjs";
 
-import { useDeleteDeck } from "../../../../hooks/deck";
+import type { UpdateDeck } from "../../../../hooks/deck";
+import {
+	UpdateDeckSchema,
+	useDeleteDeck,
+	useUpdateDeck,
+} from "../../../../hooks/deck";
 import type { Card } from "../../../../types/Card";
 import type { Deck } from "../../../../types/Deck";
 import { DeckSchema } from "../../../../types/Deck";
@@ -35,6 +42,94 @@ const getDeck = async ({
 	});
 	const data: unknown = await res.json();
 	return DeckSchema.parse(data);
+};
+
+const DeckName = ({ deck }: { deck: Deck }) => {
+	const [token] = useAtom(tokenAtom);
+	const [editMode, setEditMode] = useState(false);
+	const updateDeckMutation = useUpdateDeck(() => setEditMode(false));
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isDirty },
+		reset,
+	} = useForm<UpdateDeck>({
+		resolver: zodResolver(UpdateDeckSchema),
+		defaultValues: {
+			name: deck.name,
+			id: deck.id,
+			selected: deck.selected,
+		},
+	});
+
+	const onUpdateDeck = ({ name, id, selected }: UpdateDeck) => {
+		updateDeckMutation.mutate(
+			{
+				updateDeck: { name, id, selected },
+				token,
+			},
+			{
+				onSuccess: () => {
+					toast.success(`Updated deck "${deck.name}"`);
+				},
+				onError: () => {
+					reset();
+					toast.error(`Error updating deck "${deck.name}"`);
+				},
+			},
+		);
+	};
+
+	return (
+		<>
+			{editMode ? (
+				<>
+					{errors.name && (
+						<p className="emsg mb-4">{errors.name.message}</p>
+					)}
+					<form
+						className="form sm:flex-row w-full mb-2"
+						onSubmit={handleSubmit(onUpdateDeck)}
+					>
+						<input
+							type="text"
+							placeholder="Deck Name"
+							className="sm:mr-2 mb-2 sm:mb-0 flex-1 ml-[1px]"
+							{...register("name")}
+							autoComplete="off"
+						/>
+						<div className="flex">
+							<input
+								className={`btn flex-1 ${
+									isDirty
+										? ""
+										: "opacity-50 cursor-not-allowed !important hover:opacity-50 !important"
+								}`}
+								type="submit"
+								value="Update"
+							/>
+							<div
+								className="ml-2 gbtn flex-1"
+								onClick={() => setEditMode(false)}
+							>
+								Cancel
+							</div>
+						</div>
+					</form>
+				</>
+			) : (
+				<div className="flex items-center justify-left mb-4">
+					<h2 className="text-2xl font-bold">{deck.name}</h2>
+					<FaEdit
+						size={20}
+						className="ml-4 cursor-pointer"
+						onClick={() => setEditMode(true)}
+					/>
+				</div>
+			)}
+		</>
+	);
 };
 
 const DeckPage = ({
@@ -131,9 +226,7 @@ const DeckPage = ({
 											</button>
 										</div>
 									</div>
-									<h2 className="text-2xl font-bold mb-4">
-										{deck.name}
-									</h2>
+									<DeckName deck={deck} />
 									<div className="flex-1">
 										{deck.cards &&
 											deck.cards.map((card, index) => (

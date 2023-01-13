@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 import { FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { env } from "../../../env/client.mjs";
 import { useUpdateDeck } from "../../../hooks/deck";
@@ -40,14 +41,23 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 				<div
 					className="rounded-l-none items-center w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
-						updateDeckMutation.mutate({
-							updateDeck: {
-								name,
-								id,
-								selected: false,
+						updateDeckMutation.mutate(
+							{
+								updateDeck: {
+									name,
+									id,
+									selected: false,
+								},
+								token,
 							},
-							token,
-						});
+							{
+								onError: () => {
+									toast.error(
+										`Error selecting deck "${name}"`,
+									);
+								},
+							},
+						);
 					}}
 				>
 					<FaToggleOn size={24} />
@@ -56,14 +66,23 @@ const DeckItem = ({ deck: { id, name, selected } }: { deck: Deck }) => {
 				<div
 					className="rounded-l-none items-center w-12 py-2 rounded shadow text-white border-[1px] border-[#ccc] cursor-pointer flex justify-center border-l-0"
 					onClick={() => {
-						updateDeckMutation.mutate({
-							updateDeck: {
-								name,
-								id,
-								selected: true,
+						updateDeckMutation.mutate(
+							{
+								updateDeck: {
+									name,
+									id,
+									selected: true,
+								},
+								token,
 							},
-							token,
-						});
+							{
+								onError: () => {
+									toast.error(
+										`Error selecting deck "${name}"`,
+									);
+								},
+							},
+						);
 					}}
 				>
 					<FaToggleOff size={24} />
