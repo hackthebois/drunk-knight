@@ -66,6 +66,7 @@ export const useCreateDeck = () => {
 								cards: [],
 								selected: false,
 								name: newDeck.deck.name,
+								private: false,
 							},
 					  ]
 					: [],
@@ -124,6 +125,7 @@ export const useCopyDeck = () => {
 								cards: [],
 								selected: false,
 								name: deck.name,
+								private: false,
 							},
 					  ]
 					: [],
@@ -149,10 +151,11 @@ export const UpdateDeckSchema = z.object({
 	id: DeckSchema.shape.id,
 	name: DeckSchema.shape.name,
 	selected: DeckSchema.shape.selected,
+	private: DeckSchema.shape.private,
 });
 export type UpdateDeck = z.input<typeof UpdateDeckSchema>;
 const updateDeck = async ({
-	updateDeck: { id, name, selected },
+	updateDeck: { id, name, selected, private: isPrivate },
 	token,
 }: {
 	updateDeck: UpdateDeck;
@@ -165,7 +168,7 @@ const updateDeck = async ({
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${token}`,
 		},
-		body: JSON.stringify({ name, selected }),
+		body: JSON.stringify({ name, selected, private: isPrivate }),
 	});
 	const data: unknown = await res.json();
 	return DeckSchema.parse(data);
