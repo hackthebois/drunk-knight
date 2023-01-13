@@ -31,6 +31,7 @@ export class DeckResponseDto {
 	id: string;
 	name: string;
 	selected: boolean;
+	private: boolean;
 	cards: CardResponseDto[];
 
 	constructor(partial: Partial<Deck>, cards?: Card[]) {
