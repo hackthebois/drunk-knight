@@ -170,31 +170,54 @@ const updateDeck = async ({
 	const data: unknown = await res.json();
 	return DeckSchema.parse(data);
 };
-export const useUpdateDeck = () => {
+export const useUpdateDeck = (cancel?: () => void) => {
 	const queryClient = useQueryClient();
 	return useMutation(updateDeck, {
 		onMutate: async ({ updateDeck: newDeck }) => {
+			// Update decks page
 			await queryClient.cancelQueries({
 				queryKey: ["decks"],
 			});
 			const previousDecks = queryClient.getQueryData<Deck[]>(["decks"]);
-			queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
-				old
-					? old.map((oldDeck) =>
-							oldDeck.id === newDeck.id ? newDeck : oldDeck,
-					  )
-					: [],
+			if (previousDecks) {
+				queryClient.setQueryData<Deck[] | undefined>(["decks"], (old) =>
+					old
+						? old.map((oldDeck) =>
+								oldDeck.id === newDeck.id ? newDeck : oldDeck,
+						  )
+						: [],
+				);
+			}
+			// Update on deck page
+			await queryClient.cancelQueries({
+				queryKey: ["deck", newDeck.id],
+			});
+			const previousDeck = queryClient.getQueryData<Deck>([
+				"deck",
+				newDeck.id,
+			]);
+			queryClient.setQueryData<Deck | undefined>(
+				["deck", newDeck.id],
+				(old) => (old ? newDeck : old),
 			);
-			return { previousDecks };
+			if (cancel) {
+				cancel();
+			}
+			return { previousDecks, previousDeck };
 		},
 		onSuccess: () => {
 			queryClient.refetchQueries(["play"]);
 		},
-		onError: (err, newTodo, context) => {
+		onError: (err, newDeck, context) => {
 			queryClient.setQueryData(["decks"], context?.previousDecks);
+			queryClient.setQueryData(
+				["deck", newDeck.updateDeck.id],
+				context?.previousDeck,
+			);
 		},
-		onSettled: () => {
+		onSettled: (variables) => {
 			queryClient.invalidateQueries(["decks"]);
+			queryClient.invalidateQueries(["deck", variables?.id]);
 		},
 	});
 };

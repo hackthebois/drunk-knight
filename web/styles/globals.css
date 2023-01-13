@@ -13,10 +13,10 @@
 
 @layer components {
 	.btn {
-		@apply bg-primary font-bold px-4 py-2 rounded shadow text-white cursor-pointer hover:opacity-90 transition;
+		@apply bg-primary font-bold px-4 py-2 rounded shadow text-white cursor-pointer hover:opacity-90 transition text-center;
 	}
 	.gbtn {
-		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
+		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer text-center;
 	}
 	.ebtn {
 		@apply rounded border-[1px] border-red-500 py-2 px-4 text-red-500 font-bold transition-colors hover:bg-white hover:bg-opacity-5 cursor-pointer;
