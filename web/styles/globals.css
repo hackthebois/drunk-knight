@@ -25,7 +25,7 @@
 		@apply rounded border-[1px] border-red-700 py-2 px-4 bg-red-700 font-bold;
 	}
 	.item {
-		@apply rounded border-[1px] border-[#ccc] py-2 px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
+		@apply flex items-center rounded border-[1px] border-[#ccc] py-2 px-3 sm:py-2 sm:px-4 text-white font-bold hover:bg-white hover:bg-opacity-5 transition-colors cursor-pointer;
 	}
 	.form {
 		@apply flex flex-col;

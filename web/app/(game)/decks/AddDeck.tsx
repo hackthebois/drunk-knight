@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { FaPlus, FaTimes } from "react-icons/fa";
 import type { CreateDeck } from "../../../hooks/deck";
 import { CreateDeckSchema, useCreateDeck } from "../../../hooks/deck";
@@ -40,7 +39,7 @@ const AddDeck = () => {
 	return (
 		<>
 			<div className="flex justify-between items-center mb-4">
-				<h2 className="text-2xl font-bold">My Decks</h2>
+				<h2 className="text-xl sm:text-2xl font-bold">My Decks</h2>
 				{addDeck ? (
 					<button className="gbtn" onClick={() => setAddDeck(false)}>
 						<FaTimes />

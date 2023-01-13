@@ -5,7 +5,7 @@ import GuestDeck from "./GuestDeck";
 import DeckList from "./DeckList";
 import { env } from "../../../env/client.mjs";
 import { DeckSchema } from "../../../types/Deck";
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { z } from "zod";
 import SearchForm from "./SearchForm";
@@ -38,6 +38,9 @@ const getStandardDecks = async () => {
 const UserDeckSchema = z.object({
 	id: z.string().cuid(),
 	name: z.string(),
+	user: z.object({
+		username: z.string(),
+	}),
 	copiedNumber: z.number(),
 });
 
@@ -67,7 +70,9 @@ const Page = async () => {
 		return (
 			<main className="flex justify-start items-center flex-col w-full">
 				<div className="background flex flex-col w-full">
-					<h2 className="text-2xl font-bold mb-4">Standard Decks</h2>
+					<h2 className="text-xl sm:text-2xl font-bold mb-4">
+						Standard Decks
+					</h2>
 					{standardDecks.map((deck) => (
 						<GuestDeck deck={deck} key={deck.id} />
 					))}
@@ -86,7 +91,12 @@ const Page = async () => {
 								key={deck.id}
 								className="item mt-2 flex justify-between items-center"
 							>
-								<p>{deck.name}</p>
+								<div className="flex flex-1 sm:items-center justify-between flex-col sm:flex-row sm:pr-4 md:pr-6">
+									<p>{deck.name}</p>
+									<p className="opacity-80 mt-1 sm:mt-0">
+										{deck.user.username}
+									</p>
+								</div>
 								<div className="flex items-center">
 									<p className="mr-2 mt-1">
 										{deck.copiedNumber}
