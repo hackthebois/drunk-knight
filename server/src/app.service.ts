@@ -62,6 +62,7 @@ export class AppService {
 				name: true,
 				selected: true,
 				cards: true,
+				private: true,
 			},
 		});
 

@@ -7,7 +7,15 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { FaAngleLeft, FaCopy, FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import {
+	FaAngleLeft,
+	FaCopy,
+	FaEdit,
+	FaEye,
+	FaEyeSlash,
+	FaPlus,
+	FaTrash,
+} from "react-icons/fa";
 import CardItem from "../../../../components/CardItem";
 import ConfirmDelete from "../../../../components/ConfirmDelete";
 import { env } from "../../../../env/client.mjs";
@@ -63,10 +71,15 @@ const DeckName = ({ deck }: { deck: Deck }) => {
 		},
 	});
 
-	const onUpdateDeck = ({ name, id, selected }: UpdateDeck) => {
+	const onUpdateDeck = ({
+		name,
+		id,
+		selected,
+		private: isPrivate,
+	}: UpdateDeck) => {
 		updateDeckMutation.mutate(
 			{
-				updateDeck: { name, id, selected },
+				updateDeck: { name, id, selected, private: isPrivate },
 				token,
 			},
 			{
@@ -132,6 +145,61 @@ const DeckName = ({ deck }: { deck: Deck }) => {
 	);
 };
 
+const PrivateButton = ({ deck }: { deck: Deck }) => {
+	const updateDeckMutation = useUpdateDeck();
+	const [token] = useAtom(tokenAtom);
+	const router = useRouter();
+	return (
+		<>
+			{deck.private ? (
+				<button
+					className="gbtn mr-3"
+					onClick={() =>
+						updateDeckMutation.mutate(
+							{
+								updateDeck: { ...deck, private: false },
+								token,
+							},
+							{
+								onSuccess: () => {
+									router.refresh();
+									toast.success(
+										`Deck "${deck.name}" is now public`,
+									);
+								},
+							},
+						)
+					}
+				>
+					<FaEyeSlash />
+				</button>
+			) : (
+				<button
+					className="gbtn mr-3"
+					onClick={() =>
+						updateDeckMutation.mutate(
+							{
+								updateDeck: { ...deck, private: true },
+								token,
+							},
+							{
+								onSuccess: () => {
+									router.refresh();
+									toast.success(
+										`Deck "${deck.name}" is now private`,
+									);
+								},
+							},
+						)
+					}
+				>
+					<FaEye />
+				</button>
+			)}
+		</>
+	);
+};
+
 const DeckPage = ({
 	deckId,
 	placeholderDeck,
@@ -180,6 +248,7 @@ const DeckPage = ({
 											<FaAngleLeft />
 										</button>
 										<div className="flex flex-row">
+											<PrivateButton deck={deck} />
 											<button
 												className="item mr-3"
 												onClick={() => {

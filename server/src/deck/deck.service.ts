@@ -35,6 +35,7 @@ export class DeckService {
 				name: true,
 				selected: true,
 				cards: true,
+				private: true,
 			},
 		});
 

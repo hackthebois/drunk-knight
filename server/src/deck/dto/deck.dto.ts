@@ -41,5 +41,6 @@ export class DeckResponseDto {
 		this.cards = cards
 			? cards.map((card) => new CardResponseDto(card))
 			: [];
+		this.private = partial.private;
 	}
 }
