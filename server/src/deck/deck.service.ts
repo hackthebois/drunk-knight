@@ -44,14 +44,6 @@ export class DeckService {
 	}
 
 	async createDeck(userId: string, { name }: CreateDeckDto) {
-		const cardExists = await this.prismaService.card.findFirst({
-			where: {
-				name,
-			},
-		});
-
-		if (cardExists) throw new ConflictException();
-
 		const card = await this.prismaService.deck.create({
 			data: {
 				name: name,
