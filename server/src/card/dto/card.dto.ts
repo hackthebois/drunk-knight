@@ -1,5 +1,11 @@
 import { Card, CardType } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+	IsEnum,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	MaxLength,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Transform } from 'class-transformer';
 
@@ -7,11 +13,13 @@ export class CreateCardDto {
 	@IsString()
 	@IsNotEmpty()
 	@ApiProperty()
+	@MaxLength(190)
 	name: string;
 
 	@IsString()
 	@IsNotEmpty()
 	@ApiProperty()
+	@MaxLength(190)
 	description: string;
 
 	@IsEnum(CardType)
@@ -24,11 +32,13 @@ export class UpdateCardDto {
 	@IsString()
 	@IsOptional()
 	@ApiProperty()
+	@MaxLength(190)
 	name?: string;
 
 	@IsString()
 	@IsOptional()
 	@ApiProperty()
+	@MaxLength(190)
 	description?: string;
 
 	@IsEnum(CardType)

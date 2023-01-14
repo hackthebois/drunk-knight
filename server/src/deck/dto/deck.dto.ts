@@ -1,12 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Card, Deck } from '@prisma/client';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+	IsBoolean,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	MaxLength,
+} from 'class-validator';
 import { CardResponseDto } from 'src/card/dto/card.dto';
 
 export class CreateDeckDto {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty()
+	@MaxLength(190)
 	name: string;
 }
 
@@ -14,6 +21,7 @@ export class UpdateDeckDto {
 	@IsOptional()
 	@IsString()
 	@ApiProperty()
+	@MaxLength(190)
 	name: string;
 
 	@IsOptional()
