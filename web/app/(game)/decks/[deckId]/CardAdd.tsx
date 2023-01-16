@@ -142,7 +142,7 @@ const CardAdd = ({
 						<p className="emsg mb-4">{errors.cardType.message}</p>
 					)
 				)}
-				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
+				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] overflow-auto max-w-full bg-transparent m-auto my-10">
 					<CardItem card={{ id: "123", ...cardState }} />
 				</div>
 				<form className="form" onSubmit={handleSubmit(onCreateCard)}>
