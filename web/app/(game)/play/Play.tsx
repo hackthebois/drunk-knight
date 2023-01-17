@@ -101,7 +101,7 @@ const Play = () => {
 			{cards ? (
 				<>
 					<div
-						className={`w-full sm:w-[600px] h-[300px] sm:h-[450px] bg-transparent`}
+						className={`w-full sm:w-[550px] h-[300px] sm:h-[400px] bg-transparent`}
 						style={{ perspective: 1000 }}
 					>
 						<div

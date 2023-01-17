@@ -133,6 +133,9 @@ const CardAdd = ({
 						<FaPlus />
 					</button>
 				</div>
+				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] overflow-auto max-w-full bg-transparent m-auto my-10">
+					<CardItem card={{ id: "123", ...cardState }} />
+				</div>
 				{errors.name ? (
 					<p className="emsg mb-4">{errors.name.message}</p>
 				) : errors.description ? (
@@ -142,9 +145,6 @@ const CardAdd = ({
 						<p className="emsg mb-4">{errors.cardType.message}</p>
 					)
 				)}
-				<div className="w-full sm:w-[600px] h-[300px] sm:h-[450px] max-w-full bg-transparent m-auto my-10">
-					<CardItem card={{ id: "123", ...cardState }} />
-				</div>
 				<form className="form" onSubmit={handleSubmit(onCreateCard)}>
 					<div className="flex flex-col md:flex-row">
 						<input
@@ -152,12 +152,16 @@ const CardAdd = ({
 							placeholder="Card Name"
 							className="flex-1 mb-2 md:mr-2 md:mb-0"
 							{...register("name")}
+							maxLength={50}
+							autoComplete="off"
 						/>
 						<input
 							type="text"
 							placeholder="Card Description"
 							className="flex-1 mb-2 md:mr-2 md:mb-0"
 							{...register("description")}
+							maxLength={300}
+							autoComplete="off"
 						/>
 						<select
 							className="lg:mr-2 lg:mb-0"

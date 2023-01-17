@@ -153,7 +153,7 @@ const PrivateButton = ({ deck }: { deck: Deck }) => {
 		<>
 			{deck.private ? (
 				<button
-					className="gbtn mr-3"
+					className="gbtn mr-3 mb-4"
 					onClick={() =>
 						updateDeckMutation.mutate(
 							{
@@ -175,7 +175,7 @@ const PrivateButton = ({ deck }: { deck: Deck }) => {
 				</button>
 			) : (
 				<button
-					className="gbtn mr-3"
+					className="gbtn mr-3 mb-4"
 					onClick={() =>
 						updateDeckMutation.mutate(
 							{
@@ -240,17 +240,17 @@ const DeckPage = ({
 						<div className="background flex flex-col w-full">
 							{deck && (
 								<>
-									<div className="flex justify-between items-center mb-8">
+									<div className="flex justify-between items-center mb-4 flex-wrap">
 										<button
-											className="gbtn mr-3"
+											className="gbtn mr-3 mb-4"
 											onClick={() => router.back()}
 										>
 											<FaAngleLeft />
 										</button>
-										<div className="flex flex-row">
+										<div className="flex flex-row flex-wrap">
 											<PrivateButton deck={deck} />
 											<button
-												className="item mr-3"
+												className="item mr-3 mb-4"
 												onClick={() => {
 													navigator.clipboard
 														.writeText(deckId)
@@ -264,7 +264,7 @@ const DeckPage = ({
 												<FaCopy />
 											</button>
 											<button
-												className="ebtn mr-3"
+												className="ebtn mr-3 mb-4"
 												onClick={() =>
 													setConfirmDelete(true)
 												}
@@ -288,7 +288,7 @@ const DeckPage = ({
 												/>
 											) : null}
 											<button
-												className="btn"
+												className="btn mb-4"
 												onClick={() => setAddCard(true)}
 											>
 												<FaPlus />
