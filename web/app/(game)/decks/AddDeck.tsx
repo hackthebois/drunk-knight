@@ -64,6 +64,7 @@ const AddDeck = () => {
 							placeholder="Deck Name"
 							className="sm:mr-2 mb-2 sm:mb-0 flex-1 ml-[1px]"
 							{...register("name")}
+							maxLength={50}
 							autoComplete="off"
 						/>
 						<input
