@@ -23,11 +23,11 @@ const CardItem = ({ card }: { card?: Card }) => {
 					{cardType}
 				</div>
 			</div>
-			<div className="bg-white p-8 flex-1 flex flex-col rounded-b">
+			<div className="bg-white p-4 sm:p-8 flex-1 flex flex-col rounded-b">
 				<h3 className="text-2xl sm:text-4xl font-bold text-left break-words max-h-[65px] sm:min-h-[45px] sm:max-h-[80px] overflow-y-auto">
 					{name}
 				</h3>
-				<p className="text-lg sm:text-2xl mt-4 text-left break-words max-h-[80px] sm:max-h-[130px] overflow-y-auto">
+				<p className="text-lg sm:text-2xl mt-4 text-left break-words flex-1 max-h-[110px] sm:max-h-[160px] overflow-y-auto">
 					{description}
 				</p>
 			</div>
