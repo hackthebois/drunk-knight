@@ -92,8 +92,10 @@ const Page = async () => {
 								className="item mt-2 flex justify-between items-center"
 							>
 								<div className="flex flex-1 sm:items-center justify-between flex-col sm:flex-row sm:pr-4 md:pr-6">
-									<p>{deck.name}</p>
-									<p className="opacity-80 mt-1 sm:mt-0">
+									<p className="break-all flex-1 pr-2">
+										{deck.name}
+									</p>
+									<p className="break-all opacity-80 mt-1 sm:mt-0 pr-2">
 										{deck.user.username}
 									</p>
 								</div>
