@@ -37,13 +37,13 @@ const DeckItem = ({
 			<Link
 				key={id}
 				href={`/decks/${id}`}
-				className="flex-1 item rounded-r-none border-r-0 flex justify-between"
+				className="flex-1 item rounded-r-none border-r-0 flex justify-between overflow-hidden pr-1"
 			>
-				<p className="flex items-center">{name}</p>
+				<p className="break-all flex-1 pr-2">{name}</p>
 				{isPrivate ? (
-					<FaEyeSlash size={18} className="opacity-70" />
+					<FaEyeSlash size={18} className="opacity-70 min-w-8" />
 				) : (
-					<FaEye size={18} className="opacity-70" />
+					<FaEye size={18} className="opacity-70 min-w-8" />
 				)}
 			</Link>
 			{selected ? (

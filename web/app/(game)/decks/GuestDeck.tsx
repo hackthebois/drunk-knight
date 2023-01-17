@@ -21,7 +21,7 @@ const GuestDeck = ({ deck }: Props) => {
 				href={`/decks/standard/${deck.id}`}
 				className="flex-1 item rounded-r-none border-r-0"
 			>
-				<p className="flex items-center">{deck.name}</p>
+				<p className="break-all">{deck.name}</p>
 			</Link>
 			{excludeDeckIds.includes(deck.id) ? (
 				<div
