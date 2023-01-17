@@ -13,13 +13,13 @@ export class CreateCardDto {
 	@IsString()
 	@IsNotEmpty()
 	@ApiProperty()
-	@MaxLength(190)
+	@MaxLength(50)
 	name: string;
 
 	@IsString()
 	@IsNotEmpty()
 	@ApiProperty()
-	@MaxLength(190)
+	@MaxLength(300)
 	description: string;
 
 	@IsEnum(CardType)
@@ -32,13 +32,13 @@ export class UpdateCardDto {
 	@IsString()
 	@IsOptional()
 	@ApiProperty()
-	@MaxLength(190)
+	@MaxLength(50)
 	name?: string;
 
 	@IsString()
 	@IsOptional()
 	@ApiProperty()
-	@MaxLength(190)
+	@MaxLength(300)
 	description?: string;
 
 	@IsEnum(CardType)

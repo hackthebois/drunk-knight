@@ -13,7 +13,7 @@ export class CreateDeckDto {
 	@IsNotEmpty()
 	@IsString()
 	@ApiProperty()
-	@MaxLength(190)
+	@MaxLength(50)
 	name: string;
 }
 
@@ -21,7 +21,7 @@ export class UpdateDeckDto {
 	@IsOptional()
 	@IsString()
 	@ApiProperty()
-	@MaxLength(190)
+	@MaxLength(50)
 	name: string;
 
 	@IsOptional()
