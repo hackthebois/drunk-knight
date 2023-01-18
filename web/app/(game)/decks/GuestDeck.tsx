@@ -19,9 +19,18 @@ const GuestDeck = ({ deck }: Props) => {
 		<div className={`flex mt-2`}>
 			<Link
 				href={`/decks/standard/${deck.id}`}
-				className="flex-1 item rounded-r-none border-r-0"
+				className="flex-1 item pr-0 sm:pr-2 flex justify-between items-center rounded-r-none border-r-0"
 			>
 				<p className="break-all">{deck.name}</p>
+				{!excludeDeckIds.includes(deck.id) ? (
+					<p className="text-xs font-bold bg-green-400 w-8 text-center rounded py-[2px]">
+						ON
+					</p>
+				) : (
+					<p className="text-xs font-bold bg-red-400 w-8 text-center rounded py-[2px]">
+						OFF
+					</p>
+				)}
 			</Link>
 			{excludeDeckIds.includes(deck.id) ? (
 				<div
