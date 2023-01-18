@@ -15,7 +15,7 @@ const getUser = async ({ token }: { token: string }) => {
 	});
 	const data: unknown = await res.json();
 	if (res.status === 403) {
-		redirect("/guest");
+		redirect("/account/guest");
 	} else {
 		return UserSchema.parse(data);
 	}
@@ -36,7 +36,7 @@ const Page = async () => {
 			</main>
 		);
 	} else {
-		redirect("/guest");
+		redirect("/account/guest");
 	}
 };
 

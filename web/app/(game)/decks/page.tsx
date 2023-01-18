@@ -111,7 +111,7 @@ const Page = async () => {
 			</main>
 		);
 	} else {
-		redirect("/guest");
+		redirect("/decks/guest");
 	}
 };
 
