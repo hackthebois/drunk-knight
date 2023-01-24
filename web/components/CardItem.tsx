@@ -14,7 +14,7 @@ const CardItem = ({ card }: { card?: Card }) => {
 	const { cardType, name, description } = card;
 
 	return (
-		<div className="w-full h-full text-text flex flex-col shadow overflow-y-auto">
+		<div className="w-full h-full text-text flex flex-col shadow overflow-y-auto overflow-x-hidden">
 			<div
 				className="p-3 relative flex items-start justify-between rounded-t"
 				style={{ backgroundColor: typeColours[cardType] }}
@@ -24,7 +24,7 @@ const CardItem = ({ card }: { card?: Card }) => {
 				</div>
 			</div>
 			<div className="bg-white p-3 sm:p-6 flex-1 rounded-b">
-				<h3 className="text-2xl sm:text-4xl font-bold text-left break-words">
+				<h3 className="text-2xl sm:text-4xl font-bold text-left break-word">
 					{name}
 				</h3>
 				<p className="text-lg sm:text-2xl mt-4 text-left break-words flex-1">
