@@ -9,12 +9,11 @@ import { tokenAtom, excludeDeckIdsAtom } from "../../ClientWrapper";
 import { atomWithReset, useResetAtom } from "jotai/utils";
 import Loader from "../../../components/Loader";
 import { useState } from "react";
+import Image from "next/image";
 
 const playAtom = atomWithReset({
-	firstCard: 0,
-	secondCard: 0,
+	currentCard: 0,
 	degrees: 0,
-	flipped: false,
 });
 
 export const play = async ({
@@ -46,8 +45,7 @@ const Play = () => {
 	const [token] = useAtom(tokenAtom);
 	const [excludeDeckIds] = useAtom(excludeDeckIdsAtom);
 	const resetPlay = useResetAtom(playAtom);
-	const [{ firstCard, secondCard, degrees, flipped }, setPlay] =
-		useAtom(playAtom);
+	const [{ currentCard, degrees }, setPlay] = useAtom(playAtom);
 	const [canFlip, setCanFlip] = useState(true);
 
 	const { data: cards } = useQuery(
@@ -56,7 +54,9 @@ const Play = () => {
 			play({
 				token,
 				excludeDeckIds,
-				reset: () => resetPlay(),
+				reset: () => {
+					resetPlay();
+				},
 			}),
 		{
 			cacheTime: Infinity,
@@ -71,18 +71,23 @@ const Play = () => {
 		else return index + 1;
 	};
 
-	const flipCard = () => {
+	const flipCard = (currentPlay: {
+		currentCard: number;
+		degrees: number;
+	}) => {
 		if (canFlip) {
 			setPlay({
-				flipped: !flipped,
-				degrees: degrees - 180,
-				firstCard: flipped ? nextCard(secondCard) : firstCard,
-				secondCard: flipped ? secondCard : nextCard(firstCard),
+				degrees: currentPlay.degrees - 180,
+				currentCard: currentPlay.currentCard,
 			});
 			setCanFlip(false);
 			setTimeout(() => {
+				setPlay({
+					degrees: currentPlay.degrees - 360,
+					currentCard: nextCard(currentPlay.currentCard),
+				});
 				setCanFlip(true);
-			}, 400);
+			}, 1000);
 		}
 	};
 
@@ -115,7 +120,7 @@ const Play = () => {
 								className="absolute w-full h-full"
 								style={{ backfaceVisibility: "hidden" }}
 							>
-								<CardItem card={cards[firstCard]} />
+								<CardItem card={cards[currentCard]} />
 							</div>
 							<div
 								className="absolute w-full h-full"
@@ -124,11 +129,21 @@ const Play = () => {
 									transform: "rotateY(180deg)",
 								}}
 							>
-								<CardItem card={cards[secondCard]} />
+								<div className="w-full h-full flex flex-col justify-center items-center shadow bg-lightbackground rounded">
+									<Image
+										src="/logo.png"
+										height={100}
+										width={100}
+										alt="Drunk knight logo of knight helmet with beer flowing out"
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
-					<button onClick={flipCard} className="btn mt-8 sm:mt-12">
+					<button
+						onClick={() => flipCard({ currentCard, degrees })}
+						className="btn mt-8 sm:mt-12"
+					>
 						Next Card
 					</button>
 				</>
