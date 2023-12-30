@@ -16,31 +16,30 @@ import {
 } from '../dtos/auth.dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { UserType } from '@prisma/client';
 import * as nodemailer from 'nodemailer';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// const transport = nodemailer.createTransport({
-// 	host: 'smtp.gmail.com',
-// 	port: 465,
-// 	secure: true,
-// 	auth: {
-// 		user: process.env.EMAIL_USERNAME,
-// 		pass: process.env.EMAIL_PASSWORD,
-// 	},
-// });
-
 const transport = nodemailer.createTransport({
-	host: 'smtp.zoho.com',
+	host: 'smtp.gmail.com',
 	port: 465,
 	secure: true,
 	auth: {
-		user: process.env.Z_EMAIL_USERNAME,
-		pass: process.env.Z_EMAIL_PASSWORD,
+		user: process.env.EMAIL_USERNAME,
+		pass: process.env.EMAIL_PASSWORD,
 	},
 });
+
+// const transport = nodemailer.createTransport({
+// 	host: 'smtp.zoho.com',
+// 	port: 465,
+// 	secure: true,
+// 	auth: {
+// 		user: process.env.Z_EMAIL_USERNAME,
+// 		pass: process.env.Z_EMAIL_PASSWORD,
+// 	},
+// });
 
 interface JWTPayload {
 	name: string;
