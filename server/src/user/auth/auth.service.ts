@@ -52,9 +52,16 @@ export class AuthService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	async signup({ email, password, username }: SignUpDto) {
-		const userExists = await this.prismaService.user.findUnique({
+		const userExists = await this.prismaService.user.findFirst({
 			where: {
-				email,
+				OR: [
+					{
+						email,
+					},
+					{
+						username,
+					},
+				],
 			},
 		});
 
