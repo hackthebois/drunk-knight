@@ -244,7 +244,10 @@ export class AuthService {
 		});
 	}
 
-	private emailHtml(fileName: string, replacements: {}) {
+	private emailHtml(
+		fileName: string,
+		replacements: { email: string; url: string },
+	) {
 		const filePath = path.join(
 			__dirname,
 			'..',

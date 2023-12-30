@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBody } from '@nestjs/swagger';
 import {
 	PasswordResetDto,
 	PasswordUpdateDto,
